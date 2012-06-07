@@ -1,6 +1,6 @@
 = invisible_captcha
 
-Description goes here.
+UNDER CONSTRUCTION
 
 == Contributing to invisible_captcha
  

@@ -1,16 +1,16 @@
 module InvisibleCaptcha
   module ViewHelpers
 
-    def invisible_captcha object
+    def invisible_captcha model_name, attr_name
       html_ids = []
-      { :a_comment_body => 'If you are a human, do not fill in this field' }.collect do |f, l|
-        html_ids << (html_id = "#{f}_inv_cap_#{Time.now.to_i}")
+      { :"#{model_name}" => 'If you are a human, do not fill in this field' }.collect do |field, label|
+        html_ids << (html_id = "#{field}_#{Time.now.to_i}")
         content_tag :div, :id => html_id do
           content_tag(:style, :type => 'text/css', :media => 'screen', :scoped => "scoped") do
             "#{html_ids.map { |i| "##{i}" }.join(', ')} { display:none; }"
           end +
-            label_tag(f, l) +
-            text_field_tag("#{object}[#{f}]")
+            label_tag("#{field}_#{attr_name}", label) +
+            text_field_tag("#{model_name}[#{attr_name}]")
         end
       end.join.html_safe
     end

@@ -1,9 +1,0 @@
-= invisible_captcha
-
-Coming soon
-
-== Copyright
-
-Copyright (c) 2012 Marc Anguera Insa. See LICENSE.txt for
-further details.
-

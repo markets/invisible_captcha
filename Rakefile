@@ -25,29 +25,28 @@ Jeweler::Tasks.new do |gem|
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
+namespace :release do
+  desc "create a patch release, create tag and push to github"
+  task :patch do
+    Rake::Task['version:bump:patch'].invoke
+    Rake::Task['gemspec'].invoke
+    `git commit -am 'Regenerate gemspec'`
+    Rake::Task['git:release'].invoke
+  end
 
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
-end
+  desc "create a minor, create tag and push to github"
+  task :minor do
+    Rake::Task['version:bump:minor'].invoke
+    Rake::Task['gemspec'].invoke
+    `git commit -am 'Regenerate gemspec'`
+    Rake::Task['git:release'].invoke
+  end
 
-task :default => :test
-
-require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "invisible_captcha #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+  desc "create a major, create tag and push to github"
+  task :major do
+    Rake::Task['version:bump:major'].invoke
+    Rake::Task['gemspec'].invoke
+    `git commit -am 'Regenerate gemspec'`
+    Rake::Task['git:release'].invoke
+  end
 end

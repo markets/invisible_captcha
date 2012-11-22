@@ -22,4 +22,4 @@ validates :subtitle, :invisible_captcha => true
 ```
 
 ## License
-Invisible Captcha is released under the [MIT](http://opensource.org/licenses/MIT) License.
+Copyright (c) 2012 Marc Anguera. Invisible Captcha is released under the [MIT](http://opensource.org/licenses/MIT) License.

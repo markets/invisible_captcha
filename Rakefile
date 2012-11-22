@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "invisible_captcha"
   gem.homepage = "http://github.com/markets/invisible_captcha"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Simple honeypot protection}
+  gem.description = %Q{Don't disturb users. Simple protection for ActiveModel forms using honeypot strategy.}
   gem.email = "srmarc.ai@gmail.com"
   gem.authors = ["Marc Anguera Insa"]
   # dependencies defined in Gemfile

@@ -1,5 +1,5 @@
 # Invisible Captcha
-Don't disturb users. Simple protection for ActiveModel forms using honeypot strategy.
+Simple protection for ActiveModel forms using honeypot strategy.
 
 ## Installation
 Add this line to you Gemfile:

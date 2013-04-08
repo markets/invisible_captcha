@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = "invisible_captcha"
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Marc Anguera Insa"]
   s.date = "2013-04-08"
-  s.description = "Don't disturb users. Simple protection for ActiveModel forms using honeypot strategy."
+  s.description = "Simple protection for ActiveModel forms using honeypot strategy."
   s.email = "srmarc.ai@gmail.com"
   s.extra_rdoc_files = [
     "README.md"

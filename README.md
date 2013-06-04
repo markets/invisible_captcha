@@ -14,7 +14,11 @@ In your form:
 ```ruby
 <%= form_for(@topic) do |f| %>
   ...
-  <%= invisible_captcha 'topic', 'subtitle' %>
+  <!-- using form helper -->
+  <%= f.invisible_captcha :subtitle %>
+
+  <!-- or using view helper -->
+  <%= invisible_captcha :topic, :subtitle %>
   ...
 <% end %>
 ```

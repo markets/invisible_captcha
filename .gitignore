@@ -21,6 +21,9 @@ nbproject/*
 # RVM
 .rvmrc
 
+# Gemfile.lock for gems
+Gemfile.lock
+
 # Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore: 
 #
 # * Create a file at ~/.gitignore

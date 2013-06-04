@@ -11,7 +11,8 @@ module InvisibleCaptcha
     end
 
     private
-    def robot_presence? object, attribute
+
+    def robot_presence?(object, attribute)
       object.send(attribute).present?
     end
   

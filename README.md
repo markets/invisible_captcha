@@ -5,7 +5,13 @@ Simple protection for ActiveModel forms using honeypot strategy.
 Add this line to you Gemfile:
 
 ```
-gem 'invisible_captcha', :require => 'invisible_captcha'
+gem 'invisible_captcha'
+```
+
+Or install gem:
+
+```
+gem install invisible_captcha
 ```
 
 ## Usage
@@ -13,13 +19,13 @@ In your form:
 
 ```ruby
 <%= form_for(@topic) do |f| %>
-  ...
-  <!-- using form helper -->
+
+  <!-- use form helper -->
   <%= f.invisible_captcha :subtitle %>
 
-  <!-- or using view helper -->
+  <!-- or use view helper -->
   <%= invisible_captcha :topic, :subtitle %>
-  ...
+
 <% end %>
 ```
 

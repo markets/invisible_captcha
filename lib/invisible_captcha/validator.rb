@@ -6,7 +6,7 @@ module InvisibleCaptcha
     def validate_each(record, attribute, value)
       if robot_presence?(record, attribute)
         record.errors.clear
-        record.errors[:base] = "YOU ARE A ROBOT!!"
+        record.errors[:base] = InvisibleCaptcha.error_message
       end
     end
 

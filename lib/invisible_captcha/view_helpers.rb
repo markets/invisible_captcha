@@ -8,7 +8,7 @@ module InvisibleCaptcha
     private
 
     def build_invisible_captcha(model_name, method)
-      label      = 'If you are a human, ignore this field'
+      label      = InvisibleCaptcha.sentence_for_humans
       html_id    = "#{model_name}_#{Time.now.to_i}"
 
       content_tag(:div, :id => html_id) do

@@ -1,5 +1,5 @@
 # Invisible Captcha
-Simple protection for ActiveModel forms using honeypot strategy.
+Simple protection for ActiveModel (and ActiveRecord) instances using honeypot strategy.
 
 ## Installation
 Add this line to you Gemfile:
@@ -20,10 +20,10 @@ In your form:
 ```ruby
 <%= form_for(@topic) do |f| %>
 
-  <!-- use form helper -->
+  <!-- You can use form helper -->
   <%= f.invisible_captcha :subtitle %>
 
-  <!-- or use view helper -->
+  <!-- or view helper -->
   <%= invisible_captcha :topic, :subtitle %>
 
 <% end %>
@@ -32,8 +32,6 @@ In your form:
 In your ActiveModel:
 
 ```ruby
-attr_accessor :subtitle
-
 validates :subtitle, :invisible_captcha => true
 ```
 

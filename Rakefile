@@ -13,12 +13,11 @@ require 'rake'
 
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "invisible_captcha"
   gem.homepage = "http://github.com/markets/invisible_captcha"
   gem.license = "MIT"
-  gem.summary = %Q{Simple honeypot protection}
-  gem.description = %Q{Simple protection for ActiveModel forms using honeypot strategy.}
+  gem.summary = %Q{Simple honeypot protection for RoR apps}
+  gem.description = %Q{Simple protection for ActiveModel (and ActiveRecord) instances using honeypot strategy.}
   gem.email = "srmarc.ai@gmail.com"
   gem.authors = ["Marc Anguera Insa"]
   # dependencies defined in Gemfile

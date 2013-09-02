@@ -19,7 +19,7 @@ gem install invisible_captcha
 ### RESTful style
 In your form:
 
-```ruby
+```html
 <%= form_for(@topic) do |f| %>
 
   <!-- You can use form helper -->
@@ -40,7 +40,7 @@ validates :subtitle, :invisible_captcha => true
 ### Non-RESTful style
 In your form:
 
-```ruby
+```html
 <%= form_tag(search_path) do %>
 
   <%= invisible_captcha %>

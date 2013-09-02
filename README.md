@@ -1,5 +1,5 @@
 # Invisible Captcha
-Simple protection for ActiveModel (and ActiveRecord) instances using honeypot strategy.
+Simple spam protection for Rails applications using honeypot strategy. Support for ActiveModel (and ActiveRecord) forms and for non-RESTful resources.
 
 ## Installation
 Add this line to you Gemfile:
@@ -15,6 +15,8 @@ gem install invisible_captcha
 ```
 
 ## Usage
+
+### RESTful style
 In your form:
 
 ```ruby
@@ -29,10 +31,27 @@ In your form:
 <% end %>
 ```
 
-In your ActiveModel:
+In your model:
 
 ```ruby
 validates :subtitle, :invisible_captcha => true
+```
+
+### Non-RESTful style
+In your form:
+
+```ruby
+<%= form_tag(search_path) do %>
+
+  <%= invisible_captcha %>
+
+<% end %>
+```
+
+In your controller:
+
+```ruby
+before_filter :check_invisible_captcha
 ```
 
 ## License

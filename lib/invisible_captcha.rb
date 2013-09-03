@@ -17,10 +17,10 @@ module InvisibleCaptcha
   mattr_accessor :fake_fields
   self.fake_fields = ['foo_id', 'bar_id', 'baz_id']
 
-  # InvisibleCaptcha.setup do |iv|
-  #   iv.sentence_for_humans = 'Another sentence'
-  #   iv.error_message = 'Another message'
-  #   iv.fake_fields << 'fake_field'
+  # InvisibleCaptcha.setup do |ic|
+  #   ic.sentence_for_humans = 'Another sentence'
+  #   ic.error_message = 'Another error message'
+  #   ic.fake_fields << 'fake_field'
   # end
   def self.setup
     yield(self)

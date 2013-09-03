@@ -5,17 +5,28 @@ require "#{GEM_PATH}/form_helpers.rb"
 require "#{GEM_PATH}/validator.rb"
 
 module InvisibleCaptcha
-
   # Default sentence for humans if text field is visible
   mattr_accessor :sentence_for_humans
   self.sentence_for_humans = 'If you are a human, ignore this field'
 
   # Default error message for validator
   mattr_accessor :error_message
-  self.error_message = 'YOU ARE A ROBOT!'
+  self.error_message = 'You are a robot!'
 
-  # Default fake field name for text_field_tag
-  mattr_accessor :fake_field
-  self.fake_field = :query
+  # Default fake fields for controller based workflow
+  mattr_accessor :fake_fields
+  self.fake_fields = ['foo_id', 'bar_id', 'baz_id']
 
+  # InvisibleCaptcha.setup do |iv|
+  #   iv.sentence_for_humans = 'Another sentence'
+  #   iv.error_message = 'Another message'
+  #   iv.fake_fields << 'fake_field'
+  # end
+  def self.setup
+    yield(self)
+  end
+
+  def self.fake_field
+    self.fake_fields.sample
+  end
 end

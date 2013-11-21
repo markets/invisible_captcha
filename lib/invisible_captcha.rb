@@ -1,5 +1,5 @@
 GEM_PATH = File.dirname(__FILE__) + "/invisible_captcha"
-require "#{GEM_PATH}/controller_helpers.rb"
+require "#{GEM_PATH}/controller_methods.rb"
 require "#{GEM_PATH}/view_helpers.rb"
 require "#{GEM_PATH}/form_helpers.rb"
 require "#{GEM_PATH}/validator.rb"
@@ -20,7 +20,7 @@ module InvisibleCaptcha
   # InvisibleCaptcha.setup do |ic|
   #   ic.sentence_for_humans = 'Another sentence'
   #   ic.error_message = 'Another error message'
-  #   ic.fake_fields << 'fake_field'
+  #   ic.fake_fields << 'another_fake_field'
   # end
   def self.setup
     yield(self)

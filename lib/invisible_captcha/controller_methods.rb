@@ -1,5 +1,5 @@
 module InvisibleCaptcha
-  module ControllerHelpers
+  module ControllerMethods
 
     def check_invisible_captcha
       head 200 if invisible_captcha?
@@ -18,4 +18,4 @@ module InvisibleCaptcha
   end
 end
 
-ActionController::Base.send :include, InvisibleCaptcha::ControllerHelpers
+ActionController::Base.send :include, InvisibleCaptcha::ControllerMethods

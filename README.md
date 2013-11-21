@@ -1,5 +1,6 @@
 # Invisible Captcha
-Simple spam protection for Rails applications using honeypot strategy and for better user experience. Support for ActiveRecord (and ActiveModel) forms and for non-RESTful resources.
+Simple and flexible spam protection solution for Rails applications using honeypot strategy and for better user experience.
+Support for ActiveRecord (and ActiveModel) forms and for non-RESTful resources.
 
 ## Installation
 Add this line to you Gemfile:
@@ -8,69 +9,85 @@ Add this line to you Gemfile:
 gem 'invisible_captcha'
 ```
 
-Or install gem:
+Or install gem manually:
 
 ```
 gem install invisible_captcha
 ```
 
 ## Usage
+There are different ways to implement:
 
 ### Model style
 View code:
 
 ```erb
 <%= form_for(@topic) do |f| %>
-
-  <!-- You can use form helper -->
   <%= f.invisible_captcha :subtitle %>
-
-  <!-- or view helper -->
-  <%= invisible_captcha :topic, :subtitle %>
-
 <% end %>
 ```
 
 Model code:
 
 ```ruby
-validates :subtitle, :invisible_captcha => true
+class Topic < ActiveRecord::Base
+  attr_accessor :subtitle # virtual attribute, the honeypot
+  validates :subtitle, :invisible_captcha => true
+end
+```
+
+If you are using [strong_parameters](https://github.com/rails/strong_parameters), don't forget to keep the honeypot attribute into the params hash:
+```ruby
+def topic_params
+  params.require(:topic).permit(:subtitle)
+end
 ```
 
 ### Controller style
 View code:
 
 ```erb
-<%= form_tag(search_path) do %>
-
+<%= form_for(@topic) do |f| %>
   <%= invisible_captcha %>
-
 <% end %>
 ```
 
 Controller code:
 
 ```ruby
-before_filter :check_invisible_captcha, :only => [:create, :update]
-```
-
-This filter returns a response that has no content (only headers). If you desire a different behaviour, this lib provides a method to check manualy if invisible captcha (fake field) is present:
-
-```ruby
-if invisible_captcha?
-  # invalid
-else
-  # valid
+class DogsController < ApplicationController
+  before_filter :check_invisible_captcha # :only => [:create, :update]
+  # your controller code
 end
 ```
 
-If you want to use it in this way but using RESTful forms with `form_for`, you can call this method with the fake field as a parameters:
+This filter triggers when the spam is the in params and responds without content (only headers). If you desire a different behaviour, you can use a provided method to check manualy if invisible captcha (fake field) is present:
 
 ```ruby
-if invisible_captcha?(:topic, :subtitle)
-  # invalid
+if invisible_captcha?
+  # spam present
 else
-  # valid
+  # no spam
+end
+```
+
+### Controller style (resource oriented):
+
+In your form:
+```
+<%= form_for(@topic) do |f| %>
+  <%= f.invisible_captcha :subtitle %>
+<% end %>
+```
+
+In your controller:
+```
+def create
+  if invisible_captcha?(:topic, :subtitle)
+    head 200 # or redirect_to new_topic_path
+  else
+    # regular workflow
+  end
 end
 ```
 
@@ -79,9 +96,9 @@ If you want to customize some defaults, add the following to an initializer (con
 
 ```
 InvisibleCaptcha.setup do |ic|
-  ic.sentence_for_humans = 'Another sentence'
-  ic.error_message = 'Another error message'
-  ic.fake_fields << 'fake_field'
+  ic.sentence_for_humans = 'If you are a human, ignore this field'
+  ic.error_message = 'You are a robot!'
+  ic.fake_fields << 'another_fake_field'
 end
 ```
 

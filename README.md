@@ -55,7 +55,7 @@ View code:
 Controller code:
 
 ```ruby
-class DogsController < ApplicationController
+class TopicsController < ApplicationController
   before_filter :check_invisible_captcha # :only => [:create, :update]
   # your controller code
 end

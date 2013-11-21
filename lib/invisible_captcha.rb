@@ -1,8 +1,7 @@
-GEM_PATH = File.dirname(__FILE__) + "/invisible_captcha"
-require "#{GEM_PATH}/controller_methods.rb"
-require "#{GEM_PATH}/view_helpers.rb"
-require "#{GEM_PATH}/form_helpers.rb"
-require "#{GEM_PATH}/validator.rb"
+require 'invisible_captcha/controller_methods.rb'
+require 'invisible_captcha/view_helpers.rb'
+require 'invisible_captcha/form_helpers.rb'
+require 'invisible_captcha/validator.rb'
 
 module InvisibleCaptcha
   # Default sentence for humans if text field is visible

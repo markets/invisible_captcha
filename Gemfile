@@ -1,9 +1,3 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'activemodel'
-
-group :development do
-  gem 'bundler'
-  gem 'jeweler'
-  gem 'debugger'
-end
+gemspec

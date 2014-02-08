@@ -74,14 +74,14 @@ end
 ### Controller style (resource oriented):
 
 In your form:
-```
+```erb
 <%= form_for(@topic) do |f| %>
   <%= f.invisible_captcha :subtitle %>
 <% end %>
 ```
 
 In your controller:
-```
+```ruby
 def create
   if invisible_captcha?(:topic, :subtitle)
     head 200 # or redirect_to new_topic_path
@@ -94,7 +94,7 @@ end
 ### Setup
 If you want to customize some defaults, add the following to an initializer (config/initializers/invisible_captcha.rb):
 
-```
+```ruby
 InvisibleCaptcha.setup do |ic|
   ic.sentence_for_humans = 'If you are a human, ignore this field'
   ic.error_message = 'You are a robot!'
@@ -103,4 +103,4 @@ end
 ```
 
 ## License
-Copyright (c) 2012 Marc Anguera. Invisible Captcha is released under the [MIT](http://opensource.org/licenses/MIT) License.
+Copyright (c) 2012-2014 Marc Anguera. Invisible Captcha is released under the [MIT](LICENSE) License.

@@ -1,7 +1,8 @@
-require 'invisible_captcha/controller_methods.rb'
-require 'invisible_captcha/view_helpers.rb'
-require 'invisible_captcha/form_helpers.rb'
-require 'invisible_captcha/validator.rb'
+require 'invisible_captcha/version'
+require 'invisible_captcha/controller_methods'
+require 'invisible_captcha/view_helpers'
+require 'invisible_captcha/form_helpers'
+require 'invisible_captcha/validator'
 
 module InvisibleCaptcha
   # Default sentence for humans if text field is visible

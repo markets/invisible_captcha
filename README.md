@@ -1,4 +1,7 @@
 # Invisible Captcha
+
+[![Gem Version](https://badge.fury.io/rb/invisible_captcha.png)](http://badge.fury.io/rb/invisible_captcha)
+
 Simple and flexible spam protection solution for Rails applications using honeypot strategy and for better user experience.
 Support for ActiveRecord (and ActiveModel) forms and for non-RESTful resources.
 

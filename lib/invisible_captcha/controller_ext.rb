@@ -1,5 +1,12 @@
 module InvisibleCaptcha
-  module ControllerMethods
+  module ControllerExt
+    module ClassMethods
+      def invisible_captcha(options = {})
+        before_filter(options) do
+          check_invisible_captcha
+        end
+      end
+    end
 
     def check_invisible_captcha
       head 200 if invisible_captcha?
@@ -17,5 +24,3 @@ module InvisibleCaptcha
     end
   end
 end
-
-ActionController::Base.send :include, InvisibleCaptcha::ControllerMethods

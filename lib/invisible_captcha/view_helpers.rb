@@ -1,6 +1,5 @@
 module InvisibleCaptcha
   module ViewHelpers
-
     def invisible_captcha(resource = nil, method = nil)
       build_invisible_captcha(resource, method)
     end
@@ -46,5 +45,3 @@ module InvisibleCaptcha
     end
   end
 end
-
-ActionView::Base.send :include, InvisibleCaptcha::ViewHelpers

@@ -1,7 +1,7 @@
 module InvisibleCaptcha
   module ControllerExt
     module ClassMethods
-      def invisible_captcha(options = {})
+      def invisible_captcha(options = {}, &block)
         before_filter(options) do
           check_invisible_captcha
         end

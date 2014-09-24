@@ -1,20 +1,29 @@
 module InvisibleCaptcha
   module ControllerExt
     module ClassMethods
-      def invisible_captcha(options = {}, &block)
+      def invisible_captcha(options = {})
         before_filter(options) do
-          check_invisible_captcha
+          detect_spam(options)
         end
       end
     end
 
-    def check_invisible_captcha
-      head 200 if invisible_captcha?
+    def detect_spam(options = {})
+      if invisible_captcha?(options)
+        on_spam
+      end
     end
 
-    def invisible_captcha?(fake_resource = nil, fake_field = nil)
-      if fake_resource && fake_field
-        return true if params[fake_resource][fake_field].present?
+    def on_spam
+      head(200)
+    end
+
+    def invisible_captcha?(options = {})
+      honeypot = options[:honeypot]
+      resource = options[:resource] || controller_name.singularize
+
+      if honeypot
+        return true if params[resource][honeypot].present?
       else
         InvisibleCaptcha.fake_fields.each do |field|
           return true if params[field].present?

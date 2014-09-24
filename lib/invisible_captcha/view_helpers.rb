@@ -7,9 +7,9 @@ module InvisibleCaptcha
     private
 
     def build_invisible_captcha(resource = nil, method = nil)
-      resource   = resource ? resource.to_s : InvisibleCaptcha.fake_field
-      label      = InvisibleCaptcha.sentence_for_humans
-      html_id    = generate_html_id(resource)
+      resource = resource ? resource.to_s : InvisibleCaptcha.fake_field
+      label    = InvisibleCaptcha.sentence_for_humans
+      html_id  = generate_html_id(resource)
 
       content_tag(:div, :id => html_id) do
         insert_inline_css(html_id) +
@@ -24,7 +24,7 @@ module InvisibleCaptcha
 
     def insert_inline_css(container_id)
       content_tag(:style, :type => 'text/css', :media => 'screen', :scoped => 'scoped') do
-       "##{container_id} { display:none; }"
+       "##{container_id} { display:none; }" unless InvisibleCaptcha.visual_honeypots
       end
     end
 

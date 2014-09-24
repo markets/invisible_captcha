@@ -18,7 +18,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rails'
 
-  spec.add_development_dependency 'debugger'
-  spec.add_development_dependency 'rspec', '~> 3.1'
+  spec.add_development_dependency 'rspec-rails', '~> 3.1'
 end
 

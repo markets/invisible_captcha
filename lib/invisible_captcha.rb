@@ -12,7 +12,7 @@ ActiveModel::Validations::InvisibleCaptchaValidator = InvisibleCaptcha::Invisibl
 
 module InvisibleCaptcha
   class << self
-    attr_accessor :sentence_for_humans, :error_message, :fake_fields
+    attr_accessor :sentence_for_humans, :error_message, :fake_fields, :visual_honeypots
 
     def init!
       # Default sentence for humans if text field is visible
@@ -23,6 +23,9 @@ module InvisibleCaptcha
 
       # Default fake fields for controller based workflow
       self.fake_fields = ['foo_id', 'bar_id', 'baz_id']
+
+      # Enable it to make honeypots visibles
+      self.visual_honeypots = false
     end
 
     # InvisibleCaptcha.setup do |ic|

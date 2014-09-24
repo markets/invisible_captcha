@@ -11,8 +11,8 @@ module InvisibleCaptcha
 
     private
 
-    def invisible_captcha?(object, attribute)
-      object.send(attribute).present?
+    def invisible_captcha?(object, honeypot)
+      object.send(honeypot).present?
     end
   end
 end

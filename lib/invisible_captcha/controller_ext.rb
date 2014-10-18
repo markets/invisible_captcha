@@ -10,11 +10,19 @@ module InvisibleCaptcha
 
     def detect_spam(options = {})
       if invisible_captcha?(options)
-        on_spam
+        on_spam_action(options)
       end
     end
 
-    def on_spam
+    def on_spam_action(options = {})
+      if action = options[:on_spam]
+        send(action)
+      else
+        default_on_spam
+      end
+    end
+
+    def default_on_spam
       head(200)
     end
 

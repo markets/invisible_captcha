@@ -28,10 +28,15 @@ module InvisibleCaptcha
 
     def invisible_captcha?(options = {})
       honeypot = options[:honeypot]
-      resource = options[:resource] || controller_name.singularize
+      scope    = options[:scope] || controller_name.singularize
 
       if honeypot
-        return true if params[resource][honeypot].present?
+        # If honeypot is presented, search for:
+        # - honeypot: params[:subtitle]
+        # - honeypot with scope: params[:topic][:subtitle]
+        if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
+          return true
+        end
       else
         InvisibleCaptcha.honeypots.each do |field|
           return true if params[field].present?

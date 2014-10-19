@@ -7,7 +7,7 @@ module InvisibleCaptcha
     private
 
     def build_invisible_captcha(resource = nil, method = nil)
-      resource = resource ? resource.to_s : InvisibleCaptcha.fake_field
+      resource = resource ? resource.to_s : InvisibleCaptcha.get_honeypot
       label    = InvisibleCaptcha.sentence_for_humans
       html_id  = generate_html_id(resource)
 

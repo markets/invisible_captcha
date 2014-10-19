@@ -6,7 +6,7 @@ describe InvisibleCaptcha do
 
     expect(InvisibleCaptcha.sentence_for_humans).to eq('If you are a human, ignore this field')
     expect(InvisibleCaptcha.error_message).to eq('You are a robot!')
-    expect(InvisibleCaptcha.fake_fields).to eq(['foo_id', 'bar_id', 'baz_id'])
+    expect(InvisibleCaptcha.honeypots).to eq(['foo_id', 'bar_id', 'baz_id'])
   end
 
   it 'allow setup via block' do

@@ -33,7 +33,7 @@ module InvisibleCaptcha
       if honeypot
         return true if params[resource][honeypot].present?
       else
-        InvisibleCaptcha.fake_fields.each do |field|
+        InvisibleCaptcha.honeypots.each do |field|
           return true if params[field].present?
         end
       end

@@ -3,7 +3,7 @@ module InvisibleCaptcha
     # Builds the honeypot html
     #
     # @param honeypot [Symbol] name of honeypot, ie: subtitle => input name: subtitle
-    # @param honeypot [Symbol] name of honeypot scope, ie: topic => input name: topic[subtitle]
+    # @param scope [Symbol] name of honeypot scope, ie: topic => input name: topic[subtitle]
     # @return [String] the generated html
     def invisible_captcha(honeypot = nil, scope = nil)
       build_invisible_captcha(honeypot, scope)

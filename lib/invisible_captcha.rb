@@ -3,12 +3,7 @@ require 'invisible_captcha/controller_ext'
 require 'invisible_captcha/view_helpers'
 require 'invisible_captcha/form_helpers'
 require 'invisible_captcha/validator'
-
-ActionController::Base.send :include, InvisibleCaptcha::ControllerExt
-ActionController::Base.send :extend, InvisibleCaptcha::ControllerExt::ClassMethods
-ActionView::Base.send :include, InvisibleCaptcha::ViewHelpers
-ActionView::Helpers::FormBuilder.send :include, InvisibleCaptcha::FormHelpers
-ActiveModel::Validations::InvisibleCaptchaValidator = InvisibleCaptcha::InvisibleCaptchaValidator
+require 'invisible_captcha/railtie'
 
 module InvisibleCaptcha
   class << self
@@ -32,6 +27,7 @@ module InvisibleCaptcha
     #   ic.sentence_for_humans = 'Another sentence'
     #   ic.error_message = 'Another error message'
     #   ic.fake_fields << 'another_fake_field'
+    #   ic.visual_honeypots = true
     # end
     def setup
       yield(self) if block_given?

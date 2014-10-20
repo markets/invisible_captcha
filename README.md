@@ -23,7 +23,7 @@ gem 'invisible_captcha'
 Or install the gem manually:
 
 ```
-gem install invisible_captcha
+$ gem install invisible_captcha
 ```
 
 ## Usage
@@ -107,7 +107,9 @@ def topic_params
 end
 ```
 
-## Options and customizations
+## Options and customization
+
+This section contains the option list of `invisible_captcha` method (controllers side) and the plugin setup options (initializer).
 
 ### Controller method options:
 
@@ -142,6 +144,22 @@ end
 ## Contribute
 
 Any kind of idea, feedback or bug report are welcome! Open an [issue](https://github.com/markets/invisible_captcha/issues) or send a [pull request](https://github.com/markets/invisible_captcha/pulls).
+
+## Development
+
+Clone/fork the repository and start to hack.
+
+Run test suite:
+
+```
+$ rspec
+```
+
+Start a sample Rails app ([source code](spec/dummy)) with `InvisibleCaptcha` integrated:
+
+```
+$ rake web # PORT=4000 (default: 3000)
+```
 
 ## License
 

@@ -24,7 +24,6 @@ module InvisibleCaptcha
     end
 
     def setup
-      puts self
       yield(self) if block_given?
     end
 

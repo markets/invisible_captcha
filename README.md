@@ -4,9 +4,9 @@
 
 Simple and flexible spam protection solution for Rails applications. Based on the `honeypot` strategy to provide a better user experience.
 
-## Background
+**Background**
 
-This strategy is based on adding an input field into the form that:
+The strategy is based on adding an input field into the form that:
 
 * shouldn't be visible by the real users
 * should be left empty by the real users
@@ -48,7 +48,7 @@ class TopicsController < ApplicationController
 end
 ```
 
-This method will add a filter (a `before_filter`) into the controller that triggers when the spam is detected. By default it responds with no content (only headers: `head(200)`). But you are able to define your own callback passing the a method to the `on_spam` option:
+This method will act as a `before_filter` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). But you are able to define your own callback by passing a method to the `on_spam` option:
 
 ```ruby
 invisible_captcha only: [:create, :update], on_spam: :your_on_spam_callback_method
@@ -60,7 +60,7 @@ def your_on_spam_callback_method
 end
 ```
 
-[Check here the complete list of allowed options.](#controller-method-options)
+[Check here a complete list of allowed options.](#controller-method-options)
 
 ### Controller style (resource oriented):
 
@@ -147,7 +147,7 @@ Any kind of idea, feedback or bug report are welcome! Open an [issue](https://gi
 
 ## Development
 
-Clone/fork the repository and start to hack.
+Clone/fork this repository and start to hack.
 
 Run test suite:
 

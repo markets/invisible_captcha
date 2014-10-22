@@ -2,7 +2,6 @@ require 'active_model/validator'
 
 module InvisibleCaptcha
   class InvisibleCaptchaValidator < ActiveModel::EachValidator
-
     def validate_each(record, attribute, value)
       if invisible_captcha?(record, attribute)
         record.errors.clear
@@ -12,11 +11,8 @@ module InvisibleCaptcha
 
     private
 
-    def invisible_captcha?(object, attribute)
-      object.send(attribute).present?
+    def invisible_captcha?(object, honeypot)
+      object.send(honeypot).present?
     end
-  
   end
 end
-
-ActiveModel::Validations::InvisibleCaptchaValidator = InvisibleCaptcha::InvisibleCaptchaValidator

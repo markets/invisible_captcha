@@ -1,11 +1,7 @@
 module InvisibleCaptcha
   module FormHelpers
-
-    def invisible_captcha(method)
-      @template.invisible_captcha(self.object_name, method)
+    def invisible_captcha(honeypot)
+      @template.invisible_captcha(honeypot, self.object_name)
     end
-
   end
 end
-
-ActionView::Helpers::FormBuilder.send :include, InvisibleCaptcha::FormHelpers

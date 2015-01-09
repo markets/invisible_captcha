@@ -9,9 +9,9 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
 
     %{
       <div id="#{html_id}">
-        <style media="screen" scoped="scoped" type="text/css">#{InvisibleCaptcha.visual_honeypots ? '' : "##{html_id} { display:none; }"}</style>
+        <style type="text/css" media="screen" scoped="scoped">#{InvisibleCaptcha.visual_honeypots ? '' : "##{html_id} { display:none; }"}</style>
         <label for="#{input_id}">#{InvisibleCaptcha.sentence_for_humans}</label>
-        <input id="#{input_id}" name="#{input_name}" type="text" />
+        <input type="text" name="#{input_name}" id="#{input_id}" />
       </div>
     }.gsub(/\s+/, ' ').strip.gsub('> <', '><')
   end

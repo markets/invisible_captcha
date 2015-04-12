@@ -10,7 +10,7 @@ class TopicsController < ApplicationController
     @topic = Topic.new(params[:topic])
 
     if @topic.valid?
-      redirect_to new_topic_path, notice: 'Topic valid!'
+      redirect_to new_topic_path(context: params[:context]), notice: 'Topic valid!'
     else
       render action: 'new'
     end

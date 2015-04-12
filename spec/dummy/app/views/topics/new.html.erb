@@ -12,7 +12,13 @@
 <% end %>
 
 <%= form_for(@topic) do |f| %>
-  <%= f.invisible_captcha :subtitle %>
+  <%= hidden_field_tag :context, params[:context] %>
+
+  <% if params[:context].blank? || params[:context] == 'default' %>
+    <%= f.invisible_captcha :subtitle %>
+  <% else %>
+    <%= f.invisible_captcha :subtitle, visual_honeypots: true %>
+  <% end %>
 
   <div class="field">
     <%= f.label :title %><br />

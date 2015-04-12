@@ -33,14 +33,14 @@ module InvisibleCaptcha
     end
 
     def visibility_css(container_id, options)
-      force_visible = if options.key?(:visual_honeypots)
+      visibility = if options.key?(:visual_honeypots)
         options[:visual_honeypots]
       else
         InvisibleCaptcha.visual_honeypots
       end
 
       content_tag(:style, :type => 'text/css', :media => 'screen', :scoped => 'scoped') do
-        "##{container_id} { display:none; }" unless force_visible
+        "##{container_id} { display:none; }" unless visibility
       end
     end
 

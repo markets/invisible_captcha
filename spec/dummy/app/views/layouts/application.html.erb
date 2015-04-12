@@ -8,6 +8,9 @@
 </head>
 <body>
 
+<%= link_to "Default", new_topic_path %> |
+<%= link_to "With visual honeypots", new_topic_path(context: "visual_honeypots") %>
+
 <% flash.each do |key, value| %>
   <ul>
     <li>

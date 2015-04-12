@@ -145,9 +145,11 @@ The `invisible_captcha` method accepts some options:
 
 Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change: `sentence_for_humans` and `visual_honeypots`.
 
-```
+```erb
 <%= form_for(@topic) do |f| %>
   <%= f.invisible_captcha :subtitle, visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
+  <!-- or -->
+  <%= invisible_captcha visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
 <% end %>
 ```
 

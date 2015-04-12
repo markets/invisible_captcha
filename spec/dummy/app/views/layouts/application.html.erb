@@ -8,6 +8,14 @@
 </head>
 <body>
 
+<% flash.each do |key, value| %>
+  <ul>
+    <li>
+      <%= "[#{key.upcase}] #{value}" %>
+    </li>
+  </ul>
+<% end %>
+
 <%= yield %>
 
 </body>

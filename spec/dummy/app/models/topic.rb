@@ -4,6 +4,7 @@ class Topic
 
   attr_accessor :title, :body, :subtitle
 
+  validates :title, presence: true
   validates :subtitle, invisible_captcha: true
 
   def initialize(attributes = {})

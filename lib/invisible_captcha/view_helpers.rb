@@ -5,31 +5,42 @@ module InvisibleCaptcha
     # @param honeypot [Symbol] name of honeypot, ie: subtitle => input name: subtitle
     # @param scope [Symbol] name of honeypot scope, ie: topic => input name: topic[subtitle]
     # @return [String] the generated html
-    def invisible_captcha(honeypot = nil, scope = nil)
-      build_invisible_captcha(honeypot, scope)
+    def invisible_captcha(honeypot = nil, scope = nil, options = {})
+      build_invisible_captcha(honeypot, scope, options)
     end
 
     private
 
-    def build_invisible_captcha(honeypot = nil, scope = nil)
+    def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
+      if honeypot.is_a?(Hash)
+        options = honeypot
+        honeypot = nil
+      end
+
       honeypot = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
-      label    = InvisibleCaptcha.sentence_for_humans
+      label    = options[:sentence_for_humans] || InvisibleCaptcha.sentence_for_humans
       html_id  = generate_html_id(honeypot, scope)
 
       content_tag(:div, :id => html_id) do
-        insert_inline_css(html_id) +
-        label_tag(build_label_name(honeypot, scope), label) +
-        text_field_tag(build_text_field_name(honeypot, scope))
-      end.html_safe
+        concat visibility_css(html_id, options)
+        concat label_tag(build_label_name(honeypot, scope), label)
+        concat text_field_tag(build_text_field_name(honeypot, scope))
+      end
     end
 
     def generate_html_id(honeypot, scope = nil)
       "#{scope || honeypot}_#{Time.now.to_i}"
     end
 
-    def insert_inline_css(container_id)
+    def visibility_css(container_id, options)
+      force_visible = if options.key?(:visual_honeypots)
+        options[:visual_honeypots]
+      else
+        InvisibleCaptcha.visual_honeypots
+      end
+
       content_tag(:style, :type => 'text/css', :media => 'screen', :scoped => 'scoped') do
-       "##{container_id} { display:none; }" unless InvisibleCaptcha.visual_honeypots
+        "##{container_id} { display:none; }" unless force_visible
       end
     end
 

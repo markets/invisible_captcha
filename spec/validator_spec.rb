@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe InvisibleCaptcha::InvisibleCaptchaValidator do
   it 'do not pass validations if honeypot is presented' do
-    topic = Topic.new
+    topic = Topic.new(title: 'foo')
     expect(topic.valid?).to be true
 
     topic.subtitle = 'foo'

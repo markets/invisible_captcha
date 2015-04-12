@@ -109,7 +109,27 @@ end
 
 ## Options and customization
 
-This section contains the option list of `invisible_captcha` method (controllers side) and the plugin setup options (initializer).
+This section contains a description of all plugin options and customizations.
+
+### Plugin options:
+
+You can customize:
+
+* `sentence_for_humans`: text for real users if input field was visible.
+* `error_message`: error message thrown by model validation (only model implementation).
+* `honeypots`: collection of default honeypots, used by the view helper, called with no args, to generate the honeypot field name
+* `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
+
+To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
+
+```ruby
+InvisibleCaptcha.setup do |config|
+  config.sentence_for_humans = 'If you are a human, ignore this field'
+  config.error_message       = 'You are a robot!'
+  config.honeypots          += 'fake_resource_title'
+  config.visual_honeypots    = false
+end
+```
 
 ### Controller method options:
 
@@ -121,24 +141,14 @@ The `invisible_captcha` method accepts some options:
 * `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
 * `on_spam`: custom callback to be called on spam detection.
 
-### Plugin options:
+### View helpers options:
 
-You also can customize some plugin options:
+Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change: `sentence_for_humans` and `visual_honeypots`.
 
-* `sentence_for_humans`: text for real users if input field was visible.
-* `error_message`: error message thrown by model validation (only model implementation).
-* `honeypots`: collection of default honeypots, used by the view helper, called with no args, to generate the honeypot field name
-* `visual_honeypots`: make honeypots visible, useful to test/debug your implementation.
-
-To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
-
-```ruby
-InvisibleCaptcha.setup do |config|
-  config.sentence_for_humans = 'If you are a human, ignore this field'
-  config.error_message       = 'You are a robot!'
-  config.honeypots          += 'fake_resource_title'
-  config.visual_honeypots    = false
-end
+```
+<%= form_for(@topic) do |f| %>
+  <%= f.invisible_captcha :subtitle, visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
+<% end %>
 ```
 
 ## Contribute

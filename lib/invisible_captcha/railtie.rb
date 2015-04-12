@@ -1,9 +1,17 @@
 module InvisibleCaptcha
   class Railtie < Rails::Railtie
-    ActionController::Base.send :include, InvisibleCaptcha::ControllerExt
-    ActionController::Base.send :extend, InvisibleCaptcha::ControllerExt::ClassMethods
-    ActionView::Base.send :include, InvisibleCaptcha::ViewHelpers
-    ActionView::Helpers::FormBuilder.send :include, InvisibleCaptcha::FormHelpers
-    ActiveModel::Validations::InvisibleCaptchaValidator = InvisibleCaptcha::InvisibleCaptchaValidator
+    initializer 'invisible_captcha.rails_integration' do
+      ActiveSupport.on_load(:action_controller) do
+        include InvisibleCaptcha::ControllerExt
+        extend InvisibleCaptcha::ControllerExt::ClassMethods
+      end
+
+      ActiveSupport.on_load(:action_view) do
+        include InvisibleCaptcha::ViewHelpers
+        ActionView::Helpers::FormBuilder.send :include, InvisibleCaptcha::FormHelpers
+      end
+
+      ActiveModel::Validations::InvisibleCaptchaValidator = InvisibleCaptcha::InvisibleCaptchaValidator
+    end
   end
 end

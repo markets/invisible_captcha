@@ -1,5 +1,3 @@
-require 'active_model/validator'
-
 module InvisibleCaptcha
   class InvisibleCaptchaValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)

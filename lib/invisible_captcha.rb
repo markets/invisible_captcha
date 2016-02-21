@@ -7,7 +7,12 @@ require 'invisible_captcha/railtie'
 
 module InvisibleCaptcha
   class << self
-    attr_accessor :sentence_for_humans, :error_message, :honeypots, :visual_honeypots
+    attr_accessor :sentence_for_humans,
+                  :error_message,
+                  :honeypots,
+                  :threshold,
+                  :threshold_error_message,
+                  :visual_honeypots
 
     def init!
       # Default sentence for real users if text field was visible
@@ -18,6 +23,12 @@ module InvisibleCaptcha
 
       # Default fake fields for controller based workflow
       self.honeypots = ['foo_id', 'bar_id', 'baz_id']
+
+      # Fastest time to expect a human to submit the form
+      self.threshold = 10.seconds
+
+      # Default error message for validator when form submitted too quickly
+      self.threshold_error_message = 'Sorry, that was too quick! Please resubmit.'
 
       # Make honeypots visibles
       self.visual_honeypots = false

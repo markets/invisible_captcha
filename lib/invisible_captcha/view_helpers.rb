@@ -6,6 +6,7 @@ module InvisibleCaptcha
     # @param scope [Symbol] name of honeypot scope, ie: topic => input name: topic[subtitle]
     # @return [String] the generated html
     def invisible_captcha(honeypot = nil, scope = nil, options = {})
+      session[:invisible_captcha_timestamp] ||= Time.zone.now
       build_invisible_captcha(honeypot, scope, options)
     end
 
@@ -29,7 +30,7 @@ module InvisibleCaptcha
     end
 
     def generate_html_id(honeypot, scope = nil)
-      "#{scope || honeypot}_#{Time.now.to_i}"
+      "#{scope || honeypot}_#{Time.zone.now.to_i}"
     end
 
     def visibility_css(container_id, options)

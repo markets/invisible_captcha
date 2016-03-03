@@ -6,7 +6,7 @@ describe InvisibleCaptcha do
 
     expect(InvisibleCaptcha.sentence_for_humans).to eq('If you are a human, ignore this field')
     expect(InvisibleCaptcha.error_message).to eq('You are a robot!')
-    expect(InvisibleCaptcha.timestamp_threshold).to eq(10.seconds)
+    expect(InvisibleCaptcha.timestamp_threshold).to eq(4.seconds)
     expect(InvisibleCaptcha.timestamp_error_message).to eq('Sorry, that was too quick! Please resubmit.')
     expect(InvisibleCaptcha.honeypots).to eq(['foo_id', 'bar_id', 'baz_id'])
   end

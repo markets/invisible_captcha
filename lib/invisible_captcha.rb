@@ -25,7 +25,7 @@ module InvisibleCaptcha
       self.honeypots = ['foo_id', 'bar_id', 'baz_id']
 
       # Fastest time to expect a human to submit the form
-      self.timestamp_threshold = 10.seconds
+      self.timestamp_threshold = 4.seconds
 
       # Default error message for validator when form submitted too quickly
       self.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'

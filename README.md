@@ -119,15 +119,19 @@ You can customize:
 * `error_message`: error message thrown by model validation (only model implementation).
 * `honeypots`: collection of default honeypots, used by the view helper, called with no args, to generate the honeypot field name
 * `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
+* `timestamp_threshold`: fastest time (4 seconds by default) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea)
+* `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
 ```ruby
 InvisibleCaptcha.setup do |config|
-  config.sentence_for_humans = 'If you are a human, ignore this field'
-  config.error_message       = 'You are a robot!'
-  config.honeypots          += 'fake_resource_title'
-  config.visual_honeypots    = false
+  config.sentence_for_humans     = 'If you are a human, ignore this field'
+  config.error_message           = 'You are a robot!'
+  config.honeypots              += 'fake_resource_title'
+  config.visual_honeypots        = false
+  config.timestamp_threshold     = 4.seconds
+  config.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'
 end
 ```
 
@@ -140,6 +144,7 @@ The `invisible_captcha` method accepts some options:
 * `honeypot`: name of honeypot.
 * `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
 * `on_spam`: custom callback to be called on spam detection.
+* `on_timestamp_spam`: custom callback to be called when form submitted too quickly.
 
 ### View helpers options:
 

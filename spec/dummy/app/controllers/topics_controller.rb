@@ -1,6 +1,8 @@
 class TopicsController < ApplicationController
   invisible_captcha honeypot: :subtitle, only: :create
-  invisible_captcha honeypot: :subtitle, only: :update, on_spam: :custom_callback
+  invisible_captcha honeypot: :subtitle, only: :update,
+                              on_spam: :custom_callback,
+                              on_timestamp_spam: :custom_timestamp_callback
 
   def new
     @topic = Topic.new
@@ -23,5 +25,9 @@ class TopicsController < ApplicationController
 
   def custom_callback
     redirect_to new_topic_path
+  end
+
+  def custom_timestamp_callback
+    redirect_to root_path
   end
 end

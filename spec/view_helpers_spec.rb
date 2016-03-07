@@ -22,7 +22,7 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
   end
 
   before do
-    allow(Time).to receive(:now).and_return(Time.parse('Feb 19 1986'))
+    allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
     InvisibleCaptcha.visual_honeypots = false
   end
 
@@ -59,5 +59,11 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
 
       expect(invisible_captcha(visual_honeypots: false)).to eq(helper_output(nil, nil, visual_honeypots: false))
     end
+  end
+
+  it 'should set spam timestamp' do
+    InvisibleCaptcha.honeypots = [:foo_id]
+    invisible_captcha
+    expect(session[:invisible_captcha_timestamp]).to eq(Time.zone.now)
   end
 end

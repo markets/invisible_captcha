@@ -1,6 +1,8 @@
 .bundle
 pkg
 .rvmrc
+.ruby-version
+.ruby-gemset
 Gemfile.lock
 spec/dummy/log/*.log
 spec/dummy/tmp/

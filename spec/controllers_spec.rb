@@ -3,7 +3,10 @@ require 'spec_helper'
 describe InvisibleCaptcha::ControllerExt, type: :controller do
   render_views
 
-  before { @controller = TopicsController.new }
+  before do
+    @controller = TopicsController.new
+    InvisibleCaptcha.timestamp_threshold = 1.seconds
+  end
 
   context 'submission timestamp_threshold' do
     before do
@@ -17,7 +20,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
     end
 
-    it 'allow custom on_timestamp_spam callback', focus: true do
+    it 'allow custom on_timestamp_spam callback' do
       put :update, id: 1, topic: { title: 'bar' }
 
       expect(response.body).to redirect_to(root_path)

@@ -19,5 +19,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails'
 
   spec.add_development_dependency 'rspec-rails', '~> 3.1'
+  spec.add_development_dependency 'mime-types-data', '< 3'
 end
 

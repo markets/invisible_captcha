@@ -8,6 +8,15 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
     InvisibleCaptcha.timestamp_threshold = 1.seconds
   end
 
+  context 'without invisible_captcha_timestamp in session' do
+    it 'fails like if it was submitted too fast' do
+      post :create, topic: { title: 'foo' }
+
+      expect(response).to redirect_to(new_topic_path)
+      expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
+    end
+  end
+
   context 'submission timestamp_threshold' do
     before do
       session[:invisible_captcha_timestamp] = Time.zone.now

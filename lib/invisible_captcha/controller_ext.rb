@@ -37,11 +37,18 @@ module InvisibleCaptcha
     end
 
     def invisible_captcha_timestamp?(options = {})
-      timestamp       = session[:invisible_captcha_timestamp]
-      time_to_submit  = Time.zone.now - timestamp
+      timestamp = session[:invisible_captcha_timestamp]
+
+      # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
+      unless timestamp
+        logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp not found in session.")
+        return true
+      end
+
+      time_to_submit = Time.zone.now - timestamp
 
       # Consider as spam if form submitted too quickly
-      if timestamp && time_to_submit < InvisibleCaptcha.timestamp_threshold
+      if time_to_submit < InvisibleCaptcha.timestamp_threshold
         logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
         return true
       end

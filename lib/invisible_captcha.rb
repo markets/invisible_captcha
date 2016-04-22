@@ -2,7 +2,6 @@ require 'invisible_captcha/version'
 require 'invisible_captcha/controller_ext'
 require 'invisible_captcha/view_helpers'
 require 'invisible_captcha/form_helpers'
-require 'invisible_captcha/validator'
 require 'invisible_captcha/railtie'
 
 module InvisibleCaptcha

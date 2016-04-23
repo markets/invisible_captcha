@@ -2,17 +2,21 @@
 
 [![Gem Version](https://badge.fury.io/rb/invisible_captcha.svg)](http://badge.fury.io/rb/invisible_captcha) [![Build Status](https://travis-ci.org/markets/invisible_captcha.svg)](https://travis-ci.org/markets/invisible_captcha)
 
-Simple and flexible spam protection solution for Rails applications. Based on the `honeypot` strategy to provide a better user experience.
+> Simple and flexible spam protection solution for Rails applications.
+
+It is based on the `honeypot` strategy to provide a better user experience. It also provides a time-sensitive form submission.
 
 **Background**
 
-The strategy is based on adding an input field into the form that:
+The strategy is about adding an input field into the form that:
 
 * shouldn't be visible by the real users
 * should be left empty by the real users
 * will most be filled by spam bots
 
 ## Installation
+
+Invisible Captcha is tested against Rails `>= 3.2` and Ruby `>= 1.9.3`.
 
 Add this line to you Gemfile:
 
@@ -28,7 +32,7 @@ $ gem install invisible_captcha
 
 ## Usage
 
-View code (form):
+View code:
 
 ```erb
 <%= form_for(@topic) do |f| %>
@@ -46,15 +50,15 @@ class TopicsController < ApplicationController
 end
 ```
 
-This method will act as a `before_filter` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). But you are able to define your own callback by passing a method to the `on_spam` option:
+This method will act as a `before_filter` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). This is a good default, since the bot will surely read the response code and will think that it has achieved to submit the form properly. But, anyway, you are able to define your own callback by passing a method to the `on_spam` option:
 
 ```ruby
 class TopicsController < ApplicationController
-  invisible_captcha only: [:create, :update], on_spam: :your_on_spam_callback_method
+  invisible_captcha only: [:create, :update], on_spam: :your_spam_callback_method
 
   private
 
-  def your_on_spam_callback_method
+  def your_spam_callback_method
     redirect_to root_path
   end
 end
@@ -68,10 +72,10 @@ This section contains a description of all plugin options and customizations.
 
 You can customize:
 
-* `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below)
-* `honeypots`: collection of default honeypots, used by the view helper, called with no args, to generate the honeypot field name
+* `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
+* `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name.
 * `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
-* `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds.
+* `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
 * `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
@@ -132,20 +136,26 @@ Any kind of idea, feedback or bug report are welcome! Open an [issue](https://gi
 
 ## Development
 
-Clone/fork this repository and start to hack.
+Clone/fork this repository, start to hack on it and send a pull request.
 
-Run test suite:
+Run the test suite:
 
 ```
-$ rspec
+$ bundle exec rspec
+```
+
+Run the test suite against all supported versions:
+
+```
+$ bundle exec appraisal rake
 ```
 
 Start a sample Rails app ([source code](spec/dummy)) with `InvisibleCaptcha` integrated:
 
 ```
-$ rake web # PORT=4000 (default: 3000)
+$ bundle exec rake web # PORT=4000 (default: 3000)
 ```
 
 ## License
 
-Copyright (c) 2012-2015 Marc Anguera. Invisible Captcha is released under the [MIT](LICENSE) License.
+Copyright (c) 2012-2016 Marc Anguera. Invisible Captcha is released under the [MIT](LICENSE) License.

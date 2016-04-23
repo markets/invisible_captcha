@@ -11,12 +11,23 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
     else
       InvisibleCaptcha.visual_honeypots
     end
+    style_attributes, input_attributes = if Gem::Version.new(Rails.version) > Gem::Version.new("4.2.0")
+      [
+        'type="text/css" media="screen" scoped="scoped"',
+        "type=\"text\" name=\"#{input_name}\" id=\"#{input_id}\""
+      ]
+    else
+      [
+        'media="screen" scoped="scoped" type="text/css"',
+        "id=\"#{input_id}\" name=\"#{input_name}\" type=\"text\""
+      ]
+    end
 
     %{
       <div id="#{html_id}">
-        <style type="text/css" media="screen" scoped="scoped">#{visibilty ? '' : "##{html_id} { display:none; }"}</style>
+        <style #{style_attributes}>#{visibilty ? '' : "##{html_id} { display:none; }"}</style>
         <label for="#{input_id}">#{InvisibleCaptcha.sentence_for_humans}</label>
-        <input type="text" name="#{input_name}" id="#{input_id}" />
+        <input #{input_attributes} />
       </div>
     }.gsub(/\s+/, ' ').strip.gsub('> <', '><')
   end

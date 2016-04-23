@@ -24,8 +24,8 @@ module InvisibleCaptcha
       # Default fake fields for controller based workflow
       self.honeypots = ['foo_id', 'bar_id', 'baz_id']
 
-      # Fastest time to expect a human to submit the form
-      self.timestamp_threshold = 4.seconds
+      # Fastest time (in seconds) to expect a human to submit the form
+      self.timestamp_threshold = 4
 
       # Default error message for validator when form submitted too quickly
       self.timestamp_error_message = -> { I18n.t('invisible_captcha.timestamp_error_message', default: 'Sorry, that was too quick! Please resubmit.') }

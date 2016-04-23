@@ -28,43 +28,7 @@ $ gem install invisible_captcha
 
 ## Usage
 
-There are different ways to implement, at Controller level or Model level:
-
-### Controller style
-
-View code:
-
-```erb
-<%= form_tag(create_topic_path) do |f| %>
-  <%= invisible_captcha %>
-<% end %>
-```
-
-Controller code:
-
-```ruby
-class TopicsController < ApplicationController
-  invisible_captcha only: [:create, :update]
-end
-```
-
-This method will act as a `before_filter` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). But you are able to define your own callback by passing a method to the `on_spam` option:
-
-```ruby
-invisible_captcha only: [:create, :update], on_spam: :your_on_spam_callback_method
-
-private
-
-def your_on_spam_callback_method
-  redirect_to root_path
-end
-```
-
-[Check here a complete list of allowed options.](#controller-method-options)
-
-### Controller style (resource oriented):
-
-In your form:
+View code (form):
 
 ```erb
 <%= form_for(@topic) do |f| %>
@@ -74,36 +38,25 @@ In your form:
 <% end %>
 ```
 
-In your controller:
+Controller code:
 
 ```ruby
-invisible_captcha only: [:create, :update], honeypot: :subtitle
-```
-
-### Model style
-
-View code:
-
-```erb
-<%= form_for(@topic) do |f| %>
-  <%= f.invisible_captcha :subtitle %>
-<% end %>
-```
-
-Model code:
-
-```ruby
-class Topic < ActiveRecord::Base
-  attr_accessor :subtitle # define a virtual attribute, the honeypot
-  validates :subtitle, :invisible_captcha => true
+class TopicsController < ApplicationController
+  invisible_captcha only: [:create, :update], honeypot: :subtitle
 end
 ```
 
-If you are using [strong_parameters](https://github.com/rails/strong_parameters) (by default in Rails 4), don't forget to keep the honeypot attribute into the params hash:
+This method will act as a `before_filter` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). But you are able to define your own callback by passing a method to the `on_spam` option:
 
 ```ruby
-def topic_params
-  params.require(:topic).permit(:subtitle)
+class TopicsController < ApplicationController
+  invisible_captcha only: [:create, :update], on_spam: :your_on_spam_callback_method
+
+  private
+
+  def your_on_spam_callback_method
+    redirect_to root_path
+  end
 end
 ```
 
@@ -116,7 +69,6 @@ This section contains a description of all plugin options and customizations.
 You can customize:
 
 * `sentence_for_humans`: text for real users if input field was visible.
-* `error_message`: error message thrown by model validation (only model implementation).
 * `honeypots`: collection of default honeypots, used by the view helper, called with no args, to generate the honeypot field name
 * `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 * `timestamp_threshold`: fastest time (4 seconds by default) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea)
@@ -127,7 +79,6 @@ To change these defaults, add the following to an initializer (recommended `conf
 ```ruby
 InvisibleCaptcha.setup do |config|
   config.sentence_for_humans     = 'If you are a human, ignore this field'
-  config.error_message           = 'You are a robot!'
   config.honeypots              += 'fake_resource_title'
   config.visual_honeypots        = false
   config.timestamp_threshold     = 4.seconds

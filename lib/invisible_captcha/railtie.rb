@@ -10,8 +10,6 @@ module InvisibleCaptcha
         include InvisibleCaptcha::ViewHelpers
         ActionView::Helpers::FormBuilder.send :include, InvisibleCaptcha::FormHelpers
       end
-
-      ActiveModel::Validations::InvisibleCaptchaValidator = InvisibleCaptcha::InvisibleCaptchaValidator
     end
   end
 end

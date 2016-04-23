@@ -8,5 +8,5 @@ end
 
 appraise "rails-3.2" do
   gem "rails", "~> 3.2.0"
-  gem "mime-types", '~> 2.6'
+  gem 'mime-types', '< 3.0'
 end

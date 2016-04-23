@@ -68,21 +68,22 @@ This section contains a description of all plugin options and customizations.
 
 You can customize:
 
-* `sentence_for_humans`: text for real users if input field was visible.
+* `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below)
 * `honeypots`: collection of default honeypots, used by the view helper, called with no args, to generate the honeypot field name
 * `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 * `timestamp_threshold`: fastest time (4 seconds by default) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea)
-* `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value
+* `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
 ```ruby
 InvisibleCaptcha.setup do |config|
-  config.sentence_for_humans     = 'If you are a human, ignore this field'
   config.honeypots              += 'fake_resource_title'
   config.visual_honeypots        = false
   config.timestamp_threshold     = 4.seconds
-  config.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'
+  # Leave these unset if you want to use I18n (see below)
+  # config.sentence_for_humans     = 'If you are a human, ignore this field'
+  # config.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'
 end
 ```
 
@@ -108,6 +109,22 @@ Using the view/form helper you can override some defaults for the given instance
   <%= invisible_captcha visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
 <% end %>
 ```
+
+### I18n
+
+`invisible_captcha` tries to use I18n when it's available by default. The keys it looks for are the following:
+
+```yaml
+en:
+  invisible_captcha:
+    sentence_for_humans: "If you are human, ignore this field"
+    error_message: "You are a robot!"
+    timestamp_error_message: "Sorry, that was too quick! Please resubmit."
+```
+
+You can override the english ones in your own i18n config files as well as add new ones for other locales.
+
+If you intend to use I18n with `invisible_captcha`, you _must not_ set `sentence_for_humans`, `error_message` or `timestamp_error_message` to strings in the setup phase.
 
 ## Contribute
 

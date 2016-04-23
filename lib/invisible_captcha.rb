@@ -6,19 +6,20 @@ require 'invisible_captcha/railtie'
 
 module InvisibleCaptcha
   class << self
-    attr_accessor :sentence_for_humans,
-                  :error_message,
-                  :honeypots,
+    attr_writer :sentence_for_humans,
+                :timestamp_error_message,
+                :error_message
+
+    attr_accessor :honeypots,
                   :timestamp_threshold,
-                  :timestamp_error_message,
                   :visual_honeypots
 
     def init!
       # Default sentence for real users if text field was visible
-      self.sentence_for_humans = 'If you are a human, ignore this field'
+      self.sentence_for_humans = -> { I18n.t('invisible_captcha.sentence_for_humans', default: 'If you are a human, ignore this field') }
 
       # Default error message for validator
-      self.error_message = 'You are a robot!'
+      self.error_message = -> { I18n.t('invisible_captcha.error_message', default: 'You are a robot!') }
 
       # Default fake fields for controller based workflow
       self.honeypots = ['foo_id', 'bar_id', 'baz_id']
@@ -27,10 +28,22 @@ module InvisibleCaptcha
       self.timestamp_threshold = 4.seconds
 
       # Default error message for validator when form submitted too quickly
-      self.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'
+      self.timestamp_error_message = -> { I18n.t('invisible_captcha.timestamp_error_message', default: 'Sorry, that was too quick! Please resubmit.') }
 
       # Make honeypots visibles
       self.visual_honeypots = false
+    end
+
+    def sentence_for_humans
+      call_lambda_or_return(@sentence_for_humans)
+    end
+
+    def error_message
+      call_lambda_or_return(@error_message)
+    end
+
+    def timestamp_error_message
+      call_lambda_or_return(@timestamp_error_message)
     end
 
     def setup
@@ -39,6 +52,12 @@ module InvisibleCaptcha
 
     def get_honeypot
       honeypots.sample
+    end
+
+    private
+
+    def call_lambda_or_return(obj)
+      obj.respond_to?(:call) ? obj.call : obj
     end
   end
 end

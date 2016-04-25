@@ -136,13 +136,12 @@ Using the view/form helper you can override some defaults for the given instance
 en:
   invisible_captcha:
     sentence_for_humans: "If you are human, ignore this field"
-    error_message: "You are a robot!"
     timestamp_error_message: "Sorry, that was too quick! Please resubmit."
 ```
 
 You can override the english ones in your own i18n config files as well as add new ones for other locales.
 
-If you intend to use I18n with `invisible_captcha`, you _must not_ set `sentence_for_humans`, `error_message` or `timestamp_error_message` to strings in the setup phase.
+If you intend to use I18n with `invisible_captcha`, you _must not_ set `sentence_for_humans` or `timestamp_error_message` to strings in the setup phase.
 
 ## Contribute
 

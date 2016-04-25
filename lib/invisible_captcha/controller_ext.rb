@@ -45,7 +45,7 @@ module InvisibleCaptcha
         return true
       end
 
-      time_to_submit = Time.zone.now - timestamp
+      time_to_submit = Time.zone.now - DateTime.iso8601(timestamp)
 
       # Consider as spam if form submitted too quickly
       if time_to_submit < InvisibleCaptcha.timestamp_threshold

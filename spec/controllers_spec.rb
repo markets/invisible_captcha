@@ -19,7 +19,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
 
   context 'submission timestamp_threshold' do
     before do
-      session[:invisible_captcha_timestamp] = Time.zone.now
+      session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
     end
 
     it 'fails if submission before timestamp_threshold' do
@@ -52,7 +52,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
 
   context 'form field' do
     before do
-      session[:invisible_captcha_timestamp] = Time.zone.now
+      session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
       # Wait for valid submission
       sleep InvisibleCaptcha.timestamp_threshold
     end

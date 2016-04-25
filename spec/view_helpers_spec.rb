@@ -75,6 +75,6 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
   it 'should set spam timestamp' do
     InvisibleCaptcha.honeypots = [:foo_id]
     invisible_captcha
-    expect(session[:invisible_captcha_timestamp]).to eq(Time.zone.now)
+    expect(session[:invisible_captcha_timestamp]).to eq(Time.zone.now.iso8601)
   end
 end

@@ -38,14 +38,15 @@ module InvisibleCaptcha
 
     def invisible_captcha_timestamp?(options = {})
       timestamp       = session[:invisible_captcha_timestamp]
-      time_to_submit  = Time.zone.now - timestamp
+      return false unless timestamp.present?
+
+      time_to_submit  = Time.zone.now - DateTime.iso8601(timestamp)
 
       # Consider as spam if form submitted too quickly
-      if timestamp && time_to_submit < InvisibleCaptcha.timestamp_threshold
-        logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
-        return true
-      end
-      false
+      return false if time_to_submit >= InvisibleCaptcha.timestamp_threshold
+
+      logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
+      true
     end
 
     def invisible_captcha?(options = {})

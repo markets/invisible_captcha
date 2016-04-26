@@ -13,7 +13,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
     it 'fails if submission before timestamp_threshold' do
       post :create, topic: { title: 'foo' }
 
-      expect(response).to redirect_to(new_topic_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
     end
 

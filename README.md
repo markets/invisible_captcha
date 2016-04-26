@@ -145,7 +145,7 @@ The `invisible_captcha` method accepts some options:
 * `honeypot`: name of honeypot.
 * `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
 * `on_spam`: custom callback to be called on spam detection.
-* `on_timestamp_spam`: custom callback to be called when form submitted too quickly.
+* `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `root_path` printing a warning in `flash[:error]`
 
 ### View helpers options:
 

@@ -11,16 +11,17 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
 
     it 'fails if submission before timestamp_threshold' do
-      post :create, topic: { title: 'foo' }
+      request.env['HTTP_REFERER'] = 'http://test.host/topics'
+      post :create, {topic: { title: 'foo' }}
 
-      expect(response).to redirect_to(root_path)
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
+      expect(response).to redirect_to :back
     end
 
     it 'allow custom on_timestamp_spam callback', focus: true do
-      put :update, id: 1, topic: { title: 'bar' }
+      put :update, {id: 1, topic: { title: 'bar' }}
 
-      expect(response.body).to redirect_to(root_path)
+      expect(response).to redirect_to(root_path)
     end
 
     context 'successful submissions' do

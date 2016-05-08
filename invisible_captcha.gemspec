@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.version       = InvisibleCaptcha::VERSION
   spec.authors       = ["Marc Anguera Insa"]
   spec.email         = ["srmarc.ai@gmail.com"]
-  spec.description   = %q{Simple spam protection for Rails applications using honeypot strategy for better user experience.}
-  spec.summary       = %q{Simple honeypot protection for RoR apps}
+  spec.description   = "Unobtrusive, flexible and simple spam protection for Rails applications using honeypot strategy for better user experience."
+  spec.summary       = "Simple honeypot protection for RoR apps"
   spec.homepage      = "https://github.com/markets/invisible_captcha"
   spec.license       = "MIT"
 
@@ -19,5 +19,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails'
 
   spec.add_development_dependency 'rspec-rails', '~> 3.1'
+  spec.add_development_dependency 'appraisal'
+  spec.add_development_dependency 'test-unit', '~> 3.0'
+  spec.add_development_dependency 'mime-types', '< 3.0'
 end
 

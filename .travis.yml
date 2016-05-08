@@ -1,5 +1,16 @@
 language: ruby
+
+cache: bundler
+
+sudo: false
+
 rvm:
+  - 2.3.0
+  - 2.2
   - 2.1
-  - 2.0
   - 1.9.3
+
+gemfile:
+  - gemfiles/rails_4.2.gemfile
+  - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_3.2.gemfile

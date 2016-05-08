@@ -3,6 +3,7 @@ class TopicsController < ApplicationController
   invisible_captcha honeypot: :subtitle, only: :update,
                               on_spam: :custom_callback,
                               on_timestamp_spam: :custom_timestamp_callback
+  invisible_captcha honeypot: :subtitle, only: :publish, timestamp_threshold: 2
 
   def new
     @topic = Topic.new
@@ -19,6 +20,10 @@ class TopicsController < ApplicationController
   end
 
   def update
+  end
+
+  def publish
+    redirect_to new_topic_path
   end
 
   private

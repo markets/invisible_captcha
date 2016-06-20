@@ -6,6 +6,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
   before do
     @controller = TopicsController.new
     InvisibleCaptcha.timestamp_threshold = 1
+    InvisibleCaptcha.timestamp_enabled = true
   end
 
   context 'without invisible_captcha_timestamp in session' do

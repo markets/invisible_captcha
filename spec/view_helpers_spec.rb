@@ -35,6 +35,7 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
   before do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
     InvisibleCaptcha.visual_honeypots = false
+    InvisibleCaptcha.timestamp_enabled = true
   end
 
   it 'with no arguments' do

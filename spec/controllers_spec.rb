@@ -18,10 +18,10 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
   end
 
-  context 'without invisible_captcha_timestamp in session and timestamp_threshold=0' do
+  context 'without invisible_captcha_timestamp in session and timestamp_enabled=false' do
     it 'does not fail like if it was submitted too fast' do
       request.env['HTTP_REFERER'] = 'http://test.host/topics'
-      InvisibleCaptcha.timestamp_threshold = 0
+      InvisibleCaptcha.timestamp_enabled = false
       post :create, topic: { title: 'foo' }
 
       expect(flash[:error]).not_to be_present

@@ -37,6 +37,10 @@ module InvisibleCaptcha
     end
 
     def invisible_captcha_timestamp?(options = {})
+      unless InvisibleCaptcha.timestamp_enabled
+        return false
+      end
+
       timestamp = session[:invisible_captcha_timestamp]
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all

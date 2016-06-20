@@ -12,6 +12,7 @@ module InvisibleCaptcha
 
     attr_accessor :honeypots,
                   :timestamp_threshold,
+                  :timestamp_enabled,
                   :visual_honeypots
 
     def init!
@@ -26,6 +27,9 @@ module InvisibleCaptcha
 
       # Fastest time (in seconds) to expect a human to submit the form
       self.timestamp_threshold = 4
+
+      # Timestamp check enabled by default
+      self.timestamp_enabled = true
 
       # Default error message for validator when form submitted too quickly
       self.timestamp_error_message = -> { I18n.t('invisible_captcha.timestamp_error_message', default: 'Sorry, that was too quick! Please resubmit.') }

@@ -90,6 +90,7 @@ You can customize:
 * `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name.
 * `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 * `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
+* `timestamp_enabled`: option to disable the time threshold check (default: true)
 * `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):

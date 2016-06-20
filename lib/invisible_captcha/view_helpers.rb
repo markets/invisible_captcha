@@ -6,7 +6,9 @@ module InvisibleCaptcha
     # @param scope [Symbol] name of honeypot scope, ie: topic => input name: topic[subtitle]
     # @return [String] the generated html
     def invisible_captcha(honeypot = nil, scope = nil, options = {})
-      session[:invisible_captcha_timestamp] ||= Time.zone.now.iso8601
+      if InvisibleCaptcha.timestamp_enabled
+        session[:invisible_captcha_timestamp] ||= Time.zone.now.iso8601
+      end
       build_invisible_captcha(honeypot, scope, options)
     end
 

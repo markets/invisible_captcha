@@ -90,16 +90,17 @@ You can customize:
 * `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name.
 * `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 * `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
-* `timestamp_enabled`: option to disable the time threshold check (default: true)
+* `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
 * `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
 ```ruby
 InvisibleCaptcha.setup do |config|
-  config.honeypots              += 'fake_resource_title'
-  config.visual_honeypots        = false
-  config.timestamp_threshold     = 4
+  config.honeypots           << 'another_fake_attribute'
+  config.visual_honeypots    = false
+  config.timestamp_threshold = 4
+  config.timestamp_enabled   = true
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'
   # config.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'

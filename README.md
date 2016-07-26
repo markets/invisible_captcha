@@ -50,7 +50,7 @@ class TopicsController < ApplicationController
 end
 ```
 
-This method will act as a `before_filter` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). This is a good default, since the bot will surely read the response code and will think that it has achieved to submit the form properly. But, anyway, you are able to define your own callback by passing a method to the `on_spam` option:
+This method will act as a `before_action` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). This is a good default, since the bot will surely read the response code and will think that it has achieved to submit the form properly. But, anyway, you are able to define your own callback by passing a method to the `on_spam` option:
 
 ```ruby
 class TopicsController < ApplicationController

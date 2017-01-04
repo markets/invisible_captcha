@@ -174,4 +174,4 @@ $ bundle exec rake web # PORT=4000 (default: 3000)
 
 ## License
 
-Copyright (c) 2012-2016 Marc Anguera. Invisible Captcha is released under the [MIT](LICENSE) License.
+Copyright (c) Marc Anguera. Invisible Captcha is released under the [MIT](LICENSE) License.

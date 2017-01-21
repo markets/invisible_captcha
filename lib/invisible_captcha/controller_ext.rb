@@ -16,6 +16,7 @@ module InvisibleCaptcha
 
     def detect_spam(options = {})
       if invisible_captcha_timestamp?(options)
+        session[:invisible_captcha_timestamp] = nil
         on_timestamp_spam_action(options)
       elsif invisible_captcha?(options)
         on_spam_action(options)

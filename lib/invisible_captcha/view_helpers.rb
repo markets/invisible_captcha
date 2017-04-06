@@ -22,7 +22,7 @@ module InvisibleCaptcha
 
       honeypot = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
       label    = options[:sentence_for_humans] || InvisibleCaptcha.sentence_for_humans
-      visual_honeypots = options[:visual_honeypots] || InvisibleCaptcha.visual_honeypots
+      visual_honeypots = options[:visual_honeypots].nil? ? InvisibleCaptcha.visual_honeypots : options[:visual_honeypots]
       inline_style = visual_honeypots ? "" : "display: none;"
 
       html_id  = generate_html_id(honeypot, scope)

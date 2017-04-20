@@ -12,6 +12,11 @@ module InvisibleCaptcha
       build_invisible_captcha(honeypot, scope, options)
     end
 
+    # Adds the honeypot styles to hide the invisible captcha field
+    def invisible_captcha_styles
+      content_for(:invisible_captcha_styles) if content_for?(:invisible_captcha_styles)
+    end
+
     private
 
     def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
@@ -22,10 +27,14 @@ module InvisibleCaptcha
 
       honeypot = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
       label    = options[:sentence_for_humans] || InvisibleCaptcha.sentence_for_humans
+      visual_honeypots = options[:visual_honeypots].nil? ? InvisibleCaptcha.visual_honeypots : options[:visual_honeypots]
+      @style_class = options[:style_class_name].presence
+
       html_id  = generate_html_id(honeypot, scope)
 
-      content_tag(:div, :id => html_id) do
-        concat visibility_css(html_id, options)
+      add_styles unless visual_honeypots
+
+      content_tag(:div, id: html_id, class: invisible_captcha_style_class) do
         concat label_tag(build_label_name(honeypot, scope), label)
         concat text_field_tag(build_text_field_name(honeypot, scope))
       end
@@ -33,18 +42,6 @@ module InvisibleCaptcha
 
     def generate_html_id(honeypot, scope = nil)
       "#{scope || honeypot}_#{Time.zone.now.to_i}"
-    end
-
-    def visibility_css(container_id, options)
-      visibility = if options.key?(:visual_honeypots)
-        options[:visual_honeypots]
-      else
-        InvisibleCaptcha.visual_honeypots
-      end
-
-      content_tag(:style, :type => 'text/css', :media => 'screen', :scoped => 'scoped') do
-        "##{container_id} { display:none; }" unless visibility
-      end
     end
 
     def build_label_name(honeypot, scope = nil)
@@ -61,6 +58,20 @@ module InvisibleCaptcha
       else
         honeypot
       end
+    end
+
+    def add_styles
+      provide(:invisible_captcha_styles) do
+        content_tag(:style, ".#{invisible_captcha_style_class} {display:none;}")
+      end if @view_flow.present?
+    end
+
+    def invisible_captcha_style_class
+      @style_class ||= invisible_captcha_dynamic_style_class
+    end
+
+    def invisible_captcha_dynamic_style_class
+      "abcdefghijkl-mnopqrstuvwxyz".chars.sample((10..33).to_a.sample).join
     end
   end
 end

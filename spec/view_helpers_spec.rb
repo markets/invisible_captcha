@@ -6,26 +6,20 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
     input_id   = build_label_name(honeypot, scope)
     input_name = build_text_field_name(honeypot, scope)
     html_id    = generate_html_id(honeypot, scope)
-    visibilty  = if options.key?(:visual_honeypots)
-      options[:visual_honeypots]
-    else
+    html_class = options[:style_class_name] || invisible_captcha_style_class
+    visibilty  = if options[:visual_honeypots].nil?
       InvisibleCaptcha.visual_honeypots
-    end
-    style_attributes, input_attributes = if Gem::Version.new(Rails.version) > Gem::Version.new("4.2.0")
-      [
-        'type="text/css" media="screen" scoped="scoped"',
-        "type=\"text\" name=\"#{input_name}\" id=\"#{input_id}\""
-      ]
     else
-      [
-        'media="screen" scoped="scoped" type="text/css"',
-        "id=\"#{input_id}\" name=\"#{input_name}\" type=\"text\""
-      ]
+      options[:visual_honeypots]
+    end
+    input_attributes = if Gem::Version.new(Rails.version) > Gem::Version.new("4.2.0")
+      "type=\"text\" name=\"#{input_name}\" id=\"#{input_id}\""
+    else
+      "id=\"#{input_id}\" name=\"#{input_name}\" type=\"text\""
     end
 
     %{
-      <div id="#{html_id}">
-        <style #{style_attributes}>#{visibilty ? '' : "##{html_id} { display:none; }"}</style>
+      <div id="#{html_id}" class="#{html_class}">
         <label for="#{input_id}">#{InvisibleCaptcha.sentence_for_humans}</label>
         <input #{input_attributes} />
       </div>
@@ -49,6 +43,10 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
 
   it 'with specific honeypot and scope' do
     expect(invisible_captcha(:subtitle, :topic)).to eq(helper_output(:subtitle, :topic))
+  end
+
+  it 'with specific style class name' do
+    expect(invisible_captcha(style_class_name: "test_class")).to match(/class="test_class"/)
   end
 
   context "honeypot visibilty" do

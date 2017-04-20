@@ -32,7 +32,18 @@ $ gem install invisible_captcha
 
 ## Usage
 
-View code:
+**View code for styles:**
+
+```erb
+<head>
+ ...
+  <%= invisible_captcha_styles %>
+</head>
+```
+
+This method adds the styles that hide the honeypot field from regular users.
+
+**View code in form:**
 
 ```erb
 <%= form_for(@topic) do |f| %>
@@ -42,7 +53,7 @@ View code:
 <% end %>
 ```
 
-Controller code:
+**Controller code:**
 
 ```ruby
 class TopicsController < ApplicationController
@@ -121,7 +132,10 @@ The `invisible_captcha` method accepts some options:
 
 ### View helpers options:
 
-Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change: `sentence_for_humans` and `visual_honeypots`.
+Using the view/form helper you can override some defaults for the given instance.
+It allows to change:
+
+**Visibility options:** `sentence_for_humans` and `visual_honeypots`.
 
 ```erb
 <%= form_for(@topic) do |f| %>
@@ -130,6 +144,15 @@ Using the view/form helper you can override some defaults for the given instance
   <%= invisible_captcha visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
 <% end %>
 ```
+
+**CSS option:** `style_class_name` (by default a random name is generated):
+
+```erb
+<%= form_for(@topic) do |f| %>
+  <%= f.invisible_captcha :subtitle, style_class_name: "subtitle-honeypot" %>
+<% end %>
+```
+
 
 ### I18n
 

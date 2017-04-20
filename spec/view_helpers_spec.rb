@@ -6,6 +6,7 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
     input_id   = build_label_name(honeypot, scope)
     input_name = build_text_field_name(honeypot, scope)
     html_id    = generate_html_id(honeypot, scope)
+    html_class = options[:style_class_name] || invisible_captcha_style_class
     visibilty  = if options[:visual_honeypots].nil?
       InvisibleCaptcha.visual_honeypots
     else
@@ -18,7 +19,7 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
     end
 
     %{
-      <div id="#{html_id}" style="#{visibilty ? nil : 'display: none;'}">
+      <div id="#{html_id}" class="#{html_class}">
         <label for="#{input_id}">#{InvisibleCaptcha.sentence_for_humans}</label>
         <input #{input_attributes} />
       </div>
@@ -42,6 +43,10 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
 
   it 'with specific honeypot and scope' do
     expect(invisible_captcha(:subtitle, :topic)).to eq(helper_output(:subtitle, :topic))
+  end
+
+  it 'with specific style class name' do
+    expect(invisible_captcha(style_class_name: "test_class")).to match(/class="test_class"/)
   end
 
   context "honeypot visibilty" do

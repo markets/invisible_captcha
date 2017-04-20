@@ -70,6 +70,21 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
   end
 
+  context 'styles' do
+    it 'adds hidding styles by default' do
+      allow_any_instance_of(InvisibleCaptcha::ViewHelpers).to receive(:invisible_captcha_dynamic_style_class).and_return('test')
+      get :new
+
+      expect(response.body.include?('<style>.test {display:none;}</style>')).to eq(true)
+    end
+
+    it 'does not add styles in visual_honeypots context' do
+      get :new, params: { context: 'visual_honeypots' }
+
+      expect(response.body.include?('<style>')).to eq(false)
+    end
+  end
+
   context 'honeypot attribute' do
     before do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601

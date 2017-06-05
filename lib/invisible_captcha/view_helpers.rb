@@ -4,17 +4,19 @@ module InvisibleCaptcha
     #
     # @param honeypot [Symbol] name of honeypot, ie: subtitle => input name: subtitle
     # @param scope [Symbol] name of honeypot scope, ie: topic => input name: topic[subtitle]
+    # @param options [Hash] options of invisible captcha
+    # @param html_options [Hash] html options of input
     # @return [String] the generated html
-    def invisible_captcha(honeypot = nil, scope = nil, options = {})
+    def invisible_captcha(honeypot = nil, scope = nil, options = {}, html_options = {})
       if InvisibleCaptcha.timestamp_enabled
         session[:invisible_captcha_timestamp] ||= Time.zone.now.iso8601
       end
-      build_invisible_captcha(honeypot, scope, options)
+      build_invisible_captcha(honeypot, scope, options, html_options)
     end
 
     private
 
-    def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
+    def build_invisible_captcha(honeypot = nil, scope = nil, options = {}, html_options = {})
       if honeypot.is_a?(Hash)
         options = honeypot
         honeypot = nil
@@ -27,7 +29,7 @@ module InvisibleCaptcha
       content_tag(:div, :id => html_id) do
         concat visibility_css(html_id, options)
         concat label_tag(build_label_name(honeypot, scope), label)
-        concat text_field_tag(build_text_field_name(honeypot, scope))
+        concat text_field_tag(build_text_field_name(honeypot, scope), html_options)
       end
     end
 

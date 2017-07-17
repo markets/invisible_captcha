@@ -59,6 +59,19 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
     end
 
+    it 'fails on second attempt under the timestamp_threshold in the same session' do
+      request.env['HTTP_REFERER'] = 'http://test.host/topics'
+      post :create, topic: { title: 'foo' }
+      expect(flash[:error]).to be_present
+
+      # second attempt
+      sleep(0.8)
+      flash[:error] = nil
+      session[:invisible_captcha_timestamp] ||= Time.zone.now.iso8601
+      post :create, topic: { title: 'foo' }
+      expect(flash[:error]).to be_present
+    end
+
     it 'allow custom on_timestamp_spam callback' do
       switchable_put :update, id: 1, topic: { title: 'bar' }
 

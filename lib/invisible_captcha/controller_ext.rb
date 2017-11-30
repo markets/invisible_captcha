@@ -77,7 +77,7 @@ module InvisibleCaptcha
         # If honeypot is presented, search for:
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
-        if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
+        if params.has_key?(honeypot) || (params[scope] && params[scope].has_key?(honeypot))
           return true
         end
       else

@@ -99,6 +99,18 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(response.body).to be_blank
     end
 
+    it 'fails with present spam key but empty value' do
+      switchable_post :create, topic: { subtitle: '' }
+
+      expect(response.body).to be_blank
+    end
+
+    it 'fails with present spam key but nil value' do
+      switchable_post :create, topic: { subtitle: nil }
+
+      expect(response.body).to be_blank
+    end
+
     it 'passes with no spam' do
       switchable_post :create, topic: { title: 'foo' }
 

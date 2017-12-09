@@ -21,5 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'appraisal'
   spec.add_development_dependency 'test-unit', '~> 3.0'
   spec.add_development_dependency 'mime-types', '< 3.0'
+  spec.add_development_dependency 'byebug' if RUBY_VERSION.to_i >= 2
 end
 

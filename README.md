@@ -4,15 +4,19 @@
 
 > Simple and flexible spam protection solution for Rails applications.
 
-It is based on the `honeypot` strategy to provide a better user experience. It also provides a time-sensitive form submission.
+Invisible Captcha provides different techniques to protect your application against spambots.
+
+The main protection is a solution based on the `honeypot` strategy. It provides a better user experience, since there is no extra steps for the real users.
 
 **Background**
 
-The strategy is about adding an input field into the form that:
+The technique consists on adding an input field into the form that:
 
 * shouldn't be visible by the real users
 * should be left empty by the real users
 * will most be filled by spam bots
+
+It also comes with a time-sensitive form submission.
 
 ## Installation
 
@@ -116,6 +120,7 @@ The `invisible_captcha` method accepts some options:
 * `honeypot`: name of honeypot.
 * `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
 * `on_spam`: custom callback to be called on spam detection.
+* `timestamp_threshold`: enable/disable this technique at action level.
 * `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
 * `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
 
@@ -165,6 +170,8 @@ Run the test suite against all supported versions:
 ```
 $ bundle exec appraisal rake
 ```
+
+### Demo
 
 Start a sample Rails app ([source code](spec/dummy)) with `InvisibleCaptcha` integrated:
 

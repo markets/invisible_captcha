@@ -4,10 +4,11 @@ module InvisibleCaptcha
     #
     # @param honeypot [Symbol] name of honeypot, ie: subtitle => input name: subtitle
     # @param scope [Symbol] name of honeypot scope, ie: topic => input name: topic[subtitle]
+    # @param options [Hash] html_options for input and invisible_captcha options
     # @return [String] the generated html
     def invisible_captcha(honeypot = nil, scope = nil, options = {})
       if InvisibleCaptcha.timestamp_enabled
-        session[:invisible_captcha_timestamp] ||= Time.zone.now.iso8601
+        session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
       end
       build_invisible_captcha(honeypot, scope, options)
     end
@@ -21,13 +22,13 @@ module InvisibleCaptcha
       end
 
       honeypot = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
-      label    = options[:sentence_for_humans] || InvisibleCaptcha.sentence_for_humans
+      label    = options.delete(:sentence_for_humans) || InvisibleCaptcha.sentence_for_humans
       html_id  = generate_html_id(honeypot, scope)
 
       content_tag(:div, :id => html_id) do
         concat visibility_css(html_id, options)
         concat label_tag(build_label_name(honeypot, scope), label)
-        concat text_field_tag(build_text_field_name(honeypot, scope))
+        concat text_field_tag(build_text_field_name(honeypot, scope), nil, options)
       end
     end
 
@@ -37,7 +38,7 @@ module InvisibleCaptcha
 
     def visibility_css(container_id, options)
       visibility = if options.key?(:visual_honeypots)
-        options[:visual_honeypots]
+        options.delete(:visual_honeypots)
       else
         InvisibleCaptcha.visual_honeypots
       end

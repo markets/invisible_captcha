@@ -2,9 +2,9 @@ class Topic
   include ActiveModel::Validations
   include ActiveModel::Conversion
 
-  attr_accessor :title, :body, :subtitle
+  attr_accessor :title, :author, :body, :subtitle
 
-  validates :title, presence: true
+  validates :title, :author, presence: true
 
   def initialize(attributes = {})
     attributes.each do |name, value|

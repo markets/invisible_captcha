@@ -9,10 +9,11 @@
 <body>
 
 <%= link_to "Default", new_topic_path %> |
-<%= link_to "With visual honeypots", new_topic_path(context: "visual_honeypots") %>
+<%= link_to "With visual honeypots", new_topic_path(context: "visual_honeypots") %> |
+<%= link_to "With timestamp disabled", new_topic_path(context: "timestamp_disabled") %>
 
 <% flash.each do |key, value| %>
-  <ul>
+  <ul class="errors">
     <li>
       <%= "[#{key.upcase}] #{value}" %>
     </li>

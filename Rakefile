@@ -13,5 +13,5 @@ task :web do
   puts "Starting application in http://localhost:#{port} ... \n"
 
   Dir.chdir(app_path)
-  `rails s -p #{port}`
+  exec("rails s -p #{port}")
 end

@@ -19,25 +19,29 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
   end
 
-  before do
+  before(:each) do
     @controller = TopicsController.new
+    request.env['HTTP_REFERER'] = 'http://test.host/topics'
     InvisibleCaptcha.timestamp_threshold = 1
     InvisibleCaptcha.timestamp_enabled = true
   end
 
   context 'without invisible_captcha_timestamp in session' do
     it 'fails like if it was submitted too fast' do
-      request.env['HTTP_REFERER'] = 'http://test.host/topics'
       switchable_post :create, topic: { title: 'foo' }
 
       expect(response).to redirect_to 'http://test.host/topics'
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
     end
-  end
 
-  context 'without invisible_captcha_timestamp in session and timestamp_enabled=false' do
-    it 'does not fail like if it was submitted too fast' do
-      request.env['HTTP_REFERER'] = 'http://test.host/topics'
+    it 'passes if disabled at action level' do
+      switchable_post :copy, topic: { title: 'foo' }
+
+      expect(flash[:error]).not_to be_present
+      expect(response.body).to be_present
+    end
+
+    it 'passes if disabled at app level' do
       InvisibleCaptcha.timestamp_enabled = false
       switchable_post :create, topic: { title: 'foo' }
 
@@ -47,12 +51,11 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
   end
 
   context 'submission timestamp_threshold' do
-    before do
+    before(:each) do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
     end
 
     it 'fails if submission before timestamp_threshold' do
-      request.env['HTTP_REFERER'] = 'http://test.host/topics'
       switchable_post :create, topic: { title: 'foo' }
 
       expect(response).to redirect_to 'http://test.host/topics'
@@ -87,7 +90,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
   end
 
   context 'honeypot attribute' do
-    before do
+    before(:each) do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
       # Wait for valid submission
       sleep InvisibleCaptcha.timestamp_threshold

@@ -51,6 +51,10 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
     expect(invisible_captcha(:subtitle, :topic)).to eq(helper_output(:subtitle, :topic))
   end
 
+  it 'with custom html options' do
+    expect(invisible_captcha(:subtitle, :topic, { class: 'foo_class' })).to match(/class="foo_class"/)
+  end
+
   context "honeypot visibilty" do
     it 'visible from defaults' do
       InvisibleCaptcha.honeypots = [:foo_id]

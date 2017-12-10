@@ -22,8 +22,8 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
   before(:each) do
     @controller = TopicsController.new
     request.env['HTTP_REFERER'] = 'http://test.host/topics'
+    InvisibleCaptcha.init!
     InvisibleCaptcha.timestamp_threshold = 1
-    InvisibleCaptcha.timestamp_enabled = true
   end
 
   context 'without invisible_captcha_timestamp in session' do
@@ -62,10 +62,10 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
     end
 
-    it 'allow custom on_timestamp_spam callback' do
+    it 'allow a custom on_timestamp_spam callback' do
       switchable_put :update, id: 1, topic: { title: 'bar' }
 
-      expect(response).to redirect_to(root_path)
+      expect(response.status).to eq(204)
     end
 
     context 'successful submissions' do
@@ -108,7 +108,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(response.body).to be_present
     end
 
-    it 'allow custom on_spam callback' do
+    it 'allow a custom on_spam callback' do
       switchable_put :update, id: 1, topic: { subtitle: 'foo' }
 
       expect(response.body).to redirect_to(new_topic_path)

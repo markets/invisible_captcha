@@ -6,11 +6,11 @@
 
 Invisible Captcha provides different techniques to protect your application against spambots.
 
-The main protection is a solution based on the `honeypot` strategy. It provides a better user experience, since there is no extra steps for the real users.
+The main protection is a solution based on the `honeypot` principle, which provides a better user experience, since there is no extra steps for real users, but for the bots.
 
-**Background**
+**Strategy**
 
-The technique consists on adding an input field into the form that:
+Essentially, consists on adding an input field into the form that:
 
 * shouldn't be visible by the real users
 * should be left empty by the real users
@@ -91,20 +91,23 @@ This section contains a description of all plugin options and customizations.
 You can customize:
 
 * `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
-* `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name.
+* `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated.
 * `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 * `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
 * `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
 * `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
+* `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
 ```ruby
 InvisibleCaptcha.setup do |config|
-  config.honeypots           << 'another_fake_attribute'
-  config.visual_honeypots    = false
-  config.timestamp_threshold = 4
-  config.timestamp_enabled   = true
+  # config.honeypots           << ['more', 'fake', 'attribute', 'names']
+  # config.visual_honeypots    = false
+  # config.timestamp_threshold = 4
+  # config.timestamp_enabled   = true
+  # config.injectable_styles   = false
+
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'
   # config.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'
@@ -134,6 +137,12 @@ Using the view/form helper you can override some defaults for the given instance
   <!-- or -->
   <%= invisible_captcha visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
 <% end %>
+```
+
+You can also pass html options to the input:
+
+```erb
+<%= invisible_captcha :subtitle, :topic, id: "your_id", class: "your_class" %>
 ```
 
 ### I18n

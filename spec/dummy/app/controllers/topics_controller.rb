@@ -1,9 +1,12 @@
 class TopicsController < ApplicationController
   invisible_captcha honeypot: :subtitle, only: :create
+
   invisible_captcha honeypot: :subtitle, only: :update,
                               on_spam: :custom_callback,
                               on_timestamp_spam: :custom_timestamp_callback
+
   invisible_captcha honeypot: :subtitle, only: :publish, timestamp_threshold: 2
+
   invisible_captcha honeypot: :subtitle, only: :copy, timestamp_enabled: false
 
   def index
@@ -48,6 +51,6 @@ class TopicsController < ApplicationController
   end
 
   def custom_timestamp_callback
-    redirect_to root_path
+    head(204)
   end
 end

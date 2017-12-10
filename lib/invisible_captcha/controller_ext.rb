@@ -15,14 +15,14 @@ module InvisibleCaptcha
     end
 
     def detect_spam(options = {})
-      if invisible_captcha_timestamp?(options)
-        on_timestamp_spam_action(options)
-      elsif invisible_captcha?(options)
-        on_spam_action(options)
+      if timestamp_spam?(options)
+        on_timestamp_spam(options)
+      elsif honeypot_spam?(options)
+        on_spam(options)
       end
     end
 
-    def on_timestamp_spam_action(options = {})
+    def on_timestamp_spam(options = {})
       if action = options[:on_timestamp_spam]
         send(action)
       else
@@ -34,7 +34,7 @@ module InvisibleCaptcha
       end
     end
 
-    def on_spam_action(options = {})
+    def on_spam(options = {})
       if action = options[:on_spam]
         send(action)
       else
@@ -42,7 +42,7 @@ module InvisibleCaptcha
       end
     end
 
-    def invisible_captcha_timestamp?(options = {})
+    def timestamp_spam?(options = {})
       enabled = if options.key?(:timestamp_enabled)
         options[:timestamp_enabled]
       else
@@ -70,7 +70,7 @@ module InvisibleCaptcha
       false
     end
 
-    def invisible_captcha?(options = {})
+    def honeypot_spam?(options = {})
       honeypot = options[:honeypot]
       scope    = options[:scope] || controller_name.singularize
 

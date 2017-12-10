@@ -20,7 +20,7 @@ It also comes with a time-sensitive form submission.
 
 ## Installation
 
-Invisible Captcha is tested against Rails `>= 3.2` and Ruby `>= 1.9.3`.
+Invisible Captcha is tested against Rails `>= 3.2` and Ruby `>= 2.1`.
 
 Add this line to you Gemfile:
 
@@ -133,9 +133,9 @@ Using the view/form helper you can override some defaults for the given instance
 
 ```erb
 <%= form_for(@topic) do |f| %>
-  <%= f.invisible_captcha :subtitle, visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
+  <%= f.invisible_captcha :subtitle, visual_honeypots: true, sentence_for_humans: "hey! leave this input empty!" %>
   <!-- or -->
-  <%= invisible_captcha visual_honeypots: true, sentence_for_humans: "Ei, don't fill on this input!" %>
+  <%= invisible_captcha visual_honeypots: true, sentence_for_humans: "hey! leave this input empty!" %>
 <% end %>
 ```
 

@@ -41,11 +41,11 @@ module InvisibleCaptcha
       content_tag(:div, class: css_class) do
         concat styles unless InvisibleCaptcha.injectable_styles
         concat label_tag(build_label_name(honeypot, scope), label)
-        concat text_field_tag(build_text_field_name(honeypot, scope), nil, options)
+        concat text_field_tag(build_text_field_name(honeypot, scope), nil, options.merge(tabindex: -1))
       end
     end
 
-    def visibility_css(container_id, options)
+    def visibility_css(css_class, options)
       visible = if options.key?(:visual_honeypots)
         options.delete(:visual_honeypots)
       else
@@ -55,7 +55,7 @@ module InvisibleCaptcha
       return if visible
 
       content_tag(:style, media: 'screen') do
-        ".#{container_id} {display:none;}"
+        ".#{css_class} {display:none;}"
       end
     end
 

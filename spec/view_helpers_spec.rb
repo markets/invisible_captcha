@@ -3,7 +3,11 @@ require 'spec_helper'
 describe InvisibleCaptcha::ViewHelpers, type: :helper do
   before(:each) do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
-    @view_flow = ActionView::OutputFlow.new # to test content_for and provide
+    allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")
+
+    # to test content_for and provide
+    @view_flow = ActionView::OutputFlow.new
+
     InvisibleCaptcha.init!
   end
 

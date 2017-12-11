@@ -8,15 +8,13 @@ Invisible Captcha provides different techniques to protect your application agai
 
 The main protection is a solution based on the `honeypot` principle, which provides a better user experience, since there is no extra steps for real users, but for the bots.
 
-**Strategy**
-
-Essentially, consists on adding an input field into the form that:
+Essentially, the strategy consists on adding an input field :honey_pot: into the form that:
 
 * shouldn't be visible by the real users
 * should be left empty by the real users
 * will most be filled by spam bots
 
-It also comes with a time-sensitive form submission.
+It also comes with a time-sensitive :hourglass: form submission.
 
 ## Installation
 

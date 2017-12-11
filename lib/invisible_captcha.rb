@@ -60,6 +60,14 @@ module InvisibleCaptcha
       honeypots.sample
     end
 
+    def css_strategy
+      [
+        "display:none;",
+        "position:absolute!important;top:-9999px;left:-9999px;",
+        "position:absolute!important;height:1px;width:1px;overflow:hidden;"
+      ].sample
+    end
+
     private
 
     def call_lambda_or_return(obj)

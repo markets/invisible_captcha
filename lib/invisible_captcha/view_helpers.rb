@@ -55,7 +55,7 @@ module InvisibleCaptcha
       return if visible
 
       content_tag(:style, media: 'screen') do
-        ".#{css_class} {display:none;}"
+        ".#{css_class} {#{InvisibleCaptcha.css_strategy}}"
       end
     end
 

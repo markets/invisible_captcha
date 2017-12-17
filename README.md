@@ -66,7 +66,7 @@ class TopicsController < ApplicationController
 end
 ```
 
-Note that isn't mandatory to specify a `honeypot` attribute (nor in the view, nor in the controller). In this case, the engine will take a random field from `InvisibleCaptcha.honeypots`. So, if you're integrating it following this path, in your form:
+Note that is not mandatory to specify a `honeypot` attribute (nor in the view, nor in the controller). In this case, the engine will take a random field from `InvisibleCaptcha.honeypots`. So, if you're integrating it following this path, in your form:
 
 ```erb
 <%= form_tag(new_contact_path) do |f| %>
@@ -118,7 +118,7 @@ The `invisible_captcha` method accepts some options:
 
 * `only`: apply to given controller actions.
 * `except`: exclude to given controller actions.
-* `honeypot`: name of honeypot.
+* `honeypot`: name of custom honeypot.
 * `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
 * `on_spam`: custom callback to be called on spam detection.
 * `timestamp_threshold`: enable/disable this technique at action level.
@@ -175,7 +175,8 @@ $ bundle exec rspec
 Run the test suite against all supported versions:
 
 ```
-$ bundle exec appraisal rake
+$ bundle exec appraisal install
+$ bundle exec appraisal rspec
 ```
 
 ### Demo

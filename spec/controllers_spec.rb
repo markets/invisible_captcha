@@ -113,5 +113,12 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
 
       expect(response.body).to redirect_to(new_topic_path)
     end
+
+    it 'honeypot is removed from params if you use a custom honeypot' do
+      switchable_post :create, topic: { title: 'foo', subtitle: '' }
+
+      expect(flash[:error]).not_to be_present
+      expect(@controller.params[:topic].key?(:subtitle)).to eq(false)
+    end
   end
 end

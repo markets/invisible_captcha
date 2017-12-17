@@ -14,6 +14,8 @@ module InvisibleCaptcha
       end
     end
 
+    private
+
     def detect_spam(options = {})
       if timestamp_spam?(options)
         on_timestamp_spam(options)
@@ -67,6 +69,7 @@ module InvisibleCaptcha
         logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
         return true
       end
+
       false
     end
 
@@ -75,17 +78,22 @@ module InvisibleCaptcha
       scope    = options[:scope] || controller_name.singularize
 
       if honeypot
-        # If honeypot is presented, search for:
+        # If honeypot is defined for this controller-action, search for:
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
         if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
           return true
+        else
+          # No honeypot spam detected, remove honeypot from params to avoid UnpermittedParameters exceptions
+          params.delete(honeypot) if params.key?(honeypot)
+          params[scope].try(:delete, honeypot) if params.key?(scope)
         end
       else
-        InvisibleCaptcha.honeypots.each do |field|
-          return true if params[field].present?
+        InvisibleCaptcha.honeypots.each do |default_honeypot|
+          return true if params[default_honeypot].present?
         end
       end
+
       false
     end
   end

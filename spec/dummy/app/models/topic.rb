@@ -4,8 +4,9 @@ class Topic
 
   attr_accessor :title, :author, :body, :subtitle
 
-  validates :title, :author, presence: true
-  validates :title, length: { minimum: 10 }
+  validates :title, length: { minimum: 5 }
+  validates :author, presence: true
+  validates :body, length: { minimum: 10 }
 
   def initialize(attributes = {})
     attributes.each do |name, value|

@@ -1,11 +1,3 @@
-<h1>
-  <% if params[:context] == 'timestamp_disabled' %>
-    Copy topic (action with timestamp disabled)
-  <% else %>
-    New topic
-  <% end %>
-</h1>
-
 <% if @topic.errors.any? %>
   <div class="errors">
     <strong><%= pluralize(@topic.errors.count, "error") %> prohibited this record from being saved:</strong>
@@ -42,6 +34,6 @@
   </div>
 
   <div class="actions">
-    <%= f.submit 'Save' %>
+    <%= f.button 'Save' %>
   </div>
 <% end %>

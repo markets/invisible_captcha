@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  resources :topics, only: [:new, :create, :update] do
-    member do
-      post :publish
-    end
+  resources :topics do
+    post :publish, on: :member
+    post :copy, on: :collection
   end
 
   root to: 'topics#new'

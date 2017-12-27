@@ -1,81 +1,75 @@
 require 'spec_helper'
 
 describe InvisibleCaptcha::ViewHelpers, type: :helper do
-  def helper_output(honeypot = nil, scope = nil, options = {})
-    honeypot ||= InvisibleCaptcha.get_honeypot
-    input_id   = build_label_name(honeypot, scope)
-    input_name = build_text_field_name(honeypot, scope)
-    html_id    = generate_html_id(honeypot, scope)
-    visibilty  = if options.key?(:visual_honeypots)
-      options[:visual_honeypots]
-    else
-      InvisibleCaptcha.visual_honeypots
-    end
-    style_attributes, input_attributes = if Gem::Version.new(Rails.version) > Gem::Version.new("4.2.0")
-      [
-        'type="text/css" media="screen" scoped="scoped"',
-        "type=\"text\" name=\"#{input_name}\" id=\"#{input_id}\""
-      ]
-    else
-      [
-        'media="screen" scoped="scoped" type="text/css"',
-        "id=\"#{input_id}\" name=\"#{input_name}\" type=\"text\""
-      ]
-    end
-
-    %{
-      <div id="#{html_id}">
-        <style #{style_attributes}>#{visibilty ? '' : "##{html_id} { display:none; }"}</style>
-        <label for="#{input_id}">#{InvisibleCaptcha.sentence_for_humans}</label>
-        <input #{input_attributes} />
-      </div>
-    }.gsub(/\s+/, ' ').strip.gsub('> <', '><')
-  end
-
-  before do
+  before(:each) do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
-    InvisibleCaptcha.visual_honeypots = false
-    InvisibleCaptcha.timestamp_enabled = true
+    allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")
+
+    # to test content_for and provide
+    @view_flow = ActionView::OutputFlow.new
+
+    InvisibleCaptcha.init!
   end
 
   it 'with no arguments' do
     InvisibleCaptcha.honeypots = [:foo_id]
-    expect(invisible_captcha).to eq(helper_output)
+    expect(invisible_captcha).to match(/name="foo_id"/)
   end
 
   it 'with specific honeypot' do
-    expect(invisible_captcha(:subtitle)).to eq(helper_output(:subtitle))
+    expect(invisible_captcha(:subtitle)).to match(/name="subtitle"/)
   end
 
   it 'with specific honeypot and scope' do
-    expect(invisible_captcha(:subtitle, :topic)).to eq(helper_output(:subtitle, :topic))
+    expect(invisible_captcha(:subtitle, :topic)).to match(/name="topic\[subtitle\]"/)
+  end
+
+  it 'with custom html options' do
+    expect(invisible_captcha(:subtitle, :topic, { class: 'foo_class' })).to match(/class="foo_class"/)
+  end
+
+  it 'generated html + styles' do
+    InvisibleCaptcha.honeypots = [:foo_id]
+    output = invisible_captcha.gsub("\"", "'")
+    regexp = %r{<div class='foo_id_\w*'><style.*>.foo_id_\w* {display:none;}</style><label.*>#{InvisibleCaptcha.sentence_for_humans}.*<input.*name='foo_id'.*tabindex='-1'.*</div>}
+
+    expect(output).to match(regexp)
   end
 
   context "honeypot visibilty" do
     it 'visible from defaults' do
-      InvisibleCaptcha.honeypots = [:foo_id]
       InvisibleCaptcha.visual_honeypots = true
 
-      expect(invisible_captcha).to eq(helper_output)
+      expect(invisible_captcha).not_to match(/display:none/)
     end
 
     it 'visible from given instance (default override)' do
-      InvisibleCaptcha.honeypots = [:foo_id]
-
-      expect(invisible_captcha(visual_honeypots: true)).to eq(helper_output(nil, nil, visual_honeypots: true))
+      expect(invisible_captcha(visual_honeypots: true)).not_to match(/display:none/)
     end
 
     it 'invisible from given instance (default override)' do
-      InvisibleCaptcha.honeypots = [:foo_id]
       InvisibleCaptcha.visual_honeypots = true
 
-      expect(invisible_captcha(visual_honeypots: false)).to eq(helper_output(nil, nil, visual_honeypots: false))
+      expect(invisible_captcha(visual_honeypots: false)).to match(/display:none/)
     end
   end
 
   it 'should set spam timestamp' do
-    InvisibleCaptcha.honeypots = [:foo_id]
     invisible_captcha
     expect(session[:invisible_captcha_timestamp]).to eq(Time.zone.now.iso8601)
+  end
+
+  context 'injectable_styles option' do
+    it 'by default, render styles along with the honeypot' do
+      expect(invisible_captcha).to match(/display:none/)
+      expect(helper.content_for(:invisible_captcha_styles)).to be_blank
+    end
+
+    it 'if injectable_styles is set, do not append styles inline' do
+      InvisibleCaptcha.injectable_styles = true
+
+      expect(invisible_captcha).not_to match(/display:none;/)
+      expect(helper.content_for(:invisible_captcha_styles)).to match(/display:none;/)
+    end
   end
 end

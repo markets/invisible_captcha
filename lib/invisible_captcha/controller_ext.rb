@@ -2,7 +2,7 @@ module InvisibleCaptcha
   module ControllerExt
     module ClassMethods
       def invisible_captcha(options = {})
-        if respond_to? :before_action
+        if respond_to?(:before_action)
           before_action(options) do
             detect_spam(options)
           end
@@ -14,15 +14,17 @@ module InvisibleCaptcha
       end
     end
 
+    private
+
     def detect_spam(options = {})
-      if invisible_captcha_timestamp?(options)
-        on_timestamp_spam_action(options)
-      elsif invisible_captcha?(options)
-        on_spam_action(options)
+      if timestamp_spam?(options)
+        on_timestamp_spam(options)
+      elsif honeypot_spam?(options)
+        on_spam(options)
       end
     end
 
-    def on_timestamp_spam_action(options = {})
+    def on_timestamp_spam(options = {})
       if action = options[:on_timestamp_spam]
         send(action)
       else
@@ -34,22 +36,22 @@ module InvisibleCaptcha
       end
     end
 
-    def on_spam_action(options = {})
+    def on_spam(options = {})
       if action = options[:on_spam]
         send(action)
       else
-        default_on_spam
+        head(200)
       end
     end
 
-    def default_on_spam
-      head(200)
-    end
-
-    def invisible_captcha_timestamp?(options = {})
-      unless InvisibleCaptcha.timestamp_enabled
-        return false
+    def timestamp_spam?(options = {})
+      enabled = if options.key?(:timestamp_enabled)
+        options[:timestamp_enabled]
+      else
+        InvisibleCaptcha.timestamp_enabled
       end
+
+      return false unless enabled
 
       timestamp = session[:invisible_captcha_timestamp]
 
@@ -60,31 +62,38 @@ module InvisibleCaptcha
       end
 
       time_to_submit = Time.zone.now - DateTime.iso8601(timestamp)
+      threshold = options[:timestamp_threshold] || InvisibleCaptcha.timestamp_threshold
 
       # Consider as spam if form submitted too quickly
-      if time_to_submit < (options[:timestamp_threshold] || InvisibleCaptcha.timestamp_threshold)
+      if time_to_submit < threshold
         logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
         return true
       end
+
       false
     end
 
-    def invisible_captcha?(options = {})
+    def honeypot_spam?(options = {})
       honeypot = options[:honeypot]
       scope    = options[:scope] || controller_name.singularize
 
       if honeypot
-        # If honeypot is presented, search for:
+        # If honeypot is defined for this controller-action, search for:
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
         if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
           return true
+        else
+          # No honeypot spam detected, remove honeypot from params to avoid UnpermittedParameters exceptions
+          params.delete(honeypot) if params.key?(honeypot)
+          params[scope].try(:delete, honeypot) if params.key?(scope)
         end
       else
-        InvisibleCaptcha.honeypots.each do |field|
-          return true if params[field].present?
+        InvisibleCaptcha.honeypots.each do |default_honeypot|
+          return true if params[default_honeypot].present?
         end
       end
+
       false
     end
   end

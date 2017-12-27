@@ -1,9 +1,17 @@
 class TopicsController < ApplicationController
   invisible_captcha honeypot: :subtitle, only: :create
+
   invisible_captcha honeypot: :subtitle, only: :update,
                               on_spam: :custom_callback,
                               on_timestamp_spam: :custom_timestamp_callback
+
   invisible_captcha honeypot: :subtitle, only: :publish, timestamp_threshold: 2
+
+  invisible_captcha honeypot: :subtitle, only: :copy, timestamp_enabled: false
+
+  def index
+    redirect_to new_topic_path
+  end
 
   def new
     @topic = Topic.new
@@ -26,6 +34,16 @@ class TopicsController < ApplicationController
     redirect_to new_topic_path
   end
 
+  def copy
+    @topic = Topic.new(params[:topic])
+
+    if @topic.valid?
+      redirect_to new_topic_path(context: params[:context]), notice: 'Success!'
+    else
+      render action: 'new'
+    end
+  end
+
   private
 
   def custom_callback
@@ -33,6 +51,6 @@ class TopicsController < ApplicationController
   end
 
   def custom_timestamp_callback
-    redirect_to root_path
+    head(204)
   end
 end

@@ -20,6 +20,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec-rails', '~> 3.1'
   spec.add_development_dependency 'appraisal'
   spec.add_development_dependency 'test-unit', '~> 3.0'
-  spec.add_development_dependency 'mime-types', '< 3.0'
+  spec.add_development_dependency 'byebug'
 end
 

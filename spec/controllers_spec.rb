@@ -19,25 +19,29 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
   end
 
-  before do
+  before(:each) do
     @controller = TopicsController.new
+    request.env['HTTP_REFERER'] = 'http://test.host/topics'
+    InvisibleCaptcha.init!
     InvisibleCaptcha.timestamp_threshold = 1
-    InvisibleCaptcha.timestamp_enabled = true
   end
 
   context 'without invisible_captcha_timestamp in session' do
     it 'fails like if it was submitted too fast' do
-      request.env['HTTP_REFERER'] = 'http://test.host/topics'
       switchable_post :create, topic: { title: 'foo' }
 
       expect(response).to redirect_to 'http://test.host/topics'
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
     end
-  end
 
-  context 'without invisible_captcha_timestamp in session and timestamp_enabled=false' do
-    it 'does not fail like if it was submitted too fast' do
-      request.env['HTTP_REFERER'] = 'http://test.host/topics'
+    it 'passes if disabled at action level' do
+      switchable_post :copy, topic: { title: 'foo' }
+
+      expect(flash[:error]).not_to be_present
+      expect(response.body).to be_present
+    end
+
+    it 'passes if disabled at app level' do
       InvisibleCaptcha.timestamp_enabled = false
       switchable_post :create, topic: { title: 'foo' }
 
@@ -47,22 +51,21 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
   end
 
   context 'submission timestamp_threshold' do
-    before do
+    before(:each) do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
     end
 
     it 'fails if submission before timestamp_threshold' do
-      request.env['HTTP_REFERER'] = 'http://test.host/topics'
       switchable_post :create, topic: { title: 'foo' }
 
       expect(response).to redirect_to 'http://test.host/topics'
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
     end
 
-    it 'allow custom on_timestamp_spam callback' do
+    it 'allow a custom on_timestamp_spam callback' do
       switchable_put :update, id: 1, topic: { title: 'bar' }
 
-      expect(response).to redirect_to(root_path)
+      expect(response.status).to eq(204)
     end
 
     context 'successful submissions' do
@@ -87,7 +90,7 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
   end
 
   context 'honeypot attribute' do
-    before do
+    before(:each) do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
       # Wait for valid submission
       sleep InvisibleCaptcha.timestamp_threshold
@@ -105,10 +108,17 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(response.body).to be_present
     end
 
-    it 'allow custom on_spam callback' do
+    it 'allow a custom on_spam callback' do
       switchable_put :update, id: 1, topic: { subtitle: 'foo' }
 
       expect(response.body).to redirect_to(new_topic_path)
+    end
+
+    it 'honeypot is removed from params if you use a custom honeypot' do
+      switchable_post :create, topic: { title: 'foo', subtitle: '' }
+
+      expect(flash[:error]).not_to be_present
+      expect(@controller.params[:topic].key?(:subtitle)).to eq(false)
     end
   end
 end

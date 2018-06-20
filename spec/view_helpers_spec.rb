@@ -62,14 +62,14 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
   context 'injectable_styles option' do
     it 'by default, render styles along with the honeypot' do
       expect(invisible_captcha).to match(/display:none/)
-      expect(helper.content_for(:invisible_captcha_styles)).to be_blank
+      expect(@view_flow.content[:invisible_captcha_styles]).to be_blank
     end
 
     it 'if injectable_styles is set, do not append styles inline' do
       InvisibleCaptcha.injectable_styles = true
 
       expect(invisible_captcha).not_to match(/display:none;/)
-      expect(helper.content_for(:invisible_captcha_styles)).to match(/display:none;/)
+      expect(@view_flow.content[:invisible_captcha_styles]).to match(/display:none;/)
     end
   end
 end

@@ -179,6 +179,12 @@ $ bundle exec appraisal install
 $ bundle exec appraisal rspec
 ```
 
+Run specs against specific version:
+
+```
+$ bundle exec appraisal rails-5.2 rspec
+```
+
 ### Demo
 
 Start a sample Rails app ([source code](spec/dummy)) with `InvisibleCaptcha` integrated:

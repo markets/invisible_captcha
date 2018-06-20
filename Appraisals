@@ -1,3 +1,7 @@
+appraise "rails-5.2" do
+  gem "rails", "~> 5.2.0"
+end
+
 appraise "rails-5.1" do
   gem "rails", "~> 5.1.0"
 end
@@ -8,10 +12,6 @@ end
 
 appraise "rails-4.2" do
   gem "rails", github: 'rails/rails', branch: '4-2-stable'
-end
-
-appraise "rails-4.1" do
-  gem "rails", "~> 4.1.0"
 end
 
 appraise "rails-3.2" do

@@ -121,7 +121,7 @@ The `invisible_captcha` method accepts some options:
 * `honeypot`: name of custom honeypot.
 * `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
 * `on_spam`: custom callback to be called on spam detection.
-* `timestamp_threshold`: enable/disable this technique at action level.
+* `timestamp_enabled`: enable/disable this technique at action level.
 * `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
 * `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
 

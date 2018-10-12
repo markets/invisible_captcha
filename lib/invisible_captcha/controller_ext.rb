@@ -57,7 +57,7 @@ module InvisibleCaptcha
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
       unless timestamp
-        logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp not found in session.")
+        warn("Invisible Captcha timestamp not found in session.")
         return true
       end
 
@@ -66,7 +66,7 @@ module InvisibleCaptcha
 
       # Consider as spam if form submitted too quickly
       if time_to_submit < threshold
-        logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
+        warn("Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
         return true
       end
 
@@ -82,7 +82,7 @@ module InvisibleCaptcha
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
         if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
-          logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha honeypot param '#{honeypot}' was present.")
+          warn("Invisible Captcha honeypot param '#{honeypot}' was present.")
           return true
         else
           # No honeypot spam detected, remove honeypot from params to avoid UnpermittedParameters exceptions
@@ -92,13 +92,17 @@ module InvisibleCaptcha
       else
         InvisibleCaptcha.honeypots.each do |default_honeypot|
           if params[default_honeypot].present?
-            logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha honeypot param '#{default_honeypot}' was present.")
+            warn("Invisible Captcha honeypot param '#{default_honeypot}' was present.")
             return true
           end
         end
       end
 
       false
+    end
+
+    def warn(message)
+      logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. #{message}")
     end
   end
 end

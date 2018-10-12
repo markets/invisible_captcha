@@ -82,6 +82,7 @@ module InvisibleCaptcha
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
         if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
+          logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha honeypot param '#{honeypot}' was present.")
           return true
         else
           # No honeypot spam detected, remove honeypot from params to avoid UnpermittedParameters exceptions
@@ -90,7 +91,10 @@ module InvisibleCaptcha
         end
       else
         InvisibleCaptcha.honeypots.each do |default_honeypot|
-          return true if params[default_honeypot].present?
+          if params[default_honeypot].present?
+            logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. Invisible Captcha honeypot param '#{default_honeypot}' was present.")
+            return true
+          end
         end
       end
 

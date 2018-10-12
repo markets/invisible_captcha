@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.0]
+
+- Improve logging (#40, #41)
+- Official Rails 5.2 support
+- Drop Ruby 2.1 from CI
+
 ## [0.10.0]
 
 - New timestamp on each request to avoid stale timestamps (#24)
@@ -82,6 +88,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[0.11.0]: https://github.com/markets/invisible_captcha/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/markets/invisible_captcha/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/markets/invisible_captcha/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/markets/invisible_captcha/compare/v0.9.1...v0.9.2

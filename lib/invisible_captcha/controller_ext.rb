@@ -102,7 +102,7 @@ module InvisibleCaptcha
     end
 
     def warn(message)
-      logger.warn("Potential spam detected for IP #{request.env['REMOTE_ADDR']}. #{message}")
+      logger.warn("Potential spam detected for IP #{request.remote_ip}. #{message}")
     end
   end
 end

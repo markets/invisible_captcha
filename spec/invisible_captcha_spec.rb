@@ -9,6 +9,7 @@ describe InvisibleCaptcha do
     expect(InvisibleCaptcha.timestamp_error_message).to eq('Sorry, that was too quick! Please resubmit.')
     expect(InvisibleCaptcha.honeypots).to be_an_instance_of(Array)
     expect(InvisibleCaptcha.injectable_styles).to eq(false)
+    expect(InvisibleCaptcha.disable_autocomplete).to eq(true)
   end
 
   it 'allow setup via block' do

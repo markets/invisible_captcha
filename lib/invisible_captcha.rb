@@ -13,7 +13,8 @@ module InvisibleCaptcha
                   :timestamp_threshold,
                   :timestamp_enabled,
                   :visual_honeypots,
-                  :injectable_styles
+                  :injectable_styles,
+                  :disable_autocomplete
 
     def init!
       # Default sentence for real users if text field was visible
@@ -34,6 +35,9 @@ module InvisibleCaptcha
       # If enabled, you should call anywhere in of your layout the following helper, to inject the honeypot styles:
       #  <%= invisible_captcha_styles %>
       self.injectable_styles = false
+
+      # Set the `autocomplete="off"` attribute of input fields
+      self.disable_autocomplete = true
     end
 
     def sentence_for_humans

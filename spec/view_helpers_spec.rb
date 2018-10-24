@@ -72,4 +72,30 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
       expect(@view_flow.content[:invisible_captcha_styles]).to match(/display:none;/)
     end
   end
+
+  context 'disable_autocomplete option' do
+    it 'includes the autocomplete="off" html attribute when true' do
+      InvisibleCaptcha.disable_autocomplete = true
+      expect(invisible_captcha).to match(/input.* autocomplete="off".*>/)
+    end
+
+    it 'does not include the autocomplete="off" html attribute when false' do
+      InvisibleCaptcha.disable_autocomplete = false
+      expect(invisible_captcha).not_to match(/autocomplete="off"/)
+    end
+
+    it 'overrides defaults with passed options' do
+      pattern = /input.* autocomplete="off".*>/
+
+      InvisibleCaptcha.disable_autocomplete = true
+      expect(invisible_captcha(:subtitle, :topic, {})).to match(pattern)
+      expect(invisible_captcha(:subtitle, :topic, { disable_autocomplete: true })).to match(pattern)
+      expect(invisible_captcha(:subtitle, :topic, { disable_autocomplete: false })).not_to match(pattern)
+
+      InvisibleCaptcha.disable_autocomplete = false
+      expect(invisible_captcha(:subtitle, :topic, {})).not_to match(pattern)
+      expect(invisible_captcha(:subtitle, :topic, { disable_autocomplete: true })).to match(pattern)
+      expect(invisible_captcha(:subtitle, :topic, { disable_autocomplete: false })).not_to match(pattern)
+    end
+  end
 end

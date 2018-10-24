@@ -34,6 +34,13 @@ module InvisibleCaptcha
 
       styles = visibility_css(css_class, options)
 
+      baseline_options = {}.tap do |opts|
+        opts[:tabindex] = -1
+        if options.fetch(:disable_autocomplete) { InvisibleCaptcha.disable_autocomplete }
+          opts[:autocomplete] = "off"
+        end
+      end
+
       provide(:invisible_captcha_styles) do
         styles
       end if InvisibleCaptcha.injectable_styles
@@ -41,7 +48,7 @@ module InvisibleCaptcha
       content_tag(:div, class: css_class) do
         concat styles unless InvisibleCaptcha.injectable_styles
         concat label_tag(build_label_name(honeypot, scope), label)
-        concat text_field_tag(build_text_field_name(honeypot, scope), nil, options.merge(tabindex: -1))
+        concat text_field_tag(build_text_field_name(honeypot, scope), nil, options.merge(baseline_options))
       end
     end
 

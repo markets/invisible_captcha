@@ -31,7 +31,7 @@ describe InvisibleCaptcha::ViewHelpers, type: :helper do
   it 'generated html + styles' do
     InvisibleCaptcha.honeypots = [:foo_id]
     output = invisible_captcha.gsub("\"", "'")
-    regexp = %r{<div class='foo_id_\w*'><style.*>.foo_id_\w* {display:none;}</style><label.*>#{InvisibleCaptcha.sentence_for_humans}.*<input.*name='foo_id'.*tabindex='-1'.*</div>}
+    regexp = %r{<div class='foo_id_\w*'><style.*>.foo_id_\w* {display:none;}</style><label.*>#{InvisibleCaptcha.sentence_for_humans}.*<input.*name='foo_id'.*autocomplete='off'.*tabindex='-1'.*</div>}
 
     expect(output).to match(regexp)
   end

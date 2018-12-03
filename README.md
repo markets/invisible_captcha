@@ -1,6 +1,7 @@
 # Invisible Captcha
 
-[![Gem Version](https://badge.fury.io/rb/invisible_captcha.svg)](http://badge.fury.io/rb/invisible_captcha) [![Build Status](https://travis-ci.org/markets/invisible_captcha.svg)](https://travis-ci.org/markets/invisible_captcha)
+[![Gem](https://img.shields.io/gem/v/invisible_captcha.svg?style=flat-square)](https://rubygems.org/gems/invisible_captcha)
+[![Build Status](https://travis-ci.org/markets/invisible_captcha.svg)](https://travis-ci.org/markets/invisible_captcha)
 
 > Simple and flexible spam protection solution for Rails applications.
 
@@ -10,9 +11,9 @@ The main protection is a solution based on the `honeypot` principle, which provi
 
 Essentially, the strategy consists on adding an input field :honey_pot: into the form that:
 
-* shouldn't be visible by the real users
-* should be left empty by the real users
-* will most be filled by spam bots
+- shouldn't be visible by the real users
+- should be left empty by the real users
+- will most be filled by spam bots
 
 It also comes with a time-sensitive :hourglass: form submission.
 
@@ -88,13 +89,13 @@ This section contains a description of all plugin options and customizations.
 
 You can customize:
 
-* `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
-* `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated.
-* `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
-* `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](http://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
-* `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
-* `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
-* `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
+- `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
+- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated.
+- `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
+- `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](https://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
+- `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
+- `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
+- `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
@@ -116,24 +117,31 @@ end
 
 The `invisible_captcha` method accepts some options:
 
-* `only`: apply to given controller actions.
-* `except`: exclude to given controller actions.
-* `honeypot`: name of custom honeypot.
-* `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
-* `on_spam`: custom callback to be called on spam detection.
-* `timestamp_enabled`: enable/disable this technique at action level.
-* `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
-* `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
+- `only`: apply to given controller actions.
+- `except`: exclude to given controller actions.
+- `honeypot`: name of custom honeypot.
+- `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
+- `on_spam`: custom callback to be called on spam detection.
+- `timestamp_enabled`: enable/disable this technique at action level.
+- `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
+- `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
 
 ### View helpers options:
 
-Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change: `sentence_for_humans` and `visual_honeypots`.
+Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change:
+
+- `sentence_for_humans`
 
 ```erb
 <%= form_for(@topic) do |f| %>
-  <%= f.invisible_captcha :subtitle, visual_honeypots: true, sentence_for_humans: "hey! leave this input empty!" %>
-  <!-- or -->
-  <%= invisible_captcha visual_honeypots: true, sentence_for_humans: "hey! leave this input empty!" %>
+  <%= f.invisible_captcha :subtitle, sentence_for_humans: "hey! leave this input empty!" %>
+<% end %>
+```
+- `visual_honeypots`
+
+```erb
+<%= form_for(@topic) do |f| %>
+  <%= f.invisible_captcha :subtitle, visual_honeypots: true %>
 <% end %>
 ```
 

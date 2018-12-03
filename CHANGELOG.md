@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.0]
+
+- Honeypot input with autocomplete="off" by default (#42)
+
 ## [0.11.0]
 
 - Improve logging (#40, #41)
@@ -88,6 +92,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[0.12.0]: https://github.com/markets/invisible_captcha/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/markets/invisible_captcha/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/markets/invisible_captcha/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/markets/invisible_captcha/compare/v0.9.2...v0.9.3

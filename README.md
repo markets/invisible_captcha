@@ -166,6 +166,27 @@ You can override the english ones in your own i18n config files as well as add n
 
 If you intend to use I18n with `invisible_captcha`, you _must not_ set `sentence_for_humans` or `timestamp_error_message` to strings in the setup phase.
 
+## Testing your controllers
+
+If you're encountering unexpected behaviour while testing controllers that use the `invisible_captcha` action filter, you may want to disable timestamp check for the test environment:
+
+```ruby
+# test/test_helper.rb, spec/rails_helper.rb…
+InvisibleCaptcha.timestamp_enabled = false
+
+```
+
+Another option is to wait for the timestamp check to be valid:
+
+```ruby
+# Maybe in a before block.
+InvisibleCaptcha.init!
+InvisibleCaptcha.timestamp_threshold = 1
+
+# Before testing your controller action.
+sleep InvisibleCaptcha.timestamp_threshold
+```
+
 ## Contribute
 
 Any kind of idea, feedback or bug report are welcome! Open an [issue](https://github.com/markets/invisible_captcha/issues) or send a [pull request](https://github.com/markets/invisible_captcha/pulls).

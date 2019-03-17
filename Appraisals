@@ -11,7 +11,6 @@ appraise "rails-5.0" do
 end
 
 appraise "rails-4.2" do
-  gem "bundler", "~> 1.17"
   gem "rails", "~> 4.2.0"
 end
 

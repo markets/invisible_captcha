@@ -14,6 +14,9 @@ gemfile:
   - gemfiles/rails_5.0.gemfile
   - gemfiles/rails_4.2.gemfile
   - gemfiles/rails_3.2.gemfile
+# Rails 4.2 does not work with Bundler 2
+before_install:
+  - gem install bundler || gem install bundler --version '< 2'
 matrix:
   exclude:
     - rvm: ruby-head

@@ -3,10 +3,11 @@ cache: bundler
 sudo: false
 rvm:
   - ruby-head
-  - 2.5.1
-  - 2.4.4
-  - 2.3.6
-  - 2.2.9
+  - 2.6.2
+  - 2.5.5
+  - 2.4.5
+  - 2.3.8
+  - 2.2.10
 gemfile:
   - gemfiles/rails_5.2.gemfile
   - gemfiles/rails_5.1.gemfile
@@ -17,9 +18,11 @@ matrix:
   exclude:
     - rvm: ruby-head
       gemfile: gemfiles/rails_3.2.gemfile
-    - rvm: 2.5.1
+    - rvm: 2.6.2
       gemfile: gemfiles/rails_3.2.gemfile
-    - rvm: 2.4.4
+    - rvm: 2.5.5
+      gemfile: gemfiles/rails_3.2.gemfile
+    - rvm: 2.4.5
       gemfile: gemfiles/rails_3.2.gemfile
   allow_failures:
     - rvm: ruby-head

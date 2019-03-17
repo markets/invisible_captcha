@@ -11,7 +11,8 @@ appraise "rails-5.0" do
 end
 
 appraise "rails-4.2" do
-  gem "rails", github: 'rails/rails', branch: '4-2-stable'
+  gem "bundler", "~> 1.17"
+  gem "rails", "~> 4.2.0"
 end
 
 appraise "rails-3.2" do

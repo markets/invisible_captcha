@@ -171,19 +171,18 @@ If you intend to use I18n with `invisible_captcha`, you _must not_ set `sentence
 If you're encountering unexpected behaviour while testing controllers that use the `invisible_captcha` action filter, you may want to disable timestamp check for the test environment:
 
 ```ruby
-# test/test_helper.rb, spec/rails_helper.rb…
+# test/test_helper.rb, spec/rails_helper.rb, ...
 InvisibleCaptcha.timestamp_enabled = false
-
 ```
 
 Another option is to wait for the timestamp check to be valid:
 
 ```ruby
-# Maybe in a before block.
+# Maybe in a before block
 InvisibleCaptcha.init!
 InvisibleCaptcha.timestamp_threshold = 1
 
-# Before testing your controller action.
+# Before testing your controller action
 sleep InvisibleCaptcha.timestamp_threshold
 ```
 

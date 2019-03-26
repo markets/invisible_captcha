@@ -1,5 +1,5 @@
 appraise "rails-6.0" do
-  gem "rails", github: "rails/rails", branch: "master"
+  gem "rails", "6.0.0.beta3"
 end
 
 appraise "rails-5.2" do

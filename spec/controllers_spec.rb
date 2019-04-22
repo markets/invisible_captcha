@@ -60,6 +60,9 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
 
       expect(response).to redirect_to 'http://test.host/topics'
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
+
+      # Make sure session is cleared
+      expect(session[:invisible_captcha_timestamp]).to be_nil
     end
 
     it 'allow a custom on_timestamp_spam callback' do

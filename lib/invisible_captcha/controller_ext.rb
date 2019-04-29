@@ -19,10 +19,11 @@ module InvisibleCaptcha
     def detect_spam(options = {})
       if timestamp_spam?(options)
         on_timestamp_spam(options)
-        clear_session
       elsif honeypot_spam?(options)
         on_spam(options)
       end
+
+      clear_session
     end
 
     def on_timestamp_spam(options = {})

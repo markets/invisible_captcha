@@ -75,10 +75,17 @@ describe InvisibleCaptcha::ControllerExt, type: :controller do
       it 'passes if submission on or after timestamp_threshold' do
         sleep InvisibleCaptcha.timestamp_threshold
 
-        switchable_post :create, topic: { title: 'foo' }
+        switchable_post :create, topic: {
+          title: 'foobar',
+          author: 'author',
+          body: 'body that passes validation'
+        }
 
         expect(flash[:error]).not_to be_present
         expect(response.body).to be_present
+
+        # Make sure session is cleared
+        expect(session[:invisible_captcha_timestamp]).to be_nil
       end
 
       it 'allow to set a custom timestamp_threshold per action' do

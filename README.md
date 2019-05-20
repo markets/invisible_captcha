@@ -21,16 +21,10 @@ It also comes with a time-sensitive :hourglass: form submission.
 
 Invisible Captcha is tested against Rails `>= 3.2` and Ruby `>= 2.2`.
 
-Add this line to your Gemfile:
+Add this line to your Gemfile and then execute `bundle install`:
 
-```
+```ruby
 gem 'invisible_captcha'
-```
-
-Or install the gem manually:
-
-```
-$ gem install invisible_captcha
 ```
 
 ## Usage

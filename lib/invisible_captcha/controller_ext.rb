@@ -22,6 +22,8 @@ module InvisibleCaptcha
       elsif honeypot_spam?(options)
         on_spam(options)
       end
+
+      clear_session
     end
 
     def on_timestamp_spam(options = {})
@@ -71,6 +73,10 @@ module InvisibleCaptcha
       end
 
       false
+    end
+
+    def clear_session
+      session.delete(:invisible_captcha_timestamp) if session[:invisible_captcha_timestamp]
     end
 
     def honeypot_spam?(options = {})

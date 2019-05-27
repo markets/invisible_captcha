@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe InvisibleCaptcha::ViewHelpers, type: :helper do
+RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
   before(:each) do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
     allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")

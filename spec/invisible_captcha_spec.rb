@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe InvisibleCaptcha do
+RSpec.describe InvisibleCaptcha do
   it 'initialize with defaults' do
     InvisibleCaptcha.init!
 

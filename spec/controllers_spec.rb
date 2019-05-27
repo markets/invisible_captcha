@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe InvisibleCaptcha::ControllerExt, type: :controller do
+RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   render_views
 
   def switchable_post(action, params = {})

@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'invisible_captcha'
 
 RSpec.configure do |config|
+  config.disable_monkey_patching!
   config.order = :random
   config.expect_with :rspec
   config.mock_with :rspec do |mocks|

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.1]
+
+- Clear timestamp stored in `session[:invisible_captcha_timestamp]` (#50)
+- Rails 6 support
+
 ## [0.12.0]
 
 - Honeypot input with autocomplete="off" by default (#42)
@@ -92,6 +97,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[0.12.1]: https://github.com/markets/invisible_captcha/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/markets/invisible_captcha/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/markets/invisible_captcha/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/markets/invisible_captcha/compare/v0.9.3...v0.10.0

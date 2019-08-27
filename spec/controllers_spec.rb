@@ -63,10 +63,23 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(session[:invisible_captcha_timestamp]).to be_nil
     end
 
-    it 'allow a custom on_timestamp_spam callback' do
+    it 'allows a custom on_timestamp_spam callback' do
       switchable_put :update, id: 1, topic: { title: 'bar' }
 
       expect(response.status).to eq(204)
+    end
+
+    it 'allows a new timestamp to be set in the on_timestamp_spam callback' do
+      @controller.singleton_class.class_eval do
+        def custom_timestamp_callback
+          session[:invisible_captcha_timestamp] = 2.seconds.from_now(Time.zone.now).iso8601
+          head(204)
+        end
+      end
+
+      expect { switchable_put :update, id: 1, topic: { title: 'bar' } }
+        .to change { session[:invisible_captcha_timestamp] }
+        .to be_present
     end
 
     context 'successful submissions' do

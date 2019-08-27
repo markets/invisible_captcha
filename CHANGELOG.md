@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.2]
+
+- Allow new timestamp to be set during `on_timestamp_spam` callback (#53)
+
+
 ## [0.12.1]
 
 - Clear timestamp stored in `session[:invisible_captcha_timestamp]` (#50)

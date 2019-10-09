@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module InvisibleCaptcha
   class Railtie < Rails::Railtie
     initializer 'invisible_captcha.rails_integration' do

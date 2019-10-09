@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TopicsController < ApplicationController
   invisible_captcha honeypot: :subtitle, only: :create
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module InvisibleCaptcha
   module FormHelpers
     def invisible_captcha(honeypot, options = {})

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
   before(:each) do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))

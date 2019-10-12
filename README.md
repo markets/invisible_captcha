@@ -69,7 +69,7 @@ Note that it is not mandatory to specify a `honeypot` attribute (neither in the 
 <% end %>
 ```
 
-In you controller:
+In your controller:
 
 ```
 invisible_captcha only: [:new_contact]

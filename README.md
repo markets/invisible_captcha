@@ -75,6 +75,26 @@ In you controller:
 invisible_captcha only: [:new_contact]
 ```
 
+`invisible_captcha` sends all messages to `flash[:error]`. For messages to appear on your pages, add `<%= flash[:error] %>` to `app/views/layouts/application.html.erb` (somewhere near the top of your `<body>` element):
+
+```erb
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yet another Rails app</title>
+  <%= stylesheet_link_tag    "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <%= flash[:error] %>
+  <%= yield %>
+</body>
+</html>
+```
+
+You can place `<%= flash[:error] %>` next to `:alert` and `:notice` message types, if you have them in your `app/views/layouts/application.html.erb`.
+
 ## Options and customization
 
 This section contains a description of all plugin options and customizations.

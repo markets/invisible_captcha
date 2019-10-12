@@ -55,9 +55,9 @@ class TopicsController < ApplicationController
 
   private
 
-  def your_spam_callback_method
-    redirect_to root_path
-  end
+    def your_spam_callback_method
+      redirect_to root_path
+    end
 end
 ```
 

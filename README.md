@@ -61,7 +61,7 @@ class TopicsController < ApplicationController
 end
 ```
 
-Note that is not mandatory to specify a `honeypot` attribute (nor in the view, nor in the controller). In this case, the engine will take a random field from `InvisibleCaptcha.honeypots`. So, if you're integrating it following this path, in your form:
+Note that it is not mandatory to specify a `honeypot` attribute (neither in the view nor in the controller). In this case, the engine will take a random field from `InvisibleCaptcha.honeypots`. So, if you're integrating it following this path, in your form:
 
 ```erb
 <%= form_tag(new_contact_path) do |f| %>

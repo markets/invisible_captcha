@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   render_views
 

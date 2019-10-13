@@ -7,13 +7,13 @@
 
 Invisible Captcha provides different techniques to protect your application against spambots.
 
-The main protection is a solution based on the `honeypot` principle, which provides a better user experience, since there is no extra steps for real users, but for the bots.
+The main protection is a solution based on the `honeypot` principle, which provides a better user experience since there are no extra steps for real users, only for the bots.
 
 Essentially, the strategy consists on adding an input field :honey_pot: into the form that:
 
 - shouldn't be visible by the real users
 - should be left empty by the real users
-- will most be filled by spam bots
+- will most likely be filled by spam bots
 
 It also comes with a time-sensitive :hourglass: form submission.
 
@@ -47,7 +47,7 @@ class TopicsController < ApplicationController
 end
 ```
 
-This method will act as a `before_action` that triggers when spam is detected (honeypot field has some value). By default it responds with no content (only headers: `head(200)`). This is a good default, since the bot will surely read the response code and will think that it has achieved to submit the form properly. But, anyway, you are able to define your own callback by passing a method to the `on_spam` option:
+This method will act as a `before_action` that triggers when spam is detected (honeypot field has some value). By default, it responds with no content (only headers: `head(200)`). This is a good default, since the bot will surely read the response code and will think that it has achieved to submit the form properly. But, anyway, you can define your own callback by passing a method to the `on_spam` option:
 
 ```ruby
 class TopicsController < ApplicationController
@@ -55,13 +55,13 @@ class TopicsController < ApplicationController
 
   private
 
-  def your_spam_callback_method
-    redirect_to root_path
-  end
+    def your_spam_callback_method
+      redirect_to root_path
+    end
 end
 ```
 
-Note that is not mandatory to specify a `honeypot` attribute (nor in the view, nor in the controller). In this case, the engine will take a random field from `InvisibleCaptcha.honeypots`. So, if you're integrating it following this path, in your form:
+Note that it is not mandatory to specify a `honeypot` attribute (neither in the view nor in the controller). In this case, the engine will take a random field from `InvisibleCaptcha.honeypots`. So, if you're integrating it following this path, in your form:
 
 ```erb
 <%= form_tag(new_contact_path) do |f| %>
@@ -69,11 +69,31 @@ Note that is not mandatory to specify a `honeypot` attribute (nor in the view, n
 <% end %>
 ```
 
-In you controller:
+In your controller:
 
 ```
 invisible_captcha only: [:new_contact]
 ```
+
+`invisible_captcha` sends all messages to `flash[:error]`. For messages to appear on your pages, add `<%= flash[:error] %>` to `app/views/layouts/application.html.erb` (somewhere near the top of your `<body>` element):
+
+```erb
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yet another Rails app</title>
+  <%= stylesheet_link_tag    "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <%= flash[:error] %>
+  <%= yield %>
+</body>
+</html>
+```
+
+You can place `<%= flash[:error] %>` next to `:alert` and `:notice` message types, if you have them in your `app/views/layouts/application.html.erb`.
 
 ## Options and customization
 
@@ -156,17 +176,20 @@ en:
     timestamp_error_message: "Sorry, that was too quick! Please resubmit."
 ```
 
-You can override the english ones in your own i18n config files as well as add new ones for other locales.
+You can override the English ones in your i18n config files as well as add new ones for other locales.
 
 If you intend to use I18n with `invisible_captcha`, you _must not_ set `sentence_for_humans` or `timestamp_error_message` to strings in the setup phase.
 
 ## Testing your controllers
 
-If you're encountering unexpected behaviour while testing controllers that use the `invisible_captcha` action filter, you may want to disable timestamp check for the test environment:
+If you're encountering unexpected behaviour while testing controllers that use the `invisible_captcha` action filter, you may want to disable timestamp check for the test environment. Add the following snippet to the `config/initializers/invisible_captcha.rb` file:
 
 ```ruby
-# test/test_helper.rb, spec/rails_helper.rb, ...
-InvisibleCaptcha.timestamp_enabled = false
+# Be sure to restart your server when you modify this file.
+
+InvisibleCaptcha.setup do |config|
+  config.timestamp_enabled = !Rails.env.test?
+end
 ```
 
 Another option is to wait for the timestamp check to be valid:

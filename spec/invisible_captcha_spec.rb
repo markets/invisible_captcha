@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe InvisibleCaptcha do
   it 'initialize with defaults' do
     InvisibleCaptcha.init!

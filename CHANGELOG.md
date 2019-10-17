@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+- Freeze all strings
+
 ## [0.12.2]
 
 - Allow new timestamp to be set during `on_timestamp_spam` callback (#53)

@@ -165,6 +165,36 @@ You can also pass html options to the input:
 <%= invisible_captcha :subtitle, :topic, id: "your_id", class: "your_class" %>
 ```
 
+### Content Security Policy
+
+If you're using a Content Security Policy (CSP) in your Rails app, you will need to to generate a nonce on the server, and pass `nonce: true` attribute to the view helper. Uncomment the following lines in your `config/initializers/content_security_policy.rb` file:
+
+```ruby
+# Be sure to restart your server when you modify this file.
+
+# If you are using UJS then enable automatic nonce generation
+Rails.application.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
+
+# Set the nonce only to specific directives
+Rails.application.config.content_security_policy_nonce_directives = %w(style-src)
+```
+Note that if you are already generating nonce for scripts, you'd have to include `script-src` to `content_security_policy_nonce_directives` as well:
+
+```ruby
+Rails.application.config.content_security_policy_nonce_directives = %w(script-src style-src)
+```
+
+And in your view helper, you need to pass `nonce: true` to the `invisible_captcha` helper:
+
+```erb
+<%= invisible_captcha nonce: true %>
+```
+
+**WARNING:** Content Security Policy can break your site! If you already run a website with third-party scripts, styles, images, and fonts, it is highly recommended to enable CSP in report-only mode and observe warnings as they appear. Learn more at MDN:
+
+* https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+* https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+
 ### I18n
 
 `invisible_captcha` tries to use I18n when it's available by default. The keys it looks for are the following:

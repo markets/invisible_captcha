@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-- Freeze all strings
+- Add support for the Content Security Policy nonce (#61)
+- Freeze all strings (#60)
 
 ## [0.12.2]
 

@@ -7,6 +7,7 @@ require 'rspec/rails'
 require 'invisible_captcha'
 
 RSpec.configure do |config|
+  config.include ActionDispatch::ContentSecurityPolicy::Request, type: :helper
   config.disable_monkey_patching!
   config.order = :random
   config.expect_with :rspec

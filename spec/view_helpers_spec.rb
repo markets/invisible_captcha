@@ -32,8 +32,10 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
     expect(invisible_captcha(:subtitle, :topic, { class: 'foo_class' })).to match(/class="foo_class"/)
   end
 
-  it 'with CSP nonce' do
-    expect(invisible_captcha(:subtitle, :topic, { nonce: true })).to match(/nonce="123"/)
+  if ::Rails::VERSION::STRING >= '5.2'
+    it 'with CSP nonce' do
+      expect(invisible_captcha(:subtitle, :topic, { nonce: true })).to match(/nonce="123"/)
+    end
   end
 
   it 'generated html + styles' do

@@ -4,7 +4,10 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
   before(:each) do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
     allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")
-    allow_any_instance_of(ActionDispatch::ContentSecurityPolicy::Request).to receive(:content_security_policy_nonce).and_return('123')
+
+    if ::Rails::VERSION::STRING >= '5.2'
+      allow_any_instance_of(ActionDispatch::ContentSecurityPolicy::Request).to receive(:content_security_policy_nonce).and_return('123')
+    end
 
     # to test content_for and provide
     @view_flow = ActionView::OutputFlow.new

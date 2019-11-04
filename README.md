@@ -195,6 +195,8 @@ And in your view helper, you need to pass `nonce: true` to the `invisible_captch
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
+Note that Content Security Policy only works on Rails 5.2 and up.
+
 ### I18n
 
 `invisible_captcha` tries to use I18n when it's available by default. The keys it looks for are the following:

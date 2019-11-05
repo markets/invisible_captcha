@@ -7,7 +7,7 @@ require 'rspec/rails'
 require 'invisible_captcha'
 
 RSpec.configure do |config|
-  if ::Rails::VERSION::STRING >= '5.2'
+  if Rails.version >= '5.2'
     config.include ActionDispatch::ContentSecurityPolicy::Request, type: :helper
   end
   config.disable_monkey_patching!

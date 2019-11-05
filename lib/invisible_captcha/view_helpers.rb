@@ -56,7 +56,7 @@ module InvisibleCaptcha
 
       return if visible
 
-      nonce = if ::Rails::VERSION::STRING >= '5.2'
+      nonce = if Rails.version >= '5.2'
                 content_security_policy_nonce if options[:nonce]
               else
                 nil

@@ -5,7 +5,7 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
     allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")
 
-    if ::Rails::VERSION::STRING >= '5.2'
+    if Rails.version >= '5.2'
       allow_any_instance_of(ActionDispatch::ContentSecurityPolicy::Request).to receive(:content_security_policy_nonce).and_return('123')
     end
 
@@ -32,7 +32,7 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
     expect(invisible_captcha(:subtitle, :topic, { class: 'foo_class' })).to match(/class="foo_class"/)
   end
 
-  if ::Rails::VERSION::STRING >= '5.2'
+  if Rails.version >= '5.2'
     it 'with CSP nonce' do
       expect(invisible_captcha(:subtitle, :topic, { nonce: true })).to match(/nonce="123"/)
     end

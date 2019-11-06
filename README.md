@@ -167,7 +167,7 @@ You can also pass html options to the input:
 
 ### Content Security Policy
 
-If you're using a Content Security Policy (CSP) in your Rails app, you will need to to generate a nonce on the server, and pass `nonce: true` attribute to the view helper. Uncomment the following lines in your `config/initializers/content_security_policy.rb` file:
+If you're using a Content Security Policy (CSP) in your Rails app, you will need to generate a nonce on the server, and pass `nonce: true` attribute to the view helper. Uncomment the following lines in your `config/initializers/content_security_policy.rb` file:
 
 ```ruby
 # Be sure to restart your server when you modify this file.

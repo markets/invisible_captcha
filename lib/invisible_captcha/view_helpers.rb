@@ -56,7 +56,13 @@ module InvisibleCaptcha
 
       return if visible
 
-      content_tag(:style, media: 'screen') do
+      nonce = if Rails.version >= '5.2'
+                content_security_policy_nonce if options[:nonce]
+              else
+                nil
+              end
+
+      content_tag(:style, media: 'screen', nonce: nonce) do
         ".#{css_class} {#{InvisibleCaptcha.css_strategy}}"
       end
     end

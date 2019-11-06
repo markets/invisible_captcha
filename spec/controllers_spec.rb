@@ -4,7 +4,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   render_views
 
   def switchable_post(action, params = {})
-    if ::Rails::VERSION::STRING > '5'
+    if Rails.version > '5'
       post action, params: params
     else
       post action, params
@@ -12,7 +12,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   end
 
   def switchable_put(action, params = {})
-    if ::Rails::VERSION::STRING > '5'
+    if Rails.version > '5'
       put action, params: params
     else
       put action, params

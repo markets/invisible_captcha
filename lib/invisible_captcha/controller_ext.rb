@@ -109,7 +109,11 @@ module InvisibleCaptcha
       ActiveSupport::Notifications.instrument(
         'invisible_captcha.spam_detected',
         message: message,
-        request: request
+        remote_ip: request.remote_ip,
+        user_agent: request.user_agent,
+        controller: params[:controller],
+        action: params[:action],
+        url: request.url
       )
     end
   end

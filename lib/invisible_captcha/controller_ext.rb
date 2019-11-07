@@ -114,7 +114,7 @@ module InvisibleCaptcha
         controller: params[:controller],
         action: params[:action],
         url: request.url,
-        params: params
+        params: request.filtered_parameters
       )
     end
   end

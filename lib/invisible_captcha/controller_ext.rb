@@ -113,7 +113,8 @@ module InvisibleCaptcha
         user_agent: request.user_agent,
         controller: params[:controller],
         action: params[:action],
-        url: request.url
+        url: request.url,
+        params: params
       )
     end
   end

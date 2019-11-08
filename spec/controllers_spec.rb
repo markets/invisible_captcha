@@ -143,5 +143,37 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(flash[:error]).not_to be_present
       expect(@controller.params[:topic].key?(:subtitle)).to eq(false)
     end
+
+    describe 'ActiveSupport::Notifications' do
+      let(:dummy_handler) { double(handle_event: nil) }
+
+      let!(:subscriber) do
+        subscriber = ActiveSupport::Notifications.subscribe('invisible_captcha.spam_detected') do |*args, data|
+          dummy_handler.handle_event(data)
+        end
+
+        subscriber
+      end
+
+      after  { ActiveSupport::Notifications.unsubscribe(subscriber) }
+
+      it 'dispatches an `invisible_captcha.spam_detected` event' do
+        expect(dummy_handler).to receive(:handle_event).once.with(
+          message: "Invisible Captcha honeypot param 'subtitle' was present.",
+          remote_ip: '0.0.0.0',
+          user_agent: 'Rails Testing',
+          controller: 'topics',
+          action: 'create',
+          url: 'http://test.host/topics',
+          params: {
+            topic: { subtitle: "foo"},
+            controller: 'topics',
+            action: 'create'
+          }
+        )
+
+        switchable_post :create, topic: { subtitle: 'foo' }
+      end
+    end
   end
 end

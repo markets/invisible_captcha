@@ -149,7 +149,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
 
       let!(:subscriber) do
         subscriber = ActiveSupport::Notifications.subscribe('invisible_captcha.spam_detected') do |*args, data|
-          dummy_handler.handle_event(data)
+          dummy_handler.handle_event(data.with_indifferent_access)
         end
 
         subscriber

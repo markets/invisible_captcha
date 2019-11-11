@@ -165,6 +165,41 @@ You can also pass html options to the input:
 <%= invisible_captcha :subtitle, :topic, id: "your_id", class: "your_class" %>
 ```
 
+### Spam detection notifications
+
+In addition to the `on_spam` controller callback, you can use the [Active Support Instrumentation API](https://guides.rubyonrails.org/active_support_instrumentation.html) to set up a global event handler that fires whenever spam is detected. This is useful for advanced logging, background processing, etc.
+
+To set up a global event handler, [subscribe](https://guides.rubyonrails.org/active_support_instrumentation.html#subscribing-to-an-event) to the `invisible_captcha.spam_detected` event in an initializer:
+
+```ruby
+# config/initializers/invisible_captcha.rb
+
+ActiveSupport::Notifications.subscribe('invisible_captcha.spam_detected') do |*args, data|
+  AwesomeLogger.warn(data[:message], data)  # Log to an external logging service.
+  SpamRequest.create(data)                  # Record the blocked request in your database.
+end
+```
+
+The `data` passed to the subscriber is hash containing information about the request that was detected as spam. For example:
+
+```ruby
+{
+  message: "Invisible Captcha honeypot param 'subtitle' was present.",
+  remote_ip: '127.0.0.1',
+  user_agent: 'Chrome 77',
+  controller: 'users',
+  action: 'create',
+  url: 'http://example.com/users',
+  params: {
+    topic: { subtitle: 'foo' },
+    controller: 'users',
+    action: 'create'
+  }
+}
+```
+
+_**Note:** `params` will be filtered according to your `Rails.application.config.filter_parameters` configuration, making them (probably) safe for logging. But always double-check that you're not inadvertently logging sensitive form data, like passwords and credit cards._
+
 ### Content Security Policy
 
 If you're using a Content Security Policy (CSP) in your Rails app, you will need to generate a nonce on the server, and pass `nonce: true` attribute to the view helper. Uncomment the following lines in your `config/initializers/content_security_policy.rb` file:

@@ -105,6 +105,17 @@ module InvisibleCaptcha
 
     def warn(message)
       logger.warn("Potential spam detected for IP #{request.remote_ip}. #{message}")
+
+      ActiveSupport::Notifications.instrument(
+        'invisible_captcha.spam_detected',
+        message: message,
+        remote_ip: request.remote_ip,
+        user_agent: request.user_agent,
+        controller: params[:controller],
+        action: params[:action],
+        url: request.url,
+        params: request.filtered_parameters
+      )
     end
   end
 end

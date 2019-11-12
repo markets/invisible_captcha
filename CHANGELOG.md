@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Add Instrumentation event (#62)
+
 ## [0.13.0]
 
 - Add support for the Content Security Policy nonce (#61)

@@ -4,14 +4,8 @@ module InvisibleCaptcha
   module ControllerExt
     module ClassMethods
       def invisible_captcha(options = {})
-        if respond_to?(:before_action)
-          before_action(options) do
-            detect_spam(options)
-          end
-        else
-          before_filter(options) do
-            detect_spam(options)
-          end
+        before_action(options) do
+          detect_spam(options)
         end
       end
     end

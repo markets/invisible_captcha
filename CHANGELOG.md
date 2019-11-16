@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Next
+## [1.0.0]
 
 - Remove Ruby 2.2 and Rails 3.2 support
 - Add Instrumentation event (#62)
@@ -111,6 +111,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[1.0.0]: https://github.com/markets/invisible_captcha/compare/v0.13.0...v1.0.0
 [0.13.0]: https://github.com/markets/invisible_captcha/compare/v0.12.2...v0.13.0
 [0.12.2]: https://github.com/markets/invisible_captcha/compare/v0.12.1...v0.12.2
 [0.12.1]: https://github.com/markets/invisible_captcha/compare/v0.12.0...v0.12.1

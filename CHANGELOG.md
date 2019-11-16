@@ -2,8 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## Next
 
+- Remove Ruby 2.2 and Rails 3.2 support
 - Add Instrumentation event (#62)
 
 ## [0.13.0]

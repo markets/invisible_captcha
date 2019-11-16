@@ -19,7 +19,7 @@ It also comes with a time-sensitive :hourglass: form submission.
 
 ## Installation
 
-Invisible Captcha is tested against Rails `>= 3.2` and Ruby `>= 2.2`.
+Invisible Captcha is tested against Rails `>= 4.2` and Ruby `>= 2.3`.
 
 Add this line to your Gemfile and then execute `bundle install`:
 

@@ -104,7 +104,7 @@ This section contains a description of all plugin options and customizations.
 You can customize:
 
 - `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
-- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated.
+- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated. As the random collection is stored in memory, it will not work if are running multiple Rails instances behind a load balancer. See [Multiple Rails instances](#multiple-rails-instances).
 - `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 - `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](https://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
 - `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
@@ -124,6 +124,20 @@ InvisibleCaptcha.setup do |config|
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'
   # config.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'
+end
+```
+
+#### Multiple Rails instances
+
+If you have multiple Rails instances running behind a load balancer, you have to share the same honeypots collection between the instances.
+
+Either use a fixed collection or share them between the instances using `Rails.cache`:
+
+```ruby
+InvisibleCaptcha.setup do |config|
+  config.honeypots = Rails.cache.fetch('invisible_captcha_honeypots') do
+    (1..20).map { InvisibleCaptcha.generate_random_honeypot }
+  end
 end
 ```
 

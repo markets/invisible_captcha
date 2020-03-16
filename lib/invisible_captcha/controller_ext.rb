@@ -53,7 +53,7 @@ module InvisibleCaptcha
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
       unless @invisible_captcha_timestamp
-        warn("Invisible Captcha timestamp not found in session.")
+        warn_spam("Invisible Captcha timestamp not found in session.")
         return true
       end
 
@@ -62,7 +62,7 @@ module InvisibleCaptcha
 
       # Consider as spam if form submitted too quickly
       if time_to_submit < threshold
-        warn("Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
+        warn_spam("Invisible Captcha timestamp threshold not reached (took #{time_to_submit.to_i}s).")
         return true
       end
 
@@ -78,7 +78,7 @@ module InvisibleCaptcha
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
         if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
-          warn("Invisible Captcha honeypot param '#{honeypot}' was present.")
+          warn_spam("Invisible Captcha honeypot param '#{honeypot}' was present.")
           return true
         else
           # No honeypot spam detected, remove honeypot from params to avoid UnpermittedParameters exceptions
@@ -88,7 +88,7 @@ module InvisibleCaptcha
       else
         InvisibleCaptcha.honeypots.each do |default_honeypot|
           if params[default_honeypot].present?
-            warn("Invisible Captcha honeypot param '#{default_honeypot}' was present.")
+            warn_spam("Invisible Captcha honeypot param '#{default_honeypot}' was present.")
             return true
           end
         end
@@ -97,7 +97,7 @@ module InvisibleCaptcha
       false
     end
 
-    def warn(message)
+    def warn_spam(message)
       logger.warn("Potential spam detected for IP #{request.remote_ip}. #{message}")
 
       ActiveSupport::Notifications.instrument(

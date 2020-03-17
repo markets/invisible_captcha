@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1]
+
+- Fix naming issue with Ruby 2.7 (#65)
+
 ## [1.0.0]
 
 - Remove Ruby 2.2 and Rails 3.2 support
@@ -111,6 +115,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[1.0.1]: https://github.com/markets/invisible_captcha/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/markets/invisible_captcha/compare/v0.13.0...v1.0.0
 [0.13.0]: https://github.com/markets/invisible_captcha/compare/v0.12.2...v0.13.0
 [0.12.2]: https://github.com/markets/invisible_captcha/compare/v0.12.1...v0.12.2

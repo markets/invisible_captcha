@@ -32,7 +32,6 @@ module InvisibleCaptcha
 
       honeypot  = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
       label     = options.delete(:sentence_for_humans) || InvisibleCaptcha.sentence_for_humans
-      aria      = options.delete(:'aria-hidden')
       css_class = "#{honeypot}_#{Time.zone.now.to_i}"
 
       styles = visibility_css(css_class, options)
@@ -41,7 +40,7 @@ module InvisibleCaptcha
         styles
       end if InvisibleCaptcha.injectable_styles
 
-      content_tag(:div, class: css_class, aria: { hidden: aria }) do
+      content_tag(:div, class: css_class, aria: { hidden: true }) do
         concat styles unless InvisibleCaptcha.injectable_styles
         concat label_tag(build_label_name(honeypot, scope), label)
         concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options))

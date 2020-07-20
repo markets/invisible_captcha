@@ -95,6 +95,40 @@ invisible_captcha only: [:new_contact]
 
 You can place `<%= flash[:error] %>` next to `:alert` and `:notice` message types, if you have them in your `app/views/layouts/application.html.erb`.
 
+### Scoped params
+
+If you use `form_for` or `simple_form_for`, your form's params will be nested into the model name key in the hash params.
+
+Example: 
+
+
+```erb
+# view
+<%= simple_form_for @contact do |f| %>
+  <%= f.invisible_captcha :title %>
+  <%= f.input :first_name %>
+  
+  <!-- ... -->
+  
+<% end %>
+```
+
+```
+# params
+{"utf8"=>"✓", "contact"=>{"title"=>"SOME_CONTENT", "first_name"=>"Niki" ...}}
+```
+
+As you can see, the key `title` is nested into the `contact` key of the hash `params`.
+
+In order to trigger `invisible_captcha` to detect this as spam, you'll first need to specify the scope.
+
+```ruby
+# controller
+invisible_captcha only: [:create, :update], scope: "contact", honeypot: :title
+```
+
+That way, `invisible_captcha` will look inside the `contact` key in the hash `params` to detect if the send filled out this field or not, and then flag it as spam or not.
+
 ## Options and customization
 
 This section contains a description of all plugin options and customizations.

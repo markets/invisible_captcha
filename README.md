@@ -55,9 +55,9 @@ class TopicsController < ApplicationController
 
   private
 
-    def your_spam_callback_method
-      redirect_to root_path
-    end
+  def your_spam_callback_method
+    redirect_to root_path
+  end
 end
 ```
 
@@ -153,7 +153,7 @@ The `invisible_captcha` method accepts some options:
 - `timestamp_enabled`: enable/disable this technique at action level.
 - `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
 - `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
-- `prepend`: detact spam will use `prepend_before_action` if `prepend: true` otherwise `before_action`.
+- `prepend`: the spam detection will run in a `prepend_before_action` if `prepend: true`, otherwise will run in a `before_action`.
 
 ### View helpers options:
 

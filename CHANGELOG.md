@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0]
+
+- New option `prepend: true` for the controller macro (#77)
+
 ## [1.0.1]
 
 - Fix naming issue with Ruby 2.7 (#65)
@@ -115,6 +119,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[1.1.0]: https://github.com/markets/invisible_captcha/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/markets/invisible_captcha/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/markets/invisible_captcha/compare/v0.13.0...v1.0.0
 [0.13.0]: https://github.com/markets/invisible_captcha/compare/v0.12.2...v0.13.0

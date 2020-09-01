@@ -153,7 +153,7 @@ The `invisible_captcha` method accepts some options:
 - `timestamp_enabled`: enable/disable this technique at action level.
 - `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
 - `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
-
+- `prepend`: detact spam will use `prepend_before_action` if `prepend: true` otherwise `before_action`.
 ### View helpers options:
 
 Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change:

@@ -40,7 +40,7 @@ module InvisibleCaptcha
         styles
       end if InvisibleCaptcha.injectable_styles
 
-      content_tag(:div, class: css_class) do
+      content_tag(:div, class: css_class, aria: { hidden: true }) do
         concat styles unless InvisibleCaptcha.injectable_styles
         concat label_tag(build_label_name(honeypot, scope), label)
         concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options))

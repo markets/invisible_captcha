@@ -15,6 +15,7 @@ gemfile:
   - gemfiles/rails_4.2.gemfile
 before_install:
   # Rails 4.x requires Bundler version < 2.0.
+  - sudo apt-get -yqq install libxml2-dev libxslt-dev
   - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
   - rvm @global do gem uninstall bundler -a -x
   - rvm @global do yes | gem install bundler -v '< 2'

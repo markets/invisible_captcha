@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Next
+
+- Drop official support for unmaintained Rails versions: 5.1, 5.0 and 4.2 (#86)
+- Drop official support for EOL Rubies: 2.4 and 2.3 (#86)
+
 ## [1.1.0]
 
 - New option `prepend: true` for the controller macro (#77)

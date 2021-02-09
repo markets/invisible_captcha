@@ -3,6 +3,7 @@
 module InvisibleCaptcha
   module ControllerExt
     module ClassMethods
+      
       def invisible_captcha(options = {})
         if options.key?(:prepend)
           prepend_before_action(options) do
@@ -17,9 +18,25 @@ module InvisibleCaptcha
     end
 
     private
+    
+    InvisibleCaptchaValues = Struct.new(:timestamp, :spinner_value)
+    
+    def invisible_captcha_values
+      @invisible_captcha_values ||= InvisibleCaptchaValues.new(invisible_captcha_timestamp.to_s,spinner_value)
+    end
+    
+    def invisible_captcha_timestamp
+      @invisible_captcha_timestamp ||= (session[:invisible_captcha_timestamp] || Time.zone.now)
+    end
+
+    def spinner_value
+       @spinner_value ||= InvisibleCaptcha.encode("#{invisible_captcha_timestamp}-#{request.remote_ip}")
+    end
 
     def detect_spam(options = {})
-      if timestamp_spam?(options)
+      if ip_spam?(options)
+        on_spam(options)
+      elsif timestamp_spam?(options)
         on_timestamp_spam(options)
       elsif honeypot_spam?(options)
         on_spam(options)
@@ -70,11 +87,25 @@ module InvisibleCaptcha
 
       return false
     end
-
-    def honeypot_spam?(options = {})
+    
+    def ip_spam?(options ={})
       honeypot = options[:honeypot]
       scope    = options[:scope] || controller_name.singularize
 
+      if InvisibleCaptcha.ip_enabled
+        if params[:spinner] == spinner_value || (params[scope] && params[scope][:spinner] == spinner_value) 
+          # remove spinner from params to avoid UnpermittedParameters exceptions
+          params.delete(:spinner) if params.key?(:spinner)
+          params[scope].try(:delete, :spinner) if params.key?(scope)
+        else
+          warn_spam("Invisible Captcha spinner value mismatch")
+          return true
+        end 
+      end
+      false
+    end
+    
+    def honeypot_spam?(options = {})      
       if honeypot
         # If honeypot is defined for this controller-action, search for:
         # - honeypot: params[:subtitle]

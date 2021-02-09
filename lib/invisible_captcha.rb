@@ -15,7 +15,9 @@ module InvisibleCaptcha
                   :timestamp_threshold,
                   :timestamp_enabled,
                   :visual_honeypots,
-                  :injectable_styles
+                  :injectable_styles,
+                  :ip_enabled,
+                  :secret
 
     def init!
       # Default sentence for real users if text field was visible
@@ -26,6 +28,7 @@ module InvisibleCaptcha
 
       # Fastest time (in seconds) to expect a human to submit the form
       self.timestamp_threshold = 4
+      
 
       # Default error message for validator when form submitted too quickly
       self.timestamp_error_message = -> { I18n.t('invisible_captcha.timestamp_error_message', default: 'Sorry, that was too quick! Please resubmit.') }
@@ -36,6 +39,12 @@ module InvisibleCaptcha
       # If enabled, you should call anywhere in of your layout the following helper, to inject the honeypot styles:
       #  <%= invisible_captcha_styles %>
       self.injectable_styles = false
+      
+      # IP check enabled by default
+      self.ip_enabled = true
+      
+      # A secret key setup in config settings. 'rake secret' will give you a good one.
+      self.secret = Digest::MD5.hexdigest("make_sure_to_set_your_secret_key_in_config_settings_do_not_use_default")
     end
 
     def sentence_for_humans
@@ -68,6 +77,12 @@ module InvisibleCaptcha
         "position:absolute!important;top:-9999px;left:-9999px;",
         "position:absolute!important;height:1px;width:1px;overflow:hidden;"
       ].sample
+    end
+    
+    def encode(seed)
+      Digest::MD5.hexdigest(
+        "#{self.secret}-#{seed}"
+      )
     end
 
     private

@@ -110,6 +110,8 @@ You can customize:
 - `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
 - `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 - `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
+- `ip_enabled`: option to disable the ip check to verify the same IP is being used
+- `secret`: A secret key that you pick, this is required if ip_enabled is true.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
@@ -120,12 +122,36 @@ InvisibleCaptcha.setup do |config|
   # config.timestamp_threshold = 4
   # config.timestamp_enabled   = true
   # config.injectable_styles   = false
+  # config.ip_enabled          = true
+  # config.secret              = REQUIRED_SECRET_KEY
 
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'
   # config.timestamp_error_message = 'Sorry, that was too quick! Please resubmit.'
 end
 ```
+
+#### IP Enabled Setup
+
+View code:
+
+```erb
+<%= form_for(@topic) do |f| %>
+  <%= f.invisible_captcha :subtitle, { timestamp: @invisible_captcha_values.timestamp, spinner_value: @invisible_captcha_values.spinner_value } %>
+  <!-- or -->
+  <%= invisible_captcha :subtitle, :topic, { timestamp: @invisible_captcha_values.timestamp, spinner_value: @invisible_captcha_values.spinner_value } %>
+<% end %>
+```
+
+Controller code:
+
+```ruby
+class TopicsController < ApplicationController
+  before_action :invisible_captcha_values, only: %i[new create update]
+  invisible_captcha only: [:create, :update], honeypot: :subtitle
+end
+```
+
 
 #### Multiple Rails instances
 

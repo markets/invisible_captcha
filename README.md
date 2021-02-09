@@ -1,7 +1,7 @@
 # Invisible Captcha
 
 [![Gem](https://img.shields.io/gem/v/invisible_captcha.svg?style=flat-square)](https://rubygems.org/gems/invisible_captcha)
-[![Build Status](https://travis-ci.com/markets/invisible_captcha.svg)](https://travis-ci.com/markets/invisible_captcha)
+[![Build Status](https://travis-ci.com/markets/invisible_captcha.svg?branch=master)](https://travis-ci.com/markets/invisible_captcha)
 
 > Simple and flexible spam protection solution for Rails applications.
 
@@ -19,7 +19,7 @@ It also comes with a time-sensitive :hourglass: form submission.
 
 ## Installation
 
-Invisible Captcha is tested against Rails `>= 4.2` and Ruby `>= 2.3`.
+Invisible Captcha is tested against Rails `>= 5.2` and Ruby `>= 2.5`.
 
 Add this line to your Gemfile and then execute `bundle install`:
 

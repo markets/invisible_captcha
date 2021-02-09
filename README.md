@@ -1,7 +1,7 @@
 # Invisible Captcha
 
 [![Gem](https://img.shields.io/gem/v/invisible_captcha.svg?style=flat-square)](https://rubygems.org/gems/invisible_captcha)
-[![Build Status](https://travis-ci.com/markets/invisible_captcha.svg)](https://travis-ci.com/markets/invisible_captcha)
+[![Build Status](https://travis-ci.com/markets/invisible_captcha.svg?branch=master)](https://travis-ci.com/markets/invisible_captcha)
 
 > Simple and flexible spam protection solution for Rails applications.
 

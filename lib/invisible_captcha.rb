@@ -1,12 +1,15 @@
 # frozen_string_literal: true
-
+require 'rails'
+require 'responders'
 require 'invisible_captcha/version'
 require 'invisible_captcha/controller_ext'
+require 'invisible_captcha/secret_key_finder'
 require 'invisible_captcha/view_helpers'
 require 'invisible_captcha/form_helpers'
 require 'invisible_captcha/railtie'
 
 module InvisibleCaptcha
+  
   class << self
     attr_writer :sentence_for_humans,
                 :timestamp_error_message
@@ -44,7 +47,8 @@ module InvisibleCaptcha
       self.ip_enabled = true
       
       # A secret key setup in config settings. 'rake secret' will give you a good one.
-      self.secret = Digest::MD5.hexdigest("make_sure_to_set_your_secret_key_in_config_settings_do_not_use_default")
+      # Rails.application not currently loading. Need to change the way this loads.
+      self.secret = 'Secret' # InvisibleCaptcha::SecretKeyFinder.new(Rails.application).find
    
       # Actions that exclude running the detect_spam method, usd mainly for view actons
       self.exclude_detect_actions = ['new', 'edit']

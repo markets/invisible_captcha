@@ -7,17 +7,29 @@ module InvisibleCaptcha
       def invisible_captcha(options = {})
         if options.key?(:prepend)
           prepend_before_action(options) do
-            detect_spam(options)
+            set_or_detect(options)
           end
         else
           before_action(options) do
-            detect_spam(options)
+            set_or_detect(options)
           end
         end
       end
     end
 
     private
+    
+    def set_or_detect(options)
+      invisible_captcha_values
+      exclude_detect_actions = if options.key?(:exclude_detect_actions)
+                                  options[:exclude_detect_actions]
+                               else
+                                  InvisibleCaptcha.exclude_detect_actions
+                               end
+      if exclude_detect_actions.exclude?(action_name)
+        detect_spam(options)
+      end
+    end
     
     InvisibleCaptchaValues = Struct.new(:timestamp, :spinner_value)
     
@@ -34,10 +46,10 @@ module InvisibleCaptcha
     end
 
     def detect_spam(options = {})
-      if ip_spam?(options)
-        on_spam(options)
-      elsif timestamp_spam?(options)
+      if timestamp_spam?(options)
         on_timestamp_spam(options)
+      elsif ip_spam?(options)
+        on_spam(options)
       elsif honeypot_spam?(options)
         on_spam(options)
       end
@@ -105,7 +117,10 @@ module InvisibleCaptcha
       false
     end
     
-    def honeypot_spam?(options = {})      
+    def honeypot_spam?(options = {})     
+      honeypot = options[:honeypot]
+      scope    = options[:scope] || controller_name.singularize
+ 
       if honeypot
         # If honeypot is defined for this controller-action, search for:
         # - honeypot: params[:subtitle]

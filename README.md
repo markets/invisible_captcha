@@ -136,6 +136,7 @@ end
 View code:
 
 ```erb
+
 <%= form_for(@topic) do |f| %>
   <%= f.invisible_captcha :subtitle, { timestamp: @invisible_captcha_values.timestamp, spinner_value: @invisible_captcha_values.spinner_value } %>
   <!-- or -->
@@ -147,8 +148,10 @@ Controller code:
 
 ```ruby
 class TopicsController < ApplicationController
-  before_action :invisible_captcha_values, only: %i[new create update]
-  invisible_captcha only: [:create, :update], honeypot: :subtitle
+  # By default, invisible_captcha sets instance variabls for all actions,
+  # but does not run detect_spam for actions specified.
+  _
+  invisible_captcha only: [:new, :create, :update], honeypot: :subtitle
 end
 ```
 

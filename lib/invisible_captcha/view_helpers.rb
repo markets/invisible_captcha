@@ -10,10 +10,8 @@ module InvisibleCaptcha
     #
     # @return [String] the generated html
     def invisible_captcha(honeypot = nil, scope = nil, options = {})
-      if InvisibleCaptcha.timestamp_enabled
-        
-        timestamp = ( options[:timestamp] ? Time.parse(options[:timestamp]) : Time.zone.now)
-        session[:invisible_captcha_timestamp] = timestamp.iso8601
+      if InvisibleCaptcha.timestamp_enabled || InvisibleCaptcha.ip_enabled
+        session[:invisible_captcha_timestamp] = invisible_captcha_timestamp
       end
       build_invisible_captcha(honeypot, scope, options)
     end
@@ -26,6 +24,7 @@ module InvisibleCaptcha
 
     private
 
+
     def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
       if honeypot.is_a?(Hash)
         options = honeypot
@@ -34,8 +33,8 @@ module InvisibleCaptcha
 
       honeypot  = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
       label     = options.delete(:sentence_for_humans) || InvisibleCaptcha.sentence_for_humans
-      timestamp = ( options[:timestamp] ? Time.parse(options[:timestamp]) : Time.zone.now )
-      css_class = "#{honeypot}_#{timestamp.to_i}"
+      
+      css_class = "#{honeypot}_#{DateTime.iso8601(invisible_captcha_timestamp).to_i}"
 
       styles = visibility_css(css_class, options)
       
@@ -46,8 +45,11 @@ module InvisibleCaptcha
       content_tag(:div, class: css_class) do
         concat styles unless InvisibleCaptcha.injectable_styles
         concat label_tag(build_label_name(honeypot, scope), label)
-        concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options.except(:timestamp,:spinner_value)))
-        concat hidden_field_tag(build_input_name("spinner", scope), options[:spinner_value])
+        concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options))
+        if InvisibleCaptcha.ip_enabled
+          spinner_value = options[:invisible_captcha_spinner_value] || invisible_captcha_spinner_value
+          concat hidden_field_tag( build_input_name("spinner", scope), spinner_value )
+        end
       end
     end
 

@@ -131,31 +131,6 @@ InvisibleCaptcha.setup do |config|
 end
 ```
 
-#### IP Enabled Setup
-
-View code:
-
-```erb
-
-<%= form_for(@topic) do |f| %>
-  <%= f.invisible_captcha :subtitle, { timestamp: @invisible_captcha_values.timestamp, spinner_value: @invisible_captcha_values.spinner_value } %>
-  <!-- or -->
-  <%= invisible_captcha :subtitle, :topic, { timestamp: @invisible_captcha_values.timestamp, spinner_value: @invisible_captcha_values.spinner_value } %>
-<% end %>
-```
-
-Controller code:
-
-```ruby
-class TopicsController < ApplicationController
-  # By default, invisible_captcha sets instance variabls for all actions,
-  # but does not run detect_spam for actions specified.
-  _
-  invisible_captcha only: [:new, :create, :update], honeypot: :subtitle
-end
-```
-
-
 #### Multiple Rails instances
 
 If you have multiple Rails instances running behind a load balancer, you have to share the same honeypots collection between the instances.

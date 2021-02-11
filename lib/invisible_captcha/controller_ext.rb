@@ -5,13 +5,15 @@ module InvisibleCaptcha
     module ClassMethods
       
       def invisible_captcha(options = {})
+        helper_method :invisible_captcha_timestamp, :invisible_captcha_spinner_value
+        
         if options.key?(:prepend)
           prepend_before_action(options) do
-            set_or_detect(options)
+            detect_spam(options)
           end
         else
           before_action(options) do
-            set_or_detect(options)
+            detect_spam(options)
           end
         end
       end
@@ -19,37 +21,24 @@ module InvisibleCaptcha
 
     private
     
-    def set_or_detect(options)
-      invisible_captcha_values
-      exclude_detect_actions = if options.key?(:exclude_detect_actions)
-                                  options[:exclude_detect_actions]
-                               else
-                                  InvisibleCaptcha.exclude_detect_actions
-                               end
-      if exclude_detect_actions.exclude?(action_name)
-        detect_spam(options)
-      end
-    end
-    
-    InvisibleCaptchaValues = Struct.new(:timestamp, :spinner_value)
-    
-    def invisible_captcha_values
-      @invisible_captcha_values ||= InvisibleCaptchaValues.new(invisible_captcha_timestamp.to_s,spinner_value)
-    end
-    
     def invisible_captcha_timestamp
-      @invisible_captcha_timestamp ||= (session[:invisible_captcha_timestamp] || Time.zone.now)
+      if session[:invisible_captcha_timestamp].present?
+        t= session[:invisible_captcha_timestamp]
+      else
+        t= Time.zone.now.iso8601
+      end
+      @invisible_captcha_timestamp ||= t
     end
 
-    def spinner_value
-       @spinner_value ||= InvisibleCaptcha.encode("#{invisible_captcha_timestamp}-#{request.remote_ip}")
+    def invisible_captcha_spinner_value
+       @invisible_captcha_spinner_value ||= InvisibleCaptcha.encode("#{invisible_captcha_timestamp}-#{request.remote_ip}")
     end
 
     def detect_spam(options = {})
-      if timestamp_spam?(options)
-        on_timestamp_spam(options)
-      elsif ip_spam?(options)
+      if ip_spam?(options)
         on_spam(options)
+      elsif timestamp_spam?(options)
+        on_timestamp_spam(options)
       elsif honeypot_spam?(options)
         on_spam(options)
       end
@@ -105,7 +94,7 @@ module InvisibleCaptcha
       scope    = options[:scope] || controller_name.singularize
 
       if InvisibleCaptcha.ip_enabled
-        if params[:spinner] == spinner_value || (params[scope] && params[scope][:spinner] == spinner_value) 
+        if params[:spinner] == invisible_captcha_spinner_value || (params[scope] && params[scope][:spinner] == invisible_captcha_spinner_value) 
           # remove spinner from params to avoid UnpermittedParameters exceptions
           params.delete(:spinner) if params.key?(:spinner)
           params[scope].try(:delete, :spinner) if params.key?(scope)

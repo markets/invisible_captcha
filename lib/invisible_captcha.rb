@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'invisible_captcha/version'
 require 'invisible_captcha/controller_ext'
 require 'invisible_captcha/view_helpers'

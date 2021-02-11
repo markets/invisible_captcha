@@ -3,7 +3,6 @@
 module InvisibleCaptcha
   module ControllerExt
     module ClassMethods
-      
       def invisible_captcha(options = {})
         helper_method :invisible_captcha_timestamp, :invisible_captcha_spinner_value
         if options.key?(:prepend)

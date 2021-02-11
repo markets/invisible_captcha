@@ -61,6 +61,18 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
       expect(invisible_captcha(visual_honeypots: false)).to match(/display:none/)
     end
   end
+  
+  context "should have spinner field" do
+    it 'that exists by default, ip_enabled is true' do
+      InvisibleCaptcha.ip_enabled = true
+      expect(invisible_captcha).to match(/spinner/)
+    end
+    
+    it 'that does not exist if ip_enabled is false' do
+      InvisibleCaptcha.ip_enabled = false
+      expect(invisible_captcha).not_to match(/spinner/)
+    end
+  end
 
   it 'should set spam timestamp' do
     invisible_captcha

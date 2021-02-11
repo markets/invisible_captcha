@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
+  let(:invisible_captcha_timestamp) {Time.zone.parse('Feb 19 1986').iso8601}
+  let(:invisible_captcha_spinner_value) {"123456789"}
+ 
   before(:each) do
     allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
     allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")

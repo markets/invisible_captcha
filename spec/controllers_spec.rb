@@ -3,11 +3,15 @@
 RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   render_views
 
+  let(:invisible_captcha_timestamp) {Time.zone.now.iso8601}
+  let(:invisible_captcha_spinner_value) {"123456789"}
+  
   before(:each) do
     @controller = TopicsController.new
     request.env['HTTP_REFERER'] = 'http://test.host/topics'
     InvisibleCaptcha.init!
     InvisibleCaptcha.timestamp_threshold = 1
+    InvisibleCaptcha.ip_enabled = false
   end
 
   context 'without invisible_captcha_timestamp in session' do

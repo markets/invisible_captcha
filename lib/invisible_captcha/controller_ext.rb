@@ -6,7 +6,6 @@ module InvisibleCaptcha
       
       def invisible_captcha(options = {})
         helper_method :invisible_captcha_timestamp, :invisible_captcha_spinner_value
-        
         if options.key?(:prepend)
           prepend_before_action(options) do
             detect_spam(options)
@@ -22,16 +21,11 @@ module InvisibleCaptcha
     private
     
     def invisible_captcha_timestamp
-      if session[:invisible_captcha_timestamp].present?
-        t= session[:invisible_captcha_timestamp]
-      else
-        t= Time.zone.now.iso8601
-      end
-      @invisible_captcha_timestamp ||= t
+      @invisible_captcha_timestamp ||= session[:invisible_captcha_timestamp].present? ? session[:invisible_captcha_timestamp] : Time.zone.now.iso8601
     end
 
     def invisible_captcha_spinner_value
-       @invisible_captcha_spinner_value ||= InvisibleCaptcha.encode("#{invisible_captcha_timestamp}-#{request.remote_ip}")
+      @invisible_captcha_spinner_value ||= InvisibleCaptcha.encode("#{invisible_captcha_timestamp}-#{request.remote_ip}")
     end
 
     def detect_spam(options = {})

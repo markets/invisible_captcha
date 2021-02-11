@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 module InvisibleCaptcha
   module ViewHelpers
@@ -24,7 +24,6 @@ module InvisibleCaptcha
 
     private
 
-
     def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
       if honeypot.is_a?(Hash)
         options = honeypot
@@ -33,11 +32,10 @@ module InvisibleCaptcha
 
       honeypot  = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
       label     = options.delete(:sentence_for_humans) || InvisibleCaptcha.sentence_for_humans
-      
       css_class = "#{honeypot}_#{DateTime.iso8601(invisible_captcha_timestamp).to_i}"
 
       styles = visibility_css(css_class, options)
-      
+
       provide(:invisible_captcha_styles) do
         styles
       end if InvisibleCaptcha.injectable_styles

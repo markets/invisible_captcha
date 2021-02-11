@@ -111,7 +111,7 @@ You can customize:
 - `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 - `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
 - `ip_enabled`: option to disable the ip check to verify the same IP is being used
-- `secret`: A secret key that you pick, this is required if ip_enabled is true.
+- `secret`: A secret key that you pick, this is optional. As the random value is stored in memory, it will not work if are running multiple Rails instances behind a load balancer.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
@@ -123,7 +123,7 @@ InvisibleCaptcha.setup do |config|
   # config.timestamp_enabled   = true
   # config.injectable_styles   = false
   # config.ip_enabled          = true
-  # config.secret              = REQUIRED_SECRET_KEY
+  # config.secret              = 'optional-secret-key'
 
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'

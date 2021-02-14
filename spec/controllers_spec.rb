@@ -3,9 +3,9 @@
 RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   render_views
 
-  let(:invisible_captcha_timestamp) {Time.zone.now.iso8601}
-  let(:invisible_captcha_spinner_value) {"123456789"}
-  
+  let(:invisible_captcha_timestamp) { Time.zone.now.iso8601 }
+  let(:invisible_captcha_spinner_value) { "123456789" }
+
   before(:each) do
     @controller = TopicsController.new
     request.env['HTTP_REFERER'] = 'http://test.host/topics'
@@ -106,6 +106,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   context 'honeypot attribute' do
     before(:each) do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
+
       # Wait for valid submission
       sleep InvisibleCaptcha.timestamp_threshold
     end
@@ -167,25 +168,25 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       end
     end
   end
-  
-  context 'spinner attribute' do
 
+  context 'spinner attribute' do
     before(:each) do
-      InvisibleCaptcha.secret = 'secret'
       InvisibleCaptcha.ip_enabled = true
+      InvisibleCaptcha.secret = 'secret'
       session[:invisible_captcha_timestamp] = Time.zone.parse('Feb 19 1986').iso8601
+
       # Wait for valid submission
       sleep InvisibleCaptcha.timestamp_threshold
     end
 
     it 'fails with no spam, but mismatch of spinner' do
-      post :create,  params: { topic: { title: 'foo', spinner: 'mismatch' } }
+      post :create,  params: { topic: { title: 'foo' }, spinner: 'mismatch' }
 
       expect(response.body).to be_blank
     end
 
     it 'passes with no spam and spinner match' do
-      post :create,  params: { topic: { title: 'foo', spinner: '3f0d45b1bb566b2cc979fd2259c1ca75' } }
+      post :create,  params: { topic: { title: 'foo' }, spinner: '3f0d45b1bb566b2cc979fd2259c1ca75' }
 
       expect(response.body).to be_present
     end

@@ -5,6 +5,7 @@ module InvisibleCaptcha
     module ClassMethods
       def invisible_captcha(options = {})
         helper_method :invisible_captcha_timestamp, :invisible_captcha_spinner_value
+
         if options.key?(:prepend)
           prepend_before_action(options) do
             detect_spam(options)
@@ -18,9 +19,9 @@ module InvisibleCaptcha
     end
 
     private
-    
+
     def invisible_captcha_timestamp
-      @invisible_captcha_timestamp ||= session[:invisible_captcha_timestamp].present? ? session[:invisible_captcha_timestamp] : Time.zone.now.iso8601
+      @invisible_captcha_timestamp ||= Time.zone.now.iso8601
     end
 
     def invisible_captcha_spinner_value
@@ -30,7 +31,7 @@ module InvisibleCaptcha
     def detect_spam(options = {})
       if timestamp_spam?(options)
         on_timestamp_spam(options)
-      elsif honeypot_spam?(options) || ip_spam?(options)
+      elsif honeypot_spam?(options) || ip_spam?
         on_spam(options)
       end
     end
@@ -79,33 +80,25 @@ module InvisibleCaptcha
 
       return false
     end
-    
-    def ip_spam?(options ={})
+
+    def ip_spam?
+      if InvisibleCaptcha.ip_enabled && params[:spinner] != invisible_captcha_spinner_value
+        warn_spam("Invisible Captcha spinner value mismatch")
+        return true
+      end
+
+      false
+    end
+
+    def honeypot_spam?(options = {})
       honeypot = options[:honeypot]
       scope    = options[:scope] || controller_name.singularize
 
-      if InvisibleCaptcha.ip_enabled
-        if params[:spinner] == invisible_captcha_spinner_value || (params[scope] && params[scope][:spinner] == invisible_captcha_spinner_value) 
-          # remove spinner from params to avoid UnpermittedParameters exceptions
-          params.delete(:spinner) if params.key?(:spinner)
-          params[scope].try(:delete, :spinner) if params.key?(scope)
-        else
-          warn_spam("Invisible Captcha spinner value mismatch")
-          return true
-        end 
-      end
-      false
-    end
-    
-    def honeypot_spam?(options = {})     
-      honeypot = options[:honeypot]
-      scope    = options[:scope] || controller_name.singularize
- 
       if honeypot
         # If honeypot is defined for this controller-action, search for:
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
-        if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
+        if params[honeypot].present? || params.dig(scope, honeypot).present?
           warn_spam("Invisible Captcha honeypot param '#{honeypot}' was present.")
           return true
         else

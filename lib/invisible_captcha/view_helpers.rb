@@ -32,7 +32,7 @@ module InvisibleCaptcha
 
       honeypot  = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
       label     = options.delete(:sentence_for_humans) || InvisibleCaptcha.sentence_for_humans
-      css_class = "#{honeypot}_#{DateTime.iso8601(invisible_captcha_timestamp).to_i}"
+      css_class = "#{honeypot}_#{Time.zone.now.to_i}"
 
       styles = visibility_css(css_class, options)
 
@@ -45,7 +45,7 @@ module InvisibleCaptcha
         concat label_tag(build_label_name(honeypot, scope), label)
         concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options))
         if InvisibleCaptcha.ip_enabled
-          concat hidden_field_tag( build_input_name("spinner", scope), invisible_captcha_spinner_value )
+          concat hidden_field_tag("spinner", invisible_captcha_spinner_value)
         end
       end
     end

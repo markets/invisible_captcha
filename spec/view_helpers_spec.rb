@@ -59,13 +59,13 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
   end
 
   context "should have spinner field" do
-    it 'that exists by default, ip_enabled is true' do
-      InvisibleCaptcha.ip_enabled = true
+    it 'that exists by default, spinner_enabled is true' do
+      InvisibleCaptcha.spinner_enabled = true
       expect(invisible_captcha).to match(/spinner/)
     end
 
-    it 'that does not exist if ip_enabled is false' do
-      InvisibleCaptcha.ip_enabled = false
+    it 'that does not exist if spinner_enabled is false' do
+      InvisibleCaptcha.spinner_enabled = false
       expect(invisible_captcha).not_to match(/spinner/)
     end
   end

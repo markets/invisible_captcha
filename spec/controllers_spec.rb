@@ -9,7 +9,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
 
     InvisibleCaptcha.init!
     InvisibleCaptcha.timestamp_threshold = 1
-    InvisibleCaptcha.ip_enabled = false
+    InvisibleCaptcha.spinner_enabled = false
   end
 
   context 'without invisible_captcha_timestamp in session' do
@@ -169,7 +169,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
 
   context 'spinner attribute' do
     before(:each) do
-      InvisibleCaptcha.ip_enabled = true
+      InvisibleCaptcha.spinner_enabled = true
       InvisibleCaptcha.secret = 'secret'
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
       session[:invisible_captcha_spinner] = '32ab649161f9f6faeeb323746de1a25d'

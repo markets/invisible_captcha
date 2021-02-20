@@ -3,7 +3,7 @@
 [![Gem](https://img.shields.io/gem/v/invisible_captcha.svg?style=flat-square)](https://rubygems.org/gems/invisible_captcha)
 [![Build Status](https://travis-ci.com/markets/invisible_captcha.svg?branch=master)](https://travis-ci.com/markets/invisible_captcha)
 
-> Simple and flexible spam protection solution for Rails applications.
+> Complete and flexible spam protection solution for Rails applications.
 
 Invisible Captcha provides different techniques to protect your application against spambots.
 
@@ -15,7 +15,9 @@ Essentially, the strategy consists on adding an input field :honey_pot: into the
 - should be left empty by the real users
 - will most likely be filled by spam bots
 
-It also comes with a time-sensitive :hourglass: form submission.
+It also comes with:
+- a time-sensitive :hourglass: form submission
+- an IP based :mag: spinner validation
 
 ## Installation
 
@@ -110,8 +112,8 @@ You can customize:
 - `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
 - `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 - `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
-- `ip_enabled`: option to disable the ip check to verify the same IP is being used
-- `secret`: A secret key that you pick, this is optional. As the random value is stored in memory, it will not work if are running multiple Rails instances behind a load balancer.
+- `spinner_enabled`: option to disable the IP spinner validation.
+- `secret`: customize the secret key to encode some internal values. By default, it reads the environment variable `ENV['INVISIBLE_CAPTCHA_SECRET']` and fallbacks to random in-memory value. Be careful, if you are running multiple Rails instances behind a load balancer, use always the same value via the environment variable.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
@@ -122,8 +124,7 @@ InvisibleCaptcha.setup do |config|
   # config.timestamp_threshold = 4
   # config.timestamp_enabled   = true
   # config.injectable_styles   = false
-  # config.ip_enabled          = true
-  # config.secret              = 'optional-secret-key'
+  # config.spinner_enabled     = true
 
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'
@@ -144,6 +145,8 @@ InvisibleCaptcha.setup do |config|
   end
 end
 ```
+
+Be careful also with the `secret` setting, since it will be stored in-memory. If you are running this setup, the best idea is to provide the environment variable from your infrastructure.
 
 ### Controller method options:
 
@@ -249,8 +252,6 @@ And in your view helper, you need to pass `nonce: true` to the `invisible_captch
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-Note that Content Security Policy only works on Rails 5.2 and up.
-
 ### I18n
 
 `invisible_captcha` tries to use I18n when it's available by default. The keys it looks for are the following:
@@ -313,7 +314,7 @@ $ bundle exec appraisal rspec
 Run specs against specific version:
 
 ```
-$ bundle exec appraisal rails-5.2 rspec
+$ bundle exec appraisal rails-6.0 rspec
 ```
 
 ### Demo

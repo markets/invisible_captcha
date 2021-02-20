@@ -21,7 +21,7 @@ module InvisibleCaptcha
     def detect_spam(options = {})
       if timestamp_spam?(options)
         on_timestamp_spam(options)
-      elsif honeypot_spam?(options) || ip_spam?
+      elsif honeypot_spam?(options) || spinner_spam?
         on_spam(options)
       end
     end
@@ -71,8 +71,8 @@ module InvisibleCaptcha
       return false
     end
 
-    def ip_spam?
-      if InvisibleCaptcha.ip_enabled && params[:spinner] != session[:invisible_captcha_spinner]
+    def spinner_spam?
+      if InvisibleCaptcha.spinner_enabled && params[:spinner] != session[:invisible_captcha_spinner]
         warn_spam("Invisible Captcha spinner value mismatch")
         return true
       end

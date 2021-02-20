@@ -3,12 +3,10 @@
 RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   render_views
 
-  let(:invisible_captcha_timestamp) { Time.zone.now.iso8601 }
-  let(:invisible_captcha_spinner_value) { "123456789" }
-
   before(:each) do
     @controller = TopicsController.new
     request.env['HTTP_REFERER'] = 'http://test.host/topics'
+
     InvisibleCaptcha.init!
     InvisibleCaptcha.timestamp_threshold = 1
     InvisibleCaptcha.ip_enabled = false
@@ -173,7 +171,8 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
     before(:each) do
       InvisibleCaptcha.ip_enabled = true
       InvisibleCaptcha.secret = 'secret'
-      session[:invisible_captcha_timestamp] = Time.zone.parse('Feb 19 1986').iso8601
+      session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
+      session[:invisible_captcha_spinner] = '32ab649161f9f6faeeb323746de1a25d'
 
       # Wait for valid submission
       sleep InvisibleCaptcha.timestamp_threshold
@@ -186,7 +185,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
 
     it 'passes with no spam and spinner match' do
-      post :create,  params: { topic: { title: 'foo' }, spinner: '3f0d45b1bb566b2cc979fd2259c1ca75' }
+      post :create,  params: { topic: { title: 'foo' }, spinner: '32ab649161f9f6faeeb323746de1a25d' }
 
       expect(response.body).to be_present
     end

@@ -4,8 +4,6 @@ module InvisibleCaptcha
   module ControllerExt
     module ClassMethods
       def invisible_captcha(options = {})
-        helper_method :invisible_captcha_timestamp, :invisible_captcha_spinner_value
-
         if options.key?(:prepend)
           prepend_before_action(options) do
             detect_spam(options)
@@ -19,14 +17,6 @@ module InvisibleCaptcha
     end
 
     private
-
-    def invisible_captcha_timestamp
-      @invisible_captcha_timestamp ||= Time.zone.now.iso8601
-    end
-
-    def invisible_captcha_spinner_value
-      @invisible_captcha_spinner_value ||= InvisibleCaptcha.encode("#{invisible_captcha_timestamp}-#{request.remote_ip}")
-    end
 
     def detect_spam(options = {})
       if timestamp_spam?(options)
@@ -61,15 +51,15 @@ module InvisibleCaptcha
 
       return false unless enabled
 
-      @invisible_captcha_timestamp ||= session.delete(:invisible_captcha_timestamp)
+      timestamp ||= session.delete(:invisible_captcha_timestamp)
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
-      unless @invisible_captcha_timestamp
+      unless timestamp
         warn_spam("Invisible Captcha timestamp not found in session.")
         return true
       end
 
-      time_to_submit = Time.zone.now - DateTime.iso8601(@invisible_captcha_timestamp)
+      time_to_submit = Time.zone.now - DateTime.iso8601(timestamp)
       threshold = options[:timestamp_threshold] || InvisibleCaptcha.timestamp_threshold
 
       # Consider as spam if form submitted too quickly
@@ -82,7 +72,7 @@ module InvisibleCaptcha
     end
 
     def ip_spam?
-      if InvisibleCaptcha.ip_enabled && params[:spinner] != invisible_captcha_spinner_value
+      if InvisibleCaptcha.ip_enabled && params[:spinner] != session[:invisible_captcha_spinner]
         warn_spam("Invisible Captcha spinner value mismatch")
         return true
       end

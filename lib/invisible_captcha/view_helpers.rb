@@ -10,9 +10,17 @@ module InvisibleCaptcha
     #
     # @return [String] the generated html
     def invisible_captcha(honeypot = nil, scope = nil, options = {})
+      @captcha_ocurrences = 0 unless defined?(@captcha_ocurrences)
+      @captcha_ocurrences += 1
+
       if InvisibleCaptcha.timestamp_enabled || InvisibleCaptcha.ip_enabled
-        session[:invisible_captcha_timestamp] = invisible_captcha_timestamp
+        session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
       end
+
+      if InvisibleCaptcha.ip_enabled && @captcha_ocurrences == 1
+        session[:invisible_captcha_spinner] = InvisibleCaptcha.encode("#{session[:invisible_captcha_timestamp]}-#{current_request.remote_ip}")
+      end
+
       build_invisible_captcha(honeypot, scope, options)
     end
 
@@ -23,6 +31,10 @@ module InvisibleCaptcha
     end
 
     private
+
+    def current_request
+      @request ||= request
+    end
 
     def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
       if honeypot.is_a?(Hash)
@@ -45,7 +57,7 @@ module InvisibleCaptcha
         concat label_tag(build_label_name(honeypot, scope), label)
         concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options))
         if InvisibleCaptcha.ip_enabled
-          concat hidden_field_tag("spinner", invisible_captcha_spinner_value)
+          concat hidden_field_tag("spinner", session[:invisible_captcha_spinner])
         end
       end
     end

@@ -113,7 +113,7 @@ You can customize:
 - `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 - `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
 - `spinner_enabled`: option to disable the IP spinner validation.
-- `secret`: customize the secret key to encode some internal values. By default, it reads the environment variable `ENV['INVISIBLE_CAPTCHA_SECRET']` and fallbacks to random in-memory value. Be careful, if you are running multiple Rails instances behind a load balancer, use always the same value via the environment variable.
+- `secret`: customize the secret key to encode some internal values. By default, it reads the environment variable `ENV['INVISIBLE_CAPTCHA_SECRET']` and fallbacks to random value. Be careful, if you are running multiple Rails instances behind a load balancer, use always the same value via the environment variable.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
@@ -146,7 +146,7 @@ InvisibleCaptcha.setup do |config|
 end
 ```
 
-Be careful also with the `secret` setting, since it will be stored in-memory. If you are running this setup, the best idea is to provide the environment variable from your infrastructure.
+Be careful also with the `secret` setting. Since it will be stored in-memory, if you are running this setup, the best idea is to provide the environment variable from your infrastructure.
 
 ### Controller method options:
 

@@ -35,7 +35,7 @@ module InvisibleCaptcha
       # Make honeypots visibles
       self.visual_honeypots = false
 
-      # If enabled, you should call anywhere in of your layout the following helper, to inject the honeypot styles:
+      # If enabled, you should call anywhere in your layout the following helper, to inject the honeypot styles:
       # <%= invisible_captcha_styles %>
       self.injectable_styles = false
 

@@ -106,7 +106,7 @@ This section contains a description of all plugin options and customizations.
 You can customize:
 
 - `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
-- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated. As the random collection is stored in memory, it will not work if are running multiple Rails instances behind a load balancer. See [Multiple Rails instances](#multiple-rails-instances).
+- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated. As the random collection is stored in memory, it will not work if you are running multiple Rails instances behind a load balancer. See [Multiple Rails instances](#multiple-rails-instances).
 - `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 - `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](https://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
 - `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
@@ -121,7 +121,7 @@ To change these defaults, add the following to an initializer (recommended `conf
 InvisibleCaptcha.setup do |config|
   # config.honeypots           << ['more', 'fake', 'attribute', 'names']
   # config.visual_honeypots    = false
-  # config.timestamp_threshold = 4
+  # config.timestamp_threshold = 2
   # config.timestamp_enabled   = true
   # config.injectable_styles   = false
   # config.spinner_enabled     = true
@@ -146,7 +146,7 @@ InvisibleCaptcha.setup do |config|
 end
 ```
 
-Be careful also with the `secret` setting. Since it will be stored in-memory, if you are running this setup, the best idea is to provide the environment variable from your infrastructure.
+Be careful also with the `secret` setting. Since it will be stored in-memory, if you are running this setup, the best idea is to provide the environment variable (`ENV['INVISIBLE_CAPTCHA_SECRET']`) from your infrastructure.
 
 ### Controller method options:
 
@@ -197,8 +197,8 @@ To set up a global event handler, [subscribe](https://guides.rubyonrails.org/act
 # config/initializers/invisible_captcha.rb
 
 ActiveSupport::Notifications.subscribe('invisible_captcha.spam_detected') do |*args, data|
-  AwesomeLogger.warn(data[:message], data)  # Log to an external logging service.
-  SpamRequest.create(data)                  # Record the blocked request in your database.
+  AwesomeLogger.warn(data[:message], data) # Log to an external logging service.
+  SpamRequest.create(data)                 # Record the blocked request in your database.
 end
 ```
 

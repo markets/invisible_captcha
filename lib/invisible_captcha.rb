@@ -15,7 +15,9 @@ module InvisibleCaptcha
                   :timestamp_threshold,
                   :timestamp_enabled,
                   :visual_honeypots,
-                  :injectable_styles
+                  :injectable_styles,
+                  :spinner_enabled,
+                  :secret
 
     def init!
       # Default sentence for real users if text field was visible
@@ -33,9 +35,15 @@ module InvisibleCaptcha
       # Make honeypots visibles
       self.visual_honeypots = false
 
-      # If enabled, you should call anywhere in of your layout the following helper, to inject the honeypot styles:
-      #  <%= invisible_captcha_styles %>
+      # If enabled, you should call anywhere in your layout the following helper, to inject the honeypot styles:
+      # <%= invisible_captcha_styles %>
       self.injectable_styles = false
+
+      # Spinner check enabled by default
+      self.spinner_enabled = true
+
+      # A secret key to encode some internal values
+      self.secret = ENV['INVISIBLE_CAPTCHA_SECRET'] || SecureRandom.hex(64)
     end
 
     def sentence_for_humans
@@ -68,6 +76,10 @@ module InvisibleCaptcha
         "position:absolute!important;top:-9999px;left:-9999px;",
         "position:absolute!important;height:1px;width:1px;overflow:hidden;"
       ].sample
+    end
+
+    def encode(value)
+      Digest::MD5.hexdigest("#{self.secret}-#{value}")
     end
 
     private

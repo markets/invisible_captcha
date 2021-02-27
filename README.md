@@ -3,7 +3,7 @@
 [![Gem](https://img.shields.io/gem/v/invisible_captcha.svg?style=flat-square)](https://rubygems.org/gems/invisible_captcha)
 [![Build Status](https://travis-ci.com/markets/invisible_captcha.svg?branch=master)](https://travis-ci.com/markets/invisible_captcha)
 
-> Simple and flexible spam protection solution for Rails applications.
+> Complete and flexible spam protection solution for Rails applications.
 
 Invisible Captcha provides different techniques to protect your application against spambots.
 
@@ -15,7 +15,9 @@ Essentially, the strategy consists on adding an input field :honey_pot: into the
 - should be left empty by the real users
 - will most likely be filled by spam bots
 
-It also comes with a time-sensitive :hourglass: form submission.
+It also comes with:
+- a time-sensitive :hourglass: form submission
+- an IP based :mag: spinner validation
 
 ## Installation
 
@@ -104,12 +106,14 @@ This section contains a description of all plugin options and customizations.
 You can customize:
 
 - `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
-- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated. As the random collection is stored in memory, it will not work if are running multiple Rails instances behind a load balancer. See [Multiple Rails instances](#multiple-rails-instances).
+- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated. As the random collection is stored in memory, it will not work if you are running multiple Rails instances behind a load balancer. See [Multiple Rails instances](#multiple-rails-instances).
 - `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 - `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](https://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
 - `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.
 - `timestamp_error_message`: flash error message thrown when form submitted quicker than the `timestamp_threshold` value. It uses I18n by default.
 - `injectable_styles`: if enabled, you should call anywhere in your layout the following helper `<%= invisible_captcha_styles %>`. This allows you to inject styles, for example, in `<head>`. False by default, styles are injected inline with the honeypot.
+- `spinner_enabled`: option to disable the IP spinner validation.
+- `secret`: customize the secret key to encode some internal values. By default, it reads the environment variable `ENV['INVISIBLE_CAPTCHA_SECRET']` and fallbacks to random value. Be careful, if you are running multiple Rails instances behind a load balancer, use always the same value via the environment variable.
 
 To change these defaults, add the following to an initializer (recommended `config/initializers/invisible_captcha.rb`):
 
@@ -117,9 +121,10 @@ To change these defaults, add the following to an initializer (recommended `conf
 InvisibleCaptcha.setup do |config|
   # config.honeypots           << ['more', 'fake', 'attribute', 'names']
   # config.visual_honeypots    = false
-  # config.timestamp_threshold = 4
+  # config.timestamp_threshold = 2
   # config.timestamp_enabled   = true
   # config.injectable_styles   = false
+  # config.spinner_enabled     = true
 
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'
@@ -141,6 +146,8 @@ InvisibleCaptcha.setup do |config|
 end
 ```
 
+Be careful also with the `secret` setting. Since it will be stored in-memory, if you are running this setup, the best idea is to provide the environment variable (`ENV['INVISIBLE_CAPTCHA_SECRET']`) from your infrastructure.
+
 ### Controller method options:
 
 The `invisible_captcha` method accepts some options:
@@ -148,7 +155,7 @@ The `invisible_captcha` method accepts some options:
 - `only`: apply to given controller actions.
 - `except`: exclude to given controller actions.
 - `honeypot`: name of custom honeypot.
-- `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope.
+- `scope`: name of scope, ie: 'topic[subtitle]' -> 'topic' is the scope. By default, it's inferred from the `controller_name`.
 - `on_spam`: custom callback to be called on spam detection.
 - `timestamp_enabled`: enable/disable this technique at action level.
 - `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
@@ -190,8 +197,8 @@ To set up a global event handler, [subscribe](https://guides.rubyonrails.org/act
 # config/initializers/invisible_captcha.rb
 
 ActiveSupport::Notifications.subscribe('invisible_captcha.spam_detected') do |*args, data|
-  AwesomeLogger.warn(data[:message], data)  # Log to an external logging service.
-  SpamRequest.create(data)                  # Record the blocked request in your database.
+  AwesomeLogger.warn(data[:message], data) # Log to an external logging service.
+  SpamRequest.create(data)                 # Record the blocked request in your database.
 end
 ```
 
@@ -244,8 +251,6 @@ And in your view helper, you need to pass `nonce: true` to the `invisible_captch
 
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-
-Note that Content Security Policy only works on Rails 5.2 and up.
 
 ### I18n
 
@@ -309,7 +314,7 @@ $ bundle exec appraisal rspec
 Run specs against specific version:
 
 ```
-$ bundle exec appraisal rails-5.2 rspec
+$ bundle exec appraisal rails-6.0 rspec
 ```
 
 ### Demo

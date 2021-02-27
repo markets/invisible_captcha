@@ -2,7 +2,6 @@
 
 RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
   before(:each) do
-    allow(Time.zone).to receive(:now).and_return(Time.zone.parse('Feb 19 1986'))
     allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")
     allow_any_instance_of(ActionDispatch::ContentSecurityPolicy::Request).to receive(:content_security_policy_nonce).and_return('123')
 
@@ -56,6 +55,18 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
       InvisibleCaptcha.visual_honeypots = true
 
       expect(invisible_captcha(visual_honeypots: false)).to match(/display:none/)
+    end
+  end
+
+  context "should have spinner field" do
+    it 'that exists by default, spinner_enabled is true' do
+      InvisibleCaptcha.spinner_enabled = true
+      expect(invisible_captcha).to match(/spinner/)
+    end
+
+    it 'that does not exist if spinner_enabled is false' do
+      InvisibleCaptcha.spinner_enabled = false
+      expect(invisible_captcha).not_to match(/spinner/)
     end
   end
 

@@ -21,7 +21,7 @@ module InvisibleCaptcha
     def detect_spam(options = {})
       if timestamp_spam?(options)
         on_timestamp_spam(options)
-      elsif honeypot_spam?(options)
+      elsif honeypot_spam?(options) || spinner_spam?
         on_spam(options)
       end
     end
@@ -51,15 +51,15 @@ module InvisibleCaptcha
 
       return false unless enabled
 
-      @invisible_captcha_timestamp ||= session.delete(:invisible_captcha_timestamp)
+      timestamp = session.delete(:invisible_captcha_timestamp)
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
-      unless @invisible_captcha_timestamp
+      unless timestamp
         warn_spam("Invisible Captcha timestamp not found in session.")
         return true
       end
 
-      time_to_submit = Time.zone.now - DateTime.iso8601(@invisible_captcha_timestamp)
+      time_to_submit = Time.zone.now - DateTime.iso8601(timestamp)
       threshold = options[:timestamp_threshold] || InvisibleCaptcha.timestamp_threshold
 
       # Consider as spam if form submitted too quickly
@@ -68,7 +68,16 @@ module InvisibleCaptcha
         return true
       end
 
-      return false
+      false
+    end
+
+    def spinner_spam?
+      if InvisibleCaptcha.spinner_enabled && params[:spinner] != session[:invisible_captcha_spinner]
+        warn_spam("Invisible Captcha spinner value mismatch")
+        return true
+      end
+
+      false
     end
 
     def honeypot_spam?(options = {})
@@ -79,7 +88,7 @@ module InvisibleCaptcha
         # If honeypot is defined for this controller-action, search for:
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
-        if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
+        if params[honeypot].present? || params.dig(scope, honeypot).present?
           warn_spam("Invisible Captcha honeypot param '#{honeypot}' was present.")
           return true
         else

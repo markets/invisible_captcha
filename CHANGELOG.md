@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.0] *Unreleased*
+## [2.0.0]
 
 - New spinner, IP based, validation check (#89)
 - Drop official support for unmaintained Rails versions: 5.1, 5.0 and 4.2 (#86)
@@ -125,7 +125,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
-[2.0.0]: https://github.com/markets/invisible_captcha/compare/v1.1.0...master
+[2.0.0]: https://github.com/markets/invisible_captcha/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/markets/invisible_captcha/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/markets/invisible_captcha/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/markets/invisible_captcha/compare/v0.13.0...v1.0.0

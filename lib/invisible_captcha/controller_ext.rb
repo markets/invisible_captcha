@@ -51,7 +51,7 @@ module InvisibleCaptcha
 
       return false unless enabled
 
-      timestamp ||= session.delete(:invisible_captcha_timestamp)
+      timestamp = session.delete(:invisible_captcha_timestamp)
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
       unless timestamp
@@ -68,7 +68,7 @@ module InvisibleCaptcha
         return true
       end
 
-      return false
+      false
     end
 
     def spinner_spam?

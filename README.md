@@ -106,7 +106,9 @@ This section contains a description of all plugin options and customizations.
 You can customize:
 
 - `sentence_for_humans`: text for real users if input field was visible. By default, it uses I18n (see below).
-- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated. As the random collection is stored in memory, it will not work if you are running multiple Rails instances behind a load balancer. See [Multiple Rails instances](#multiple-rails-instances).
+- `honeypots`: collection of default honeypots. Used by the view helper, called with no args, to generate a random honeypot field name. By default, a random collection is already generated. As the random collection is stored in memory, it will not work if you are running multiple Rails instances behind a load balancer. See [Multiple Rails instances](#multiple-rails-instances).  
+  Beware that Chrome may ignore `autocomplete="off"`.
+  Thus, consider not to use field names, which would be autocompleted, like for example `name`, `country`
 - `visual_honeypots`: make honeypots visible, also useful to test/debug your implementation.
 - `timestamp_threshold`: fastest time (in seconds) to expect a human to submit the form (see [original article by Yoav Aner](https://blog.gingerlime.com/2012/simple-detection-of-comment-spam-in-rails/) outlining the idea). By default, 4 seconds. **NOTE:** It's recommended to deactivate the autocomplete feature to avoid false positives (`autocomplete="off"`).
 - `timestamp_enabled`: option to disable the time threshold check at application level. Could be useful, for example, on some testing scenarios. By default, true.

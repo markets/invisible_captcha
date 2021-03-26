@@ -19,7 +19,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activesupport', '>= 5.0'
   spec.add_dependency 'actionview', '>= 5.0'
 
-  spec.add_development_dependency 'rails', '>= 5.0'
+  spec.add_development_dependency 'activemodel', '>= 5.0'
+  spec.add_development_dependency 'sprockets-rails', '>= 2.0'
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'appraisal'
 end

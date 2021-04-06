@@ -8,8 +8,11 @@ h1 {
   border-bottom: 3px solid;
 }
 
-input,
-textarea {
+a {
+  color: #000;
+}
+
+input, textarea {
   border: 0;
   margin-bottom: 1.5em;
 }
@@ -19,7 +22,9 @@ input {
 }
 
 button {
-  background-color: #f0f0f0;
+  color: #fff;
+  background-color: #000;
+  border: none;
   border-radius: 0.25em;
   height: 3em;
   width: 10em;

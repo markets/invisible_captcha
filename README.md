@@ -63,6 +63,8 @@ class TopicsController < ApplicationController
 end
 ```
 
+You should _not_ name your method `on_spam`, as this will collide with an internal method of the same name.
+
 Note that it is not mandatory to specify a `honeypot` attribute (neither in the view nor in the controller). In this case, the engine will take a random field from `InvisibleCaptcha.honeypots`. So, if you're integrating it following this path, in your form:
 
 ```erb

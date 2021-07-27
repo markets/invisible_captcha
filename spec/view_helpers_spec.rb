@@ -32,6 +32,10 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
     expect(invisible_captcha(:subtitle, :topic, { nonce: true })).to match(/nonce="123"/)
   end
 
+  it 'with tag_name option' do
+    expect(invisible_captcha(:subtitle, :topic, { tag_name: :fieldset })).to start_with('<fieldset ')
+  end
+
   it 'generated html + styles' do
     InvisibleCaptcha.honeypots = [:foo_id]
     output = invisible_captcha.gsub("\"", "'")

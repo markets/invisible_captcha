@@ -15,8 +15,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'rails', '>= 5.0'
+  spec.add_dependency 'railties', '>= 5.0'
 
+  spec.add_development_dependency 'activemodel', '>= 5.0'
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'appraisal'
 end

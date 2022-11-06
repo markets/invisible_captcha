@@ -11,19 +11,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [2.5, 2.6, 2.7, "3.0", 3.1]
+        ruby: ["2.6", "2.7", "3.0", "3.1"]
         gemfile: ["rails_5.2", "rails_6.0", "rails_6.1", "rails_7.0"]
         experimental: [false]
         exclude:
-          - ruby: 2.5
-            gemfile: rails_7.0
-          - ruby: 2.6
+          - ruby: "2.6"
             gemfile: rails_7.0
           - ruby: "3.0"
             gemfile: rails_5.2
-          - ruby: 3.1
+          - ruby: "3.1"
             gemfile: rails_5.2
-          - ruby: 3.1
+          - ruby: "3.1"
             gemfile: rails_6.0
         include:
           - ruby: head

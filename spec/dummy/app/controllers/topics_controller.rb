@@ -9,6 +9,10 @@ class TopicsController < ApplicationController
 
   invisible_captcha honeypot: :subtitle, only: :copy, timestamp_enabled: false
 
+  invisible_captcha scope: :topic, only: :rename
+
+  invisible_captcha only: :categorize
+
   def index
     redirect_to new_topic_path
   end
@@ -28,6 +32,14 @@ class TopicsController < ApplicationController
   end
 
   def update
+    redirect_to new_topic_path
+  end
+
+  def rename
+  end
+
+  def categorize
+    redirect_to new_topic_path
   end
 
   def publish

@@ -101,6 +101,9 @@ module InvisibleCaptcha
           if params[default_honeypot].present?
             warn_spam("Invisible Captcha honeypot param '#{default_honeypot}' was present.")
             return true
+          elsif params.dig(scope, default_honeypot).present?
+            warn_spam("Invisible Captcha honeypot param '#{scope}.#{default_honeypot}' was present.")
+            return true
           end
         end
       end

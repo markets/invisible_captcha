@@ -138,11 +138,9 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
 
       context 'with no scope' do
         it 'passes with no spam' do
-          $DOPRY = true
           post :categorize
 
           expect(response.body).to be_present
-          $DOPRY = false
         end
 
         it 'fails with spam' do

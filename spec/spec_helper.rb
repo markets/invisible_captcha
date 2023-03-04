@@ -4,7 +4,15 @@ ENV['RAILS_ENV'] = 'test'
 
 require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
+require 'simplecov'
 require 'invisible_captcha'
+
+if ENV['CI']
+  require 'simplecov-cobertura'
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+end
+
+SimpleCov.start
 
 RSpec.configure do |config|
   config.include ActionDispatch::ContentSecurityPolicy::Request, type: :helper

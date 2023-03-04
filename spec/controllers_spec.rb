@@ -121,6 +121,50 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(response.body).to be_present
     end
 
+    context 'with random honeypot' do
+      context 'auto-scoped' do
+        it 'passes with no spam' do
+          post :categorize, params: { topic: { title: 'foo' } }
+
+          expect(response.body).to be_present
+        end
+
+        it 'fails with spam' do
+          post :categorize, params: { topic: { "#{InvisibleCaptcha.honeypots.sample}": 'foo' } }
+
+          expect(response.body).to be_blank
+        end
+      end
+
+      context 'with no scope' do
+        it 'passes with no spam' do
+          post :categorize
+
+          expect(response.body).to be_present
+        end
+
+        it 'fails with spam' do
+          post :categorize, params: { "#{InvisibleCaptcha.honeypots.sample}": 'foo' }
+
+          expect(response.body).to be_blank
+        end
+      end
+
+      context 'with scope' do
+        it 'fails with spam' do
+          post :rename, params: { topic: { "#{InvisibleCaptcha.honeypots.sample}": 'foo' } }
+
+          expect(response.body).to be_blank
+        end
+
+        it 'passes with no spam' do
+          post :rename, params: { topic: { title: 'foo' } }
+
+          expect(response.body).to be_blank
+        end
+      end
+    end
+
     it 'allow a custom on_spam callback' do
       put :update,  params: { id: 1, topic: { subtitle: 'foo' } }
 

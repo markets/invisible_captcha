@@ -210,7 +210,7 @@ The `data` passed to the subscriber is hash containing information about the req
 
 ```ruby
 {
-  message: "Invisible Captcha honeypot param 'subtitle' was present.",
+  message: "Honeypot param 'subtitle' was present.",
   remote_ip: '127.0.0.1',
   user_agent: 'Chrome 77',
   controller: 'users',

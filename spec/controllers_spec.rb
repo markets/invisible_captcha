@@ -193,7 +193,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
 
       it 'dispatches an `invisible_captcha.spam_detected` event' do
         expect(dummy_handler).to receive(:handle_event).once.with({
-          message: "Invisible Captcha honeypot param 'subtitle' was present.",
+          message: "[Invisible Captcha] Potential spam detected for IP 0.0.0.0. Honeypot param 'subtitle' was present.",
           remote_ip: '0.0.0.0',
           user_agent: 'Rails Testing',
           controller: 'topics',

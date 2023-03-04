@@ -99,6 +99,8 @@ invisible_captcha only: [:new_contact]
 
 You can place `<%= flash[:error] %>` next to `:alert` and `:notice` message types, if you have them in your `app/views/layouts/application.html.erb`.
 
+**NOTE:** This gem relies on data set by the backend, so in order to properly work, your forms should be rendered by Rails. Forms generated via JavaScript are not going to work well.
+
 ## Options and customization
 
 This section contains a description of all plugin options and customizations.
@@ -222,7 +224,7 @@ The `data` passed to the subscriber is hash containing information about the req
 }
 ```
 
-_**Note:** `params` will be filtered according to your `Rails.application.config.filter_parameters` configuration, making them (probably) safe for logging. But always double-check that you're not inadvertently logging sensitive form data, like passwords and credit cards._
+**NOTE:** `params` will be filtered according to your `Rails.application.config.filter_parameters` configuration, making them (probably) safe for logging. But always double-check that you're not inadvertently logging sensitive form data, like passwords and credit cards.
 
 ### Content Security Policy
 
@@ -249,7 +251,7 @@ And in your view helper, you need to pass `nonce: true` to the `invisible_captch
 <%= invisible_captcha nonce: true %>
 ```
 
-**WARNING:** Content Security Policy can break your site! If you already run a website with third-party scripts, styles, images, and fonts, it is highly recommended to enable CSP in report-only mode and observe warnings as they appear. Learn more at MDN:
+**NOTE:** Content Security Policy can break your site! If you already run a website with third-party scripts, styles, images, and fonts, it is highly recommended to enable CSP in report-only mode and observe warnings as they appear. Learn more at MDN:
 
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy

@@ -21,7 +21,7 @@ It also comes with:
 
 ## Installation
 
-Invisible Captcha is tested against Rails `>= 5.2` and Ruby `>= 2.6`.
+Invisible Captcha is tested against Rails `>= 5.2` and Ruby `>= 2.7`.
 
 Add this line to your Gemfile and then execute `bundle install`:
 

@@ -57,7 +57,7 @@ module InvisibleCaptcha
         concat label_tag(build_label_name(honeypot, scope), label)
         concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options))
         if InvisibleCaptcha.spinner_enabled
-          concat hidden_field_tag("spinner", session[:invisible_captcha_spinner])
+          concat hidden_field_tag("spinner", session[:invisible_captcha_spinner], id: nil)
         end
       end
     end

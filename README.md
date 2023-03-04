@@ -2,6 +2,7 @@
 
 [![Gem](https://img.shields.io/gem/v/invisible_captcha.svg?style=flat-square)](https://rubygems.org/gems/invisible_captcha)
 [![Build Status](https://github.com/markets/invisible_captcha/workflows/CI/badge.svg)](https://github.com/markets/invisible_captcha/actions)
+[![codecov](https://codecov.io/gh/markets/invisible_captcha/branch/master/graph/badge.svg?token=nADSa6rbhM)](https://codecov.io/gh/markets/invisible_captcha)
 
 > Complete and flexible spam protection solution for Rails applications.
 

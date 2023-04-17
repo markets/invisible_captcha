@@ -134,6 +134,14 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
 
           expect(response.body).to be_blank
         end
+
+        context 'with parameter the same name as the controller' do
+          it 'passes with no spam' do
+            post :categorize, params: { topic: 'something' }
+
+            expect(response.body).to be_present
+          end
+        end
       end
 
       context 'with no scope' do
@@ -147,6 +155,14 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
           post :categorize, params: { "#{InvisibleCaptcha.honeypots.sample}": 'foo' }
 
           expect(response.body).to be_blank
+        end
+
+        context 'with parameter the same name as the controller' do
+          it 'passes with no spam' do
+            post :categorize, params: { topic: 'something' }
+
+            expect(response.body).to be_present
+          end
         end
       end
 

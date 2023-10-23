@@ -89,7 +89,7 @@ module InvisibleCaptcha
         # If honeypot is defined for this controller-action, search for:
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
-        if params[honeypot].present? || params.dig(scope, honeypot).present?
+        if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
           warn_spam("Honeypot param '#{honeypot}' was present.")
           return true
         else
@@ -99,7 +99,7 @@ module InvisibleCaptcha
         end
       else
         InvisibleCaptcha.honeypots.each do |default_honeypot|
-          if params[default_honeypot].present? || params.dig(scope, default_honeypot).present?
+          if params[default_honeypot].present? || (params[scope] && params[scope][default_honeypot].present?)
             warn_spam("Honeypot param '#{scope}.#{default_honeypot}' was present.")
             return true
           end

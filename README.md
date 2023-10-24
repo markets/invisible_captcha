@@ -167,8 +167,6 @@ The `invisible_captcha` method accepts some options:
 - `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
 - `prepend`: the spam detection will run in a `prepend_before_action` if `prepend: true`, otherwise will run in a `before_action`.
 
-**NOTE:** If you define a parameter with the same name as your controller and do not define a custom scope, you will see a `TypeError` when processing your action. To fix this error, specify a scope or rename the parameter to a different name than your controller.
-
 ### View helpers options:
 
 Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change:

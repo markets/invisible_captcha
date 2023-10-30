@@ -84,7 +84,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         }
 
         expect(flash[:error]).not_to be_present
-        expect(response.body).to be_present
+        expect(response.body).to redirect_to(new_topic_path)
 
         # Make sure session is cleared
         expect(session[:invisible_captcha_timestamp]).to be_nil
@@ -96,7 +96,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         post :publish, params: { id: 1 }
 
         expect(flash[:error]).not_to be_present
-        expect(response.body).to be_present
+        expect(response.body).to redirect_to(new_topic_path)
       end
     end
   end
@@ -126,13 +126,13 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         it 'passes with no spam' do
           post :categorize, params: { topic: { title: 'foo' } }
 
-          expect(response.body).to be_present
+          expect(response.body).to redirect_to(new_topic_path)
         end
 
         it 'fails with spam' do
           post :categorize, params: { topic: { "#{InvisibleCaptcha.honeypots.sample}": 'foo' } }
 
-          expect(response.body).to be_blank
+          expect(response.body).not_to redirect_to(new_topic_path)
         end
       end
 
@@ -140,13 +140,13 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         it 'passes with no spam' do
           post :categorize
 
-          expect(response.body).to be_present
+          expect(response.body).to redirect_to(new_topic_path)
         end
 
         it 'fails with spam' do
           post :categorize, params: { "#{InvisibleCaptcha.honeypots.sample}": 'foo' }
 
-          expect(response.body).to be_blank
+          expect(response.body).not_to redirect_to(new_topic_path)
         end
       end
 

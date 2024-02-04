@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0]
+
+- Official support for Rails 7.1
+- Fix flash message for `on_timestamp_spam` callback (#125)
+- Fix potential error when lookup the honeypot parameter using (#128)
+
 ## [2.1.0]
 
 - Drop official support for EOL Rubies: 2.5 and 2.6
@@ -130,6 +136,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[2.2.0]: https://github.com/markets/invisible_captcha/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/markets/invisible_captcha/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/markets/invisible_captcha/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/markets/invisible_captcha/compare/v1.0.1...v1.1.0

@@ -13,6 +13,10 @@ class TopicsController < ApplicationController
 
   invisible_captcha only: :categorize
 
+  invisible_captcha honeypot: :subtitle, only: :test_passthrough,
+    on_spam: :catching_on_spam_callback,
+    on_timestamp_spam: :on_timestamp_spam_callback_with_passthrough
+
   def index
     redirect_to new_topic_path
   end
@@ -56,6 +60,10 @@ class TopicsController < ApplicationController
     end
   end
 
+  def test_passthrough
+    redirect_to new_topic_path
+  end
+
   private
 
   def custom_callback
@@ -65,4 +73,12 @@ class TopicsController < ApplicationController
   def custom_timestamp_callback
     head(204)
   end
+
+  def on_timestamp_spam_callback_with_passthrough
+  end
+
+  def catching_on_spam_callback
+    head(204)
+  end
+
 end

@@ -21,7 +21,9 @@ module InvisibleCaptcha
     def detect_spam(options = {})
       if timestamp_spam?(options)
         on_timestamp_spam(options)
-      elsif honeypot_spam?(options) || spinner_spam?
+        return if performed?
+      end
+      if honeypot_spam?(options) || spinner_spam?
         on_spam(options)
       end
     end

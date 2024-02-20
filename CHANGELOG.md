@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Run honeypot + spinner checks and their callback also if timestamp triggers but passes through (#132)
+
 ## [2.2.0]
 
 - Official support for Rails 7.1

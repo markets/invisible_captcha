@@ -71,6 +71,12 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         .to be_present
     end
 
+    it 'runs on_spam callback if on_timestamp_spam callback is defined but passes' do
+      put :test_passthrough, params: { id: 1, topic: { title: 'bar', subtitle: 'foo' } }
+
+      expect(response.status).to eq(204)
+    end
+
     context 'successful submissions' do
       it 'passes if submission on or after timestamp_threshold' do
         sleep InvisibleCaptcha.timestamp_threshold
@@ -96,6 +102,12 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         post :publish, params: { id: 1 }
 
         expect(flash[:error]).not_to be_present
+        expect(response.body).to redirect_to(new_topic_path)
+      end
+
+      it 'passes if on_timestamp_spam doesn\'t perform' do
+        put :test_passthrough, params: { id: 1, topic: { title: 'bar' } }
+
         expect(response.body).to redirect_to(new_topic_path)
       end
     end

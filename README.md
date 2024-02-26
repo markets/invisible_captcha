@@ -287,12 +287,32 @@ end
 Another option is to wait for the timestamp check to be valid:
 
 ```ruby
-# Maybe in a before block
+# Maybe inside a before block
 InvisibleCaptcha.init!
 InvisibleCaptcha.timestamp_threshold = 1
 
 # Before testing your controller action
 sleep InvisibleCaptcha.timestamp_threshold
+```
+
+If you're using the "random honeypot" approach, you may want to set a known honeypot:
+
+```ruby
+config.honeypots = ['my_honeypot_field'] if Rails.env.test?
+```
+
+And for the "spinner validation" check, you may want to disable it:
+
+```ruby
+config.spinner_enabled = !Rails.env.test?
+```
+
+Or alternativelly, you should send a valid spinner value along your requests:
+
+```ruby
+# RSpec example
+session[:invisible_captcha_spinner] = '32ab649161f9f6faeeb323746de1a25d'
+post :create,  params: { topic: { title: 'foo' }, spinner: '32ab649161f9f6faeeb323746de1a25d' }
 ```
 
 ## Contribute

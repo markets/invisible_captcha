@@ -23,6 +23,7 @@ module InvisibleCaptcha
         on_timestamp_spam(options)
         return if performed?
       end
+
       if honeypot_spam?(options) || spinner_spam?
         on_spam(options)
       end
@@ -75,7 +76,7 @@ module InvisibleCaptcha
     end
 
     def spinner_spam?
-      if InvisibleCaptcha.spinner_enabled && params[:spinner] != session[:invisible_captcha_spinner]
+      if InvisibleCaptcha.spinner_enabled && (params[:spinner].blank? || params[:spinner] != session[:invisible_captcha_spinner])
         warn_spam("Spinner value mismatch")
         return true
       end

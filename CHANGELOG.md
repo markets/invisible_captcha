@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [2.3.0]
 
 - Run honeypot + spinner checks and their callback also if timestamp triggers but passes through (#132)
+- Mark as spam requests with no spinner value (#134)
 
 ## [2.2.0]
 
@@ -140,6 +141,7 @@ All notable changes to this project will be documented in this file.
 
 - First version of controller filters
 
+[2.3.0]: https://github.com/markets/invisible_captcha/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/markets/invisible_captcha/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/markets/invisible_captcha/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/markets/invisible_captcha/compare/v1.1.0...v2.0.0

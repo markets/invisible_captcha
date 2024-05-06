@@ -166,6 +166,7 @@ The `invisible_captcha` method accepts some options:
 - `on_timestamp_spam`: custom callback to be called when form submitted too quickly. The default action redirects to `:back` printing a warning in `flash[:error]`.
 - `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
 - `prepend`: the spam detection will run in a `prepend_before_action` if `prepend: true`, otherwise will run in a `before_action`.
+- `notification_extra_data`: extra data to be passed to the spam detection notification. It can be a hash or a proc that returns a hash.
 
 ### View helpers options:
 
@@ -226,6 +227,8 @@ The `data` passed to the subscriber is hash containing information about the req
 ```
 
 **NOTE:** `params` will be filtered according to your `Rails.application.config.filter_parameters` configuration, making them (probably) safe for logging. But always double-check that you're not inadvertently logging sensitive form data, like passwords and credit cards.
+
+**NOTE:** If you're using the `notification_extra_data` option in the `invisible_captcha` controller method, the data will be merged into the `data` hash passed to the subscriber.
 
 ### Content Security Policy
 

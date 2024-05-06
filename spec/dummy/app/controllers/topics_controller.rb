@@ -1,4 +1,7 @@
 class TopicsController < ApplicationController
+  invisible_captcha only: :archive,
+                    notification_extra_data: -> { { account: current_account } }
+
   invisible_captcha honeypot: :subtitle, only: :create
 
   invisible_captcha honeypot: :subtitle, only: :update,
@@ -62,6 +65,9 @@ class TopicsController < ApplicationController
 
   def test_passthrough
     redirect_to new_topic_path
+  end
+
+  def archive
   end
 
   private

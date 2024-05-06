@@ -59,7 +59,7 @@ module InvisibleCaptcha
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
       unless timestamp
-        warn_spam("Timestamp not found in session.")
+        warn_spam("Timestamp not found in session.", options[:notification_extra_data])
         return true
       end
 
@@ -68,16 +68,16 @@ module InvisibleCaptcha
 
       # Consider as spam if form submitted too quickly
       if time_to_submit < threshold
-        warn_spam("Timestamp threshold not reached (took #{time_to_submit.to_i}s).")
+        warn_spam("Timestamp threshold not reached (took #{time_to_submit.to_i}s).", options[:notification_extra_data])
         return true
       end
 
       false
     end
 
-    def spinner_spam?
+    def spinner_spam?(options = {})
       if InvisibleCaptcha.spinner_enabled && (params[:spinner].blank? || params[:spinner] != session[:invisible_captcha_spinner])
-        warn_spam("Spinner value mismatch")
+        warn_spam("Spinner value mismatch", options[:notification_extra_data])
         return true
       end
 
@@ -93,7 +93,7 @@ module InvisibleCaptcha
         # - honeypot: params[:subtitle]
         # - honeypot with scope: params[:topic][:subtitle]
         if params[honeypot].present? || (params[scope] && params[scope][honeypot].present?)
-          warn_spam("Honeypot param '#{honeypot}' was present.")
+          warn_spam("Honeypot param '#{honeypot}' was present.", options[:notification_extra_data])
           return true
         else
           # No honeypot spam detected, remove honeypot from params to avoid UnpermittedParameters exceptions
@@ -103,7 +103,7 @@ module InvisibleCaptcha
       else
         InvisibleCaptcha.honeypots.each do |default_honeypot|
           if params[default_honeypot].present? || (params[scope] && params[scope][default_honeypot].present?)
-            warn_spam("Honeypot param '#{scope}.#{default_honeypot}' was present.")
+            warn_spam("Honeypot param '#{scope}.#{default_honeypot}' was present.", options[:notification_extra_data])
             return true
           end
         end
@@ -112,20 +112,27 @@ module InvisibleCaptcha
       false
     end
 
-    def warn_spam(message)
+    def warn_spam(message, notification_extra_data = {})
       message = "[Invisible Captcha] Potential spam detected for IP #{request.remote_ip}. #{message}"
 
       logger.warn(message)
 
+      extra_data = notification_extra_data.respond_to?(:call) ? instance_exec(&notification_extra_data) : notification_extra_data
+
+      payload = {}.tap do |data|
+        data[:message] = message
+        data[:remote_ip] = request.remote_ip
+        data[:user_agent] = request.user_agent
+        data[:controller] = params[:controller]
+        data[:action] = params[:action]
+        data[:url] = request.url
+        data[:params] = request.filtered_parameters
+        data[:extra] = extra_data if extra_data.present?
+      end
+
       ActiveSupport::Notifications.instrument(
         'invisible_captcha.spam_detected',
-        message: message,
-        remote_ip: request.remote_ip,
-        user_agent: request.user_agent,
-        controller: params[:controller],
-        action: params[:action],
-        url: request.url,
-        params: request.filtered_parameters
+        payload
       )
     end
   end

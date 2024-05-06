@@ -221,6 +221,40 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         post :create, params: { topic: { subtitle: 'foo' } }
       end
     end
+
+    describe 'ActiveSupport::Notifications with extra data' do
+      let(:dummy_handler) { double(handle_event: nil) }
+
+      let!(:subscriber) do
+        subscriber = ActiveSupport::Notifications.subscribe('invisible_captcha.spam_detected') do |*args, data|
+          dummy_handler.handle_event(data)
+        end
+
+        subscriber
+      end
+
+      after { ActiveSupport::Notifications.unsubscribe(subscriber) }
+
+      it 'dispatches an `invisible_captcha.spam_detected` event with extra data' do
+        session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
+
+        expect(dummy_handler).to receive(:handle_event).once.with({
+          message: "[Invisible Captcha] Potential spam detected for IP 0.0.0.0. Timestamp threshold not reached (took 0s).",
+          remote_ip: '0.0.0.0',
+          user_agent: 'Rails Testing',
+          controller: 'topics',
+          action: 'archive',
+          url: 'http://test.host/topics/archive',
+          params: {
+            controller: 'topics',
+            action: 'archive'
+          },
+          extra: { account: 'fake_account' }
+        })
+
+        post :archive
+      end
+    end
   end
 
   context 'spinner attribute' do

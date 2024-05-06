@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     post :categorize, on: :collection
     post :copy, on: :collection
     post :test_passthrough, on: :collection
+    post :archive, on: :collection
   end
 
   root to: 'topics#new'

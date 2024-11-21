@@ -124,12 +124,13 @@ To change these defaults, add the following to an initializer (recommended `conf
 
 ```ruby
 InvisibleCaptcha.setup do |config|
-  # config.honeypots           << ['more', 'fake', 'attribute', 'names']
-  # config.visual_honeypots    = false
-  # config.timestamp_threshold = 2
-  # config.timestamp_enabled   = true
-  # config.injectable_styles   = false
-  # config.spinner_enabled     = true
+  # config.honeypots              << ['more', 'fake', 'attribute', 'names']
+  # config.visual_honeypots       = false
+  # config.timestamp_threshold    = 2
+  # config.timestamp_enabled      = true
+  # config.injectable_styles      = false
+  # config.spinner_enabled        = true
+  # config.redirect_fallback_path = root_path
 
   # Leave these unset if you want to use I18n (see below)
   # config.sentence_for_humans     = 'If you are a human, ignore this field'

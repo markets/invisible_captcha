@@ -18,6 +18,7 @@ module InvisibleCaptcha
                   :injectable_styles,
                   :spinner_enabled,
                   :secret
+                  :redirect_fallback_path
 
     def init!
       # Default sentence for real users if text field was visible

@@ -34,7 +34,7 @@ module InvisibleCaptcha
         send(action)
       else
         flash[:error] = InvisibleCaptcha.timestamp_error_message
-        redirect_back(fallback_location: root_path)
+        redirect_back(fallback_location: defined?(root_path) ? root_path : "/")
       end
     end
 

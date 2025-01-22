@@ -18,7 +18,7 @@ module InvisibleCaptcha
       end
 
       if InvisibleCaptcha.spinner_enabled && @captcha_ocurrences == 1
-        session[:invisible_captcha_spinner] = InvisibleCaptcha.encode("#{session[:invisible_captcha_timestamp]}-#{current_request.remote_ip}")
+        session[:invisible_captcha_spinner] = InvisibleCaptcha.encode("#{session[:invisible_captcha_timestamp]}-#{request.remote_ip}")
       end
 
       build_invisible_captcha(honeypot, scope, options)
@@ -31,10 +31,6 @@ module InvisibleCaptcha
     end
 
     private
-
-    def current_request
-      @request ||= request
-    end
 
     def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
       if honeypot.is_a?(Hash)

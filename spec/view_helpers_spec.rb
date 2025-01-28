@@ -8,6 +8,11 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
     # to test content_for and provide
     @view_flow = ActionView::OutputFlow.new
 
+    # mock request object for Rails < 7.0
+    if Rails.version < '7.0'
+      allow(request).to receive(:remote_ip).and_return('0.0.0.0')
+    end
+
     InvisibleCaptcha.init!
   end
 

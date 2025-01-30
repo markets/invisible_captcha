@@ -339,7 +339,7 @@ $ bundle exec appraisal rspec
 Run specs against specific version:
 
 ```
-$ bundle exec appraisal rails-6.0 rspec
+$ bundle exec appraisal rails-7.0 rspec
 ```
 
 ### Demo

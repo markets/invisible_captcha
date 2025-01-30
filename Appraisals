@@ -13,8 +13,5 @@
     # NOTE: The gem concurrent-ruby no longer loads the logger gem since v1.3.5.
     # More info: https://github.com/rails/rails/pull/54264
     gem "concurrent-ruby", "< 1.3.5"
-
-    # NOTE: Since Ruby 3.4+ BigDecimal is a bundled gem
-    gem "bigdecimal"
   end
 end

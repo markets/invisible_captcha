@@ -17,6 +17,9 @@ jobs:
       matrix:
         ruby: ["3.4", "3.3", "3.2", "3.1"]
         gemfile: [rails_8.0, rails_7.2, rails_7.1, rails_7.0, rails_6.1]
+        exclude:
+          - ruby: "3.1"
+            gemfile: rails_8.0
         include:
           - ruby: "2.7"
             gemfile: rails_5.2

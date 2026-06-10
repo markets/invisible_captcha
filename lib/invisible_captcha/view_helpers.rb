@@ -33,12 +33,13 @@ module InvisibleCaptcha
     private
 
     def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
-      if honeypot.is_a?(Hash)
-        options = honeypot
-        honeypot = nil
-      end
-
+      return '' unless InvisibleCaptcha.honeypot_enabled || InvisibleCaptcha.spinner_enabled
+      
       if InvisibleCaptcha.honeypot_enabled
+        if honeypot.is_a?(Hash)
+          options = honeypot
+          honeypot = nil
+        end
         honeypot  = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
         label     = options.delete(:sentence_for_humans) || InvisibleCaptcha.sentence_for_humans
         css_class = "#{honeypot}_#{Time.zone.now.to_i}"

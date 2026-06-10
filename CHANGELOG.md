@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+- New `honeypot_enabled` config option (default true). When set to false, the view helper renders no honeypot text input and the controller skips the honeypot param check, while leaving timestamp + spinner protection intact. Useful when password-manager autofill of the honeypot is producing false positives that outweigh the bot-blocking benefit.
+
 ## [2.3.0]
 
 - Run honeypot + spinner checks and their callback also if timestamp triggers but passes through (#132)

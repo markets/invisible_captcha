@@ -38,6 +38,8 @@ module InvisibleCaptcha
         honeypot = nil
       end
 
+      return build_spinner_only unless InvisibleCaptcha.honeypot_enabled
+
       honeypot  = honeypot ? honeypot.to_s : InvisibleCaptcha.get_honeypot
       label     = options.delete(:sentence_for_humans) || InvisibleCaptcha.sentence_for_humans
       css_class = "#{honeypot}_#{Time.zone.now.to_i}"
@@ -56,6 +58,12 @@ module InvisibleCaptcha
           concat hidden_field_tag("spinner", session[:invisible_captcha_spinner], id: nil)
         end
       end
+    end
+
+    def build_spinner_only
+      return ''.html_safe unless InvisibleCaptcha.spinner_enabled
+
+      hidden_field_tag('spinner', session[:invisible_captcha_spinner], id: nil)
     end
 
     def visibility_css(css_class, options)

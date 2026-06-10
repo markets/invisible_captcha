@@ -223,6 +223,24 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
   end
 
+  context 'with honeypot_enabled = false' do
+    before(:each) do
+      InvisibleCaptcha.honeypot_enabled = false
+      session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
+
+      # Wait for valid submission
+      sleep InvisibleCaptcha.timestamp_threshold
+    end
+
+    after(:each) { InvisibleCaptcha.honeypot_enabled = true }
+
+    it 'passes even when the honeypot field is filled' do
+      post :create, params: { topic: { subtitle: 'spam-value', title: 'foo' } }
+
+      expect(response.body).to be_present
+    end
+  end
+
   context 'spinner attribute' do
     before(:each) do
       InvisibleCaptcha.spinner_enabled = true

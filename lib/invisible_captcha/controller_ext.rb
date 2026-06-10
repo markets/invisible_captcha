@@ -24,7 +24,7 @@ module InvisibleCaptcha
         return if performed?
       end
 
-      if honeypot_spam?(options) || spinner_spam?
+      if (InvisibleCaptcha.honeypot_enabled && honeypot_spam?(options)) || spinner_spam?
         on_spam(options)
       end
     end

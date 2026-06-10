@@ -33,8 +33,8 @@ module InvisibleCaptcha
     private
 
     def build_invisible_captcha(honeypot = nil, scope = nil, options = {})
-      return '' unless InvisibleCaptcha.honeypot_enabled || InvisibleCaptcha.spinner_enabled
-      
+      return ''.html_safe unless InvisibleCaptcha.honeypot_enabled || InvisibleCaptcha.spinner_enabled
+
       if InvisibleCaptcha.honeypot_enabled
         if honeypot.is_a?(Hash)
           options = honeypot

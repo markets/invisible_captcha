@@ -43,9 +43,7 @@ module InvisibleCaptcha
       # Spinner check enabled by default
       self.spinner_enabled = true
 
-      # Honeypot check enabled by default. When false, the view helper renders
-      # only the spinner field (no hidden text input for password managers to
-      # autofill) and the controller skips the honeypot param check.
+      # Honeypot check enabled by default
       self.honeypot_enabled = true
 
       # A secret key to encode some internal values

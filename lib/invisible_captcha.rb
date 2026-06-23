@@ -17,6 +17,7 @@ module InvisibleCaptcha
                   :visual_honeypots,
                   :injectable_styles,
                   :spinner_enabled,
+                  :honeypot_enabled,
                   :secret
 
     def init!
@@ -41,6 +42,9 @@ module InvisibleCaptcha
 
       # Spinner check enabled by default
       self.spinner_enabled = true
+
+      # Honeypot check enabled by default
+      self.honeypot_enabled = true
 
       # A secret key to encode some internal values
       self.secret = ENV['INVISIBLE_CAPTCHA_SECRET'] || SecureRandom.hex(64)

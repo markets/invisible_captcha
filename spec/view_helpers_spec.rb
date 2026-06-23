@@ -75,6 +75,31 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
     end
   end
 
+  context "should have honeypot field" do
+    it 'that exists by default, honeypot_enabled is true' do
+      InvisibleCaptcha.honeypot_enabled = true
+      InvisibleCaptcha.honeypots = [:foo_id]
+      expect(invisible_captcha).to match(/name="foo_id"/)
+    end
+
+    it 'that does not exist if honeypot_enabled is false' do
+      InvisibleCaptcha.honeypot_enabled = false
+      expect(invisible_captcha).not_to match(/type="text"/)
+    end
+
+    it 'still renders the spinner if honeypot_enabled is false and spinner_enabled is true' do
+      InvisibleCaptcha.honeypot_enabled = false
+      InvisibleCaptcha.spinner_enabled = true
+      expect(invisible_captcha).to match(/name="spinner"/)
+    end
+
+    it 'renders nothing if both honeypot_enabled and spinner_enabled are false' do
+      InvisibleCaptcha.honeypot_enabled = false
+      InvisibleCaptcha.spinner_enabled = false
+      expect(invisible_captcha).to eq('')
+    end
+  end
+
   it 'should set spam timestamp' do
     invisible_captcha
     expect(session[:invisible_captcha_timestamp]).to eq(Time.zone.now.iso8601)

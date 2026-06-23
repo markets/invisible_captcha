@@ -85,6 +85,8 @@ module InvisibleCaptcha
     end
 
     def honeypot_spam?(options = {})
+      return false unless InvisibleCaptcha.honeypot_enabled
+
       honeypot = options[:honeypot]
       scope    = options[:scope] || controller_name.singularize
 

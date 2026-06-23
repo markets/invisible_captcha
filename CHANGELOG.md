@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+- New `honeypot_enabled` config option (default true).
+
 ## [2.3.0]
 
 - Run honeypot + spinner checks and their callback also if timestamp triggers but passes through (#132)

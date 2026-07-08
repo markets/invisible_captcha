@@ -242,26 +242,38 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
   end
 
   context 'spinner attribute' do
+    let(:spinner_value) do
+      '32ab649161f9f6faeeb323746de1a25d'
+    end
+
+    let(:valid_params) do
+      { title: 'foobar', author: 'author', body: 'body that passes validation' }
+    end
+    
     before(:each) do
       InvisibleCaptcha.spinner_enabled = true
       InvisibleCaptcha.secret = 'secret'
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
-      session[:invisible_captcha_spinner] = '32ab649161f9f6faeeb323746de1a25d'
+      session[:invisible_captcha_spinner] = spinner_value
 
       # Wait for valid submission
       sleep InvisibleCaptcha.timestamp_threshold
     end
 
     it 'fails with no spam, but mismatch of spinner' do
-      post :create,  params: { topic: { title: 'foo' }, spinner: 'mismatch' }
+      post :create, params: { topic: valid_params, spinner: spinner_value.reverse }
 
-      expect(response.body).to be_blank
+      expect(response).to have_http_status(:success)
+      expect(flash.notice).to be_blank
+      expect(session).not_to have_key(:invisible_captcha_spinner)
     end
 
     it 'passes with no spam and spinner match' do
-      post :create,  params: { topic: { title: 'foo' }, spinner: '32ab649161f9f6faeeb323746de1a25d' }
-
-      expect(response.body).to be_present
+      post :create, params: { topic: valid_params, spinner: spinner_value }
+      
+      expect(response).to have_http_status(:redirect)
+      expect(flash.notice).to be_present
+      expect(session).not_to have_key(:invisible_captcha_spinner)
     end
   end
 end

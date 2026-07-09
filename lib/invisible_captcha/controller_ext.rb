@@ -76,7 +76,12 @@ module InvisibleCaptcha
     end
 
     def spinner_spam?
-      if InvisibleCaptcha.spinner_enabled && (params[:spinner].blank? || params[:spinner] != session[:invisible_captcha_spinner])
+      return false unless InvisibleCaptcha.spinner_enabled
+
+      spinner_value = params[:spinner]
+      session_value = session.delete(:invisible_captcha_spinner)
+
+      if spinner_value.blank? || spinner_value != session_value
         warn_spam("Spinner value mismatch")
         return true
       end

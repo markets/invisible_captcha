@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
+  include ActiveSupport::Testing::TimeHelpers
+
   render_views
 
   before(:each) do
@@ -43,7 +45,9 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
 
     it 'fails if submission before timestamp_threshold' do
-      post :create, params: { topic: { title: 'foo' } }
+      freeze_time do
+        post :create, params: { topic: { title: 'foo' } }
+      end
 
       expect(response).to redirect_to 'http://test.host/topics'
       expect(flash[:error]).to eq(InvisibleCaptcha.timestamp_error_message)
@@ -53,7 +57,9 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
     end
 
     it 'allows a custom on_timestamp_spam callback' do
-      put :update, params: { id: 1, topic: { title: 'bar' } }
+      freeze_time do
+        put :update, params: { id: 1, topic: { title: 'bar' } }
+      end
 
       expect(response.status).to eq(204)
     end
@@ -66,9 +72,11 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
         end
       end
 
-      expect { put :update, params: { id: 1, topic: { title: 'bar' } } }
-        .to change { session[:invisible_captcha_timestamp] }
-        .to be_present
+      freeze_time do
+        expect { put :update, params: { id: 1, topic: { title: 'bar' } } }
+          .to change { session[:invisible_captcha_timestamp] }
+          .to be_present
+      end
     end
 
     it 'runs on_spam callback if on_timestamp_spam callback is defined but passes' do

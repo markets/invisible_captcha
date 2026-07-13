@@ -14,11 +14,11 @@ module InvisibleCaptcha
       @captcha_ocurrences += 1
 
       if InvisibleCaptcha.timestamp_enabled || InvisibleCaptcha.spinner_enabled
-        session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
+        session[InvisibleCaptcha::SESSION_TIMESTAMP_KEY] = Time.zone.now.iso8601
       end
 
       if InvisibleCaptcha.spinner_enabled && @captcha_ocurrences == 1
-        session[:invisible_captcha_spinner] = InvisibleCaptcha.encode("#{session[:invisible_captcha_timestamp]}-#{request.remote_ip}")
+        session[InvisibleCaptcha::SESSION_SPINNER_KEY] = InvisibleCaptcha.encode("#{session[InvisibleCaptcha::SESSION_TIMESTAMP_KEY]}-#{request.remote_ip}")
       end
 
       build_invisible_captcha(honeypot, scope, options)
@@ -58,7 +58,7 @@ module InvisibleCaptcha
           concat text_field_tag(build_input_name(honeypot, scope), nil, default_honeypot_options.merge(options))
         end
         if InvisibleCaptcha.spinner_enabled
-          concat hidden_field_tag("spinner", session[:invisible_captcha_spinner], id: nil)
+          concat hidden_field_tag("spinner", session[InvisibleCaptcha::SESSION_SPINNER_KEY], id: nil)
         end
       end
     end

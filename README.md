@@ -169,6 +169,37 @@ The `invisible_captcha` method accepts some options:
 - `timestamp_threshold`: custom threshold per controller/action. Overrides the global value for `InvisibleCaptcha.timestamp_threshold`.
 - `prepend`: the spam detection will run in a `prepend_before_action` if `prepend: true`, otherwise will run in a `before_action`.
 
+### Clearing invisible_captcha session data
+
+`invisible_captcha` stores a couple of values in the session (timestamp and/or spinner token) when the form is rendered.
+They get cleaned up automatically once the guarded action runs.
+But if a form is rendered in one flow and the user completes a *different* action that isn't guarded by `invisible_captcha`, those keys are never consumed and stay in the session.
+This can happen when:
+
+- a sign-up form sets these session keys, but the user logs in instead.
+- a page renders a password-based login form alongside an OmniAuth/OAuth button (e.g.: "Sign in with Google").
+  The form sets the session keys on render, but the user authenticates via the OAuth callback action instead, which never touches `invisible_captcha`.
+
+If you want to clear them explicitly, call `clear_invisible_captcha_session` at the exact point where you know the alternate flow succeeded:
+
+```ruby
+class SessionsController < ApplicationController
+  def create
+    if @user = User.authenticate(params)
+      sign_in(@user)
+      clear_invisible_captcha_session
+      redirect_to root_path
+    else
+      render :new
+    end
+  end
+end
+```
+
+Apply the same pattern in an OmniAuth callback controller's success branch.
+
+**Don't** wire this up as a `before_action`/`after_action`. There is no reliable, generic way to detect "the action succeeded" from a filter (a failed login might re-render the same action instead of redirecting, which would wipe out the freshly-rendered form's session values before the user gets a chance to resubmit). Call it explicitly, only on the success path you control.
+
 ### View helpers options:
 
 Using the view/form helper you can override some defaults for the given instance. Actually, it allows to change:

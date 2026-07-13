@@ -18,6 +18,11 @@ module InvisibleCaptcha
 
     private
 
+    def clear_invisible_captcha_session
+      session.delete(:invisible_captcha_timestamp)
+      session.delete(:invisible_captcha_spinner)
+    end
+
     def detect_spam(options = {})
       if timestamp_spam?(options)
         on_timestamp_spam(options)

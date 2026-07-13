@@ -81,12 +81,16 @@ module InvisibleCaptcha
       spinner_value = params[:spinner]
       session_value = session.delete(:invisible_captcha_spinner)
 
-      if spinner_value.blank? || spinner_value != session_value
+      if spinner_value.blank? || !secure_compare(spinner_value, session_value)
         warn_spam("Spinner value mismatch")
         return true
       end
 
       false
+    end
+
+    def secure_compare(value, other_value)
+      ActiveSupport::SecurityUtils.secure_compare(value.to_s, other_value.to_s)
     end
 
     def honeypot_spam?(options = {})

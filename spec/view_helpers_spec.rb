@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
+  include ActiveSupport::Testing::TimeHelpers
+
   before(:each) do
     allow(InvisibleCaptcha).to receive(:css_strategy).and_return("display:none;")
     allow_any_instance_of(ActionDispatch::ContentSecurityPolicy::Request).to receive(:content_security_policy_nonce).and_return('123')
@@ -101,8 +103,10 @@ RSpec.describe InvisibleCaptcha::ViewHelpers, type: :helper do
   end
 
   it 'should set spam timestamp' do
-    invisible_captcha
-    expect(session[:invisible_captcha_timestamp]).to eq(Time.zone.now.iso8601)
+    freeze_time do
+      invisible_captcha
+      expect(session[:invisible_captcha_timestamp]).to eq(Time.zone.now.iso8601)
+    end
   end
 
   context 'injectable_styles option' do

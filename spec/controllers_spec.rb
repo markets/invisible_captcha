@@ -14,6 +14,8 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
     InvisibleCaptcha.spinner_enabled = false
   end
 
+  after(:each) { travel_back }
+
   context 'without invisible_captcha_timestamp in session' do
     it 'fails like if it was submitted too fast' do
       post :create, params: { topic: { title: 'foo' } }
@@ -87,7 +89,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
 
     context 'successful submissions' do
       it 'passes if submission on or after timestamp_threshold' do
-        sleep InvisibleCaptcha.timestamp_threshold
+        travel InvisibleCaptcha.timestamp_threshold
 
         post :create, params: {
           topic: {
@@ -105,7 +107,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       end
 
       it 'allow to set a custom timestamp_threshold per action' do
-        sleep 2 # custom threshold
+        travel 2 # custom threshold
 
         post :publish, params: { id: 1 }
 
@@ -126,7 +128,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
 
       # Wait for valid submission
-      sleep InvisibleCaptcha.timestamp_threshold
+      travel InvisibleCaptcha.timestamp_threshold
     end
 
     it 'fails with spam' do
@@ -237,7 +239,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
 
       # Wait for valid submission
-      sleep InvisibleCaptcha.timestamp_threshold
+      travel InvisibleCaptcha.timestamp_threshold
     end
 
     after(:each) { InvisibleCaptcha.honeypot_enabled = true }
@@ -265,7 +267,7 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       session[:invisible_captcha_spinner] = spinner_value
 
       # Wait for valid submission
-      sleep InvisibleCaptcha.timestamp_threshold
+      travel InvisibleCaptcha.timestamp_threshold
     end
 
     it 'fails with no spam, but mismatch of spinner' do

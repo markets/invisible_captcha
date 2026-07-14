@@ -16,12 +16,12 @@ module InvisibleCaptcha
       end
     end
 
-    private
-
     def clear_invisible_captcha_session
       session.delete(InvisibleCaptcha::SESSION_TIMESTAMP_KEY)
       session.delete(InvisibleCaptcha::SESSION_SPINNER_KEY)
     end
+
+    private
 
     def detect_spam(options = {})
       if timestamp_spam?(options)

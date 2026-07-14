@@ -7,6 +7,9 @@ require 'invisible_captcha/form_helpers'
 require 'invisible_captcha/railtie'
 
 module InvisibleCaptcha
+  SESSION_TIMESTAMP_KEY = :invisible_captcha_timestamp
+  SESSION_SPINNER_KEY = :invisible_captcha_spinner
+
   class << self
     attr_writer :sentence_for_humans,
                 :timestamp_error_message

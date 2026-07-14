@@ -7,7 +7,9 @@ if ENV['CI']
   require 'simplecov-cobertura'
   SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 end
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/spec/'
+end
 
 require File.expand_path("../dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'

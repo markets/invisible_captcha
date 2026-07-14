@@ -16,6 +16,11 @@ module InvisibleCaptcha
       end
     end
 
+    def clear_invisible_captcha_session
+      session.delete(InvisibleCaptcha::SESSION_TIMESTAMP_KEY)
+      session.delete(InvisibleCaptcha::SESSION_SPINNER_KEY)
+    end
+
     private
 
     def detect_spam(options = {})
@@ -55,7 +60,7 @@ module InvisibleCaptcha
 
       return false unless enabled
 
-      timestamp = session.delete(:invisible_captcha_timestamp)
+      timestamp = session.delete(InvisibleCaptcha::SESSION_TIMESTAMP_KEY)
 
       # Consider as spam if timestamp not in session, cause that means the form was not fetched at all
       unless timestamp
@@ -79,7 +84,7 @@ module InvisibleCaptcha
       return false unless InvisibleCaptcha.spinner_enabled
 
       spinner_value = params[:spinner]
-      session_value = session.delete(:invisible_captcha_spinner)
+      session_value = session.delete(InvisibleCaptcha::SESSION_SPINNER_KEY)
 
       if spinner_value.blank? || !secure_compare(spinner_value, session_value)
         warn_spam("Spinner value mismatch")

@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 - New `honeypot_enabled` config option (default true).
+- New `log_remote_ip` config option to leave the client IP out of the spam log message (default true).
 
 ## [2.3.0]
 

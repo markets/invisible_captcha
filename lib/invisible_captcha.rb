@@ -21,6 +21,7 @@ module InvisibleCaptcha
                   :injectable_styles,
                   :spinner_enabled,
                   :honeypot_enabled,
+                  :log_remote_ip,
                   :secret
 
     def init!
@@ -48,6 +49,9 @@ module InvisibleCaptcha
 
       # Honeypot check enabled by default
       self.honeypot_enabled = true
+
+      # Include the client IP in the spam warning written to the log
+      self.log_remote_ip = true
 
       # A secret key to encode some internal values
       self.secret = ENV['INVISIBLE_CAPTCHA_SECRET'] || SecureRandom.hex(64)

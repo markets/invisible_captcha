@@ -200,6 +200,15 @@ RSpec.describe InvisibleCaptcha::ControllerExt, type: :controller do
       expect(@controller.params[:topic].key?(:subtitle)).to eq(false)
     end
 
+    it 'leaves the IP out of the log message if log_remote_ip is false' do
+      InvisibleCaptcha.log_remote_ip = false
+
+      expect(@controller.logger).to receive(:warn)
+        .with("[Invisible Captcha] Potential spam detected. Honeypot param 'subtitle' was present.")
+
+      post :create, params: { topic: { subtitle: 'foo' } }
+    end
+
     describe 'ActiveSupport::Notifications' do
       let(:dummy_handler) { double(handle_event: nil) }
 

@@ -129,7 +129,8 @@ module InvisibleCaptcha
     end
 
     def warn_spam(message)
-      message = "[Invisible Captcha] Potential spam detected for IP #{request.remote_ip}. #{message}"
+      source = " for IP #{request.remote_ip}" if InvisibleCaptcha.log_remote_ip
+      message = "[Invisible Captcha] Potential spam detected#{source}. #{message}"
 
       logger.warn(message)
 
